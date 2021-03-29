@@ -1,0 +1,32 @@
+@startuml
+
+class "Player" {
+    int id
+    String nickname
+    String hashedPassword
+    String email
+    List<Game> games
+
+    Player(int id)
+    Player(String email, String password)
+
+    static String hashPassword(String password)
+
+    int getId()
+    String getNickname()
+    String getHashedPassword()
+    String getEmail()
+    List<Game> getGames()
+
+    String setNickname(String nickname)
+    String setPassword(String password)
+    String setEmail(String email)
+    Game addGame(Game game)
+
+}
+
+class "Game"
+class "Character"
+
+
+@enduml
