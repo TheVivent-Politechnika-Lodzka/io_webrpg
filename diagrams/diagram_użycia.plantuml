@@ -6,7 +6,7 @@ tak się robi komentarz wielo-liniowy
 
 @startuml
 header webrpg.pl
-footer cyberpunk2077/przepraszamy
+footer cyberpunk2077
 title "diagram przypadków użycia"
 left to right direction
 

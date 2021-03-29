@@ -1,4 +1,21 @@
 @startuml
+header webrpg.pl
+footer cyberpunk2077
+title "diagram klas"
+left to right direction
+
+
+note as n1
+    Wszystkie gettery są asynchroniczne,
+    czyli wczyują dane z bazy dopiero jak jest taka potrzeba
+    i przechowują je w zmiennych, żeby poźniej nie ładować
+    ich ponownie. Idealnie byłoby też to wszystko jakoś
+    cache'ować, żeby nie ładować przy każdym zapytaniu
+    wszystkiego od nowa z bazy, ale nie znam się na tym
+    więc ¯\_(ツ)_/¯
+end note
+
+
 
 class "Player" {
     int id
@@ -29,6 +46,12 @@ class "Player" {
     Game addGame(Game game)
 
 }
+note left of Player
+    aplikacja zakłada działanie przez https,
+    dlatego hasło może być hashowane
+    dopiero po stronie serwera
+end note
+
 
 class "Game"{
     
@@ -71,5 +94,12 @@ class "Character"{
 
 }
 
+Player o-- "0...*" Game: contains
+
+Game o-- "0...*" Player: contains
+Game o-- "0...*" Character: contains
+
+Character o-- "1" Player: contains
+Character o-- "1" Game: contains
 
 @enduml
