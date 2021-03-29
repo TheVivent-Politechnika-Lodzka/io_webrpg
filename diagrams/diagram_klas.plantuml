@@ -7,17 +7,22 @@ class "Player" {
     String email
     List<Game> games
 
+    .. konstruktor ..
     Player(int id)
     Player(String email, String password)
 
+    .. static ..
     static String hashPassword(String password)
 
+    .. gettery ..
     int getId()
     String getNickname()
     String getHashedPassword()
     String getEmail()
     List<Game> getGames()
+    Game getGame(int id)
 
+    .. settery ..
     String setNickname(String nickname)
     String setPassword(String password)
     String setEmail(String email)
@@ -25,8 +30,46 @@ class "Player" {
 
 }
 
-class "Game"
-class "Character"
+class "Game"{
+    
+    int id
+    Player gameMaster
+    String name
+    List<Player> players
+    List<Character> characters
+
+    .. konstruktor ..
+    Game(int id)
+
+    .. gettery ..
+    int getId()
+    Player getGM()
+    String getName()
+    List<Player> getPlayers()
+    Player getPlayer(int id)
+    List<Character> getCharacters()
+    Character getCharacter()
+
+
+}
+
+
+class "Character"{
+    int id
+    String name
+    Player owner
+    Game game
+
+    .. konstruktor ..
+    Character(Player owner, Game game)
+
+    .. gettery ..
+    int getId()
+    String getName()
+    Player getPlayer()
+    Game getGame()
+
+}
 
 
 @enduml
