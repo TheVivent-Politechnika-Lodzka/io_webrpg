@@ -1,6 +1,5 @@
 @startuml
 header webrpg.pl
-footer cyberpunk2077
 title "diagram klas"
 left to right direction
 

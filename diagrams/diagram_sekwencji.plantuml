@@ -1,0 +1,18 @@
+@startuml
+header webrpg.pl
+title "diagram sekwencji"
+left to right direction
+
+actor player
+collections Controller
+collections View
+collections Model
+collections Data
+database database as db
+
+
+
+
+
+
+@enduml

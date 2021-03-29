@@ -1,6 +1,5 @@
 @startuml
 header webrpg.pl
-footer cyberpunk2077
 title "diagram komponentów"
 'left to right direction
 
