@@ -1,0 +1,35 @@
+Dzięki 
+Diagramy UML
+    Diagram użycia
+    Diagram klas
+    Diagram sekwencji Będzie nawet na kolosie
+    Diagram aktywności
+    Diagram komponentów
+    To znaczy chyba możemy wszytsko ale no nie wymaga tego :|
+    Jak piszemy racta to podobno będziemy mieć w chuj klas
+        Ja pierdole, chyba tylko my będziemy mieć klasy xD
+    Wymagania funkcjionalne i niefunkcjionalne
+    Diagram przypadków użycia :( za co!!!
+        Coś tam, mówił aby pamiętać o tych związkach zawierania/rozszerzenia
+    Scenariusze przypadków użycia <- powiedział o tym (nie wiem czy wymaga ale chyba lepiej to zrobić)
+        a jednak ma się to pojawić bo bęzdie nawet na kolosku
+        mamy pamiętać o scenariuszu alternatywnym 
+        W sumie to chyba robimy wszytsko to co na PZP
+    Diagram komponentów
+        Pamiętać o interfejsach
+        Mamy pamiętać o notatkach
+        no tak jak to było na POBI
+    Diagram sekwencji!
+        Linia życia
+        Pamiętać o komunikatach
+        Fragmenty
+    Diagram komponentó i sekwenscji
+        muszą się odzwiercielać i być logiczne
+
+Podsumowując warto zobaczyć tą prezentację (ultra warto)
+
+
+
+    
+    
+

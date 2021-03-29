@@ -1,0 +1,65 @@
+' <== tak się robi komentarz jedno-liniowy
+
+/'
+tak się robi komentarz wielo-liniowy
+'/
+
+@startuml
+header webrpg.pl
+footer cyberpunk2077/przepraszamy
+title "diagram przypadków użycia"
+left to right direction
+
+:gracz: as user
+:mistrz gry: as gm
+
+rectangle "aplikacja webowa" {
+    
+    rectangle "funkcjalności użytkownika" {
+        usecase "logowanie"   as login
+        usecase "rejestracja" as register
+
+        usecase "dołączenie do gry" as join_game
+        usecase "wybranie gry"      as enter_game
+        usecase "stworzenie gry"    as create_game
+
+        rectangle "funkcjonalności mistrza gry" {
+            usecase "modyfikacja dowolnej karty postaci" as modify_any_cc
+            usecase "dodawanie kart postaci"             as add_any_cc
+        }
+
+        rectangle "funkcjonalności gracza" {
+            usecase "modyfikacja swojej karty postaci"   as modify_own_cc
+            usecase "wybieranie postaci"                 as select_char
+            'usecase "chatowanie"                         as use_chat
+            usecase "rzucanie kością"                    as die_roll
+        }
+    }
+
+
+}
+
+register ..> login              : <<extends>>
+
+user -- enter_game
+enter_game <.. join_game        : <<extends>>
+enter_game <.. modify_own_cc    : <<extends>>
+'enter_game <.. use_chat         : <<extends>>
+enter_game <.. die_roll         : <<extends>>
+
+enter_game --> login            : <<include>>
+
+modify_own_cc --> select_char   : <<include>>
+modify_any_cc --> select_char   : <<include>>
+
+'gm --> user
+gm -- modify_any_cc
+gm -- add_any_cc
+gm -- create_game
+
+create_game --> login           : <<include>>
+modify_any_cc --> enter_game    : <<include>>
+add_any_cc --> enter_game       : <<include>>
+
+
+@enduml
