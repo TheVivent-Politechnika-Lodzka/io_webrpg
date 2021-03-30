@@ -6,7 +6,8 @@ title "diagram komponentów"
 interface HTTPS
 
 node "web client" {
-    [View] <-- HTTPS
+    '[View] <-- HTTPS
+    [View] <-- [Controller] 
     [Controller] --> HTTPS
     
     note right of [Controller]
