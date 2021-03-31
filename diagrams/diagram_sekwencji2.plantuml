@@ -1,0 +1,45 @@
+@startuml
+skinparam defaultFontName "Comic Sans MS"
+header webrpg.pl
+title "diagram sekwencji - zmiana wartości w karcie postaci"
+
+actor Player
+participant "userControler" as UserController
+participant "sessionControler" as SessionControler
+participant "gameController" as GameController
+database MongoDB as db
+
+Player -> UserController : zmiana w karcie postaci
+activate UserController
+
+alt błąd sesji
+    UserController -> SessionControler : potwierdzenie\ntożsamości
+    activate UserController
+    activate SessionControler
+    SessionControler --> UserController : status
+    deactivate SessionControler
+    UserController --> Player : błąd
+
+else sukces
+
+    group Uprawnienia [sukces]
+        UserController -> GameController : potwierdzenie\nuprawnień
+        deactivate UserController
+        activate GameController
+        GameController -> db : zapisanie zmian
+        activate db
+        db --> GameController : status
+        deactivate db
+        GameController --> UserController : status 
+        UserController --> Player : status
+        deactivate UserController
+    else błąd uprawnień 
+        GameController --> Player : błąd
+        deactivate GameController
+
+end
+end
+
+
+
+@enduml

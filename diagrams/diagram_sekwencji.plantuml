@@ -1,25 +1,29 @@
 @startuml
 skinparam defaultFontName "Comic Sans MS"
 header webrpg.pl
-title "diagram sekwencji"
+title "diagram sekwencji - logowanie"
 
 actor Player
-participant SessionController
+participant "sessionController" as SessionController 
 database MongoDB as db
 
 
-Player -> SessionController : Próba logowania
-activate Player
+Player -> SessionController : próba logowania
+
 activate SessionController
 SessionController -> db : sprawdzanie poświadczeń
 activate db
 
 db --> SessionController : status
 deactivate db
-SessionController --> Player : stworzenie sesji
-SessionController --> Player : Błąd
-deactivate SessionController
-deactivate Player
+
+alt sukces
+    SessionController --> Player : stworzenie sesji
+
+else błąd
+    SessionController --> Player : błąd
+    deactivate SessionController
+    end
 
 
 

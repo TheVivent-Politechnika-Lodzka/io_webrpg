@@ -28,6 +28,7 @@ node "server" {
 
     [Express] -(0- Controllers
     node Controllers {
+        [sessionController] - [userController]
         [userController] - [gameController]
     }
 
