@@ -5,6 +5,7 @@ tak się robi komentarz wielo-liniowy
 '/
 
 @startuml
+skinparam defaultFontName "Comic Sans MS"
 header webrpg.pl
 title "diagram przypadków użycia"
 left to right direction
