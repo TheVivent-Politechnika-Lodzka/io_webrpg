@@ -8,36 +8,21 @@ interface HTTPS
 
 node "web client" {
     '[View] <-- HTTPS
-    [View] <-- [Controller] 
-    [Controller] --> HTTPS
-    
-    note right of [Controller]
-        Wstępnie przygotowuje
-        dane do przetwarzania
-        i je wysyła na serwer
-    end note
-    note right of [View]
-        Wyświetla dane
-    end note
-
+    [View] <-- [charSheetController] 
+    [View] <-- [charListController]
+    [charSheetController] --> HTTPS
+    [charListController] --> HTTPS
 
 }
 
 node "server" {
-    HTTPS <--> [Model]: "comunnicates\nwith client"
-    [Model] <-- [Data]
-    note right of [Data]
-        Zapewnia koumnikację
-        w obie strony
-        z bazą danych
-    end note
-
-    note right of [Model]
-        Przetwarza dane
-    end note
+    [userController] <--> [databaseController] 
+    HTTPS <--> [userController]
+    
 }
 
+
 database "MongoDB"
-[Data] <-- MongoDB: "gets from"
+[databaseController] <-- MongoDB
 
 @enduml
