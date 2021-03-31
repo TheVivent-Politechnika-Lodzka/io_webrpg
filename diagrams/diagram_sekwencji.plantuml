@@ -2,34 +2,80 @@
 header webrpg.pl
 title "diagram sekwencji"
 
-actor player
-collections Controller
-collections View 
-collections Model
-collections Data
-database database as db
+actor Player
+participant SessionController
+database MongoDB as db
+
+
+Player -> SessionController
+SessionController -> Checking
+
+
+
+
+
+
+' participant Controller
+' participant View 
+' participant Model
+' participant Data
+' database database as db
 
 'czy view komunikuje się z kontrolerem, czy player
-player -> Controller : dane logowania
-activate player
-View --> player : odczyt
-deactivate player
-activate View
+' player -> Controller : dane logowania
+' activate player
+' View --> player : odczyt
+' deactivate player
+' activate View
 
-Controller -> Model : logowanie
-activate Model
-Model --> View : wyświetl
-deactivate Model
-deactivate View
+' Controller -> Model : logowanie
+' activate Model
+' Model --> View : wyświetl
+' deactivate Model
+' deactivate View
 
-Model -> Data :  wyszukanie
-activate Data
-Data --> Model : odpowiedź
-deactivate Data
+' Model -> Data :  wyszukanie
+' activate Data
+' Data --> Model : odpowiedź
+' deactivate Data
 
-Data -> db : zapytanie
-activate db
-db --> Data : odpowiedź
-deactivate db
+' Data -> db : zapytanie
+' activate db
+' db --> Data : odpowiedź
+' deactivate db
+
+
+
+
+
+' player -> Controller : dane logowania
+' activate player
+' activate Controller
+
+' Controller -> Model : logowanie
+' deactivate Controller
+' activate Model
+
+' Model -> Data :  wyszukanie
+' activate Data
+
+' Data -> db : zapytanie
+' activate db
+' db --> Data : odpowiedź
+' deactivate db
+
+' Data --> Model : odpowiedź
+' deactivate Data
+
+' Model --> View : wyświetl
+' deactivate Model
+' activate View
+
+' View --> player : odczyt
+' deactivate View
+' deactivate player
+
+
+
 
 @enduml

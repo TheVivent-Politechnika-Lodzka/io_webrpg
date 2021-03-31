@@ -4,25 +4,37 @@ header webrpg.pl
 title "diagram komponentów"
 'left to right direction
 
-interface HTTPS
+interface "HTTPS/WebSocket" as HTTPS
 
 node "web client" {
     '[View] <-- HTTPS
-    [View] <-- [charSheetController] 
-    [View] <-- [charListController]
-    [charSheetController] --> HTTPS
-    [charListController] --> HTTPS
+    [React] -(0- [characterSheet] 
+    [React] -(0- [characterList]
+    [characterSheet] -(0)- HTTPS
+    [characterSheet] - [dice]
+    [characterList] -(0)- HTTPS
 
 }
 
 node "server" {
-    [userController] <--> [databaseController] 
-    HTTPS <--> [userController]
     
+    HTTPS -(0)- [Express]
+    [Express-hbs] - [Express]
+    [Express] - [Express-session]
+    note bottom of [Express-hbs]
+        layout-manager
+    end note
+
+
+    [Express] -(0- Controllers
+    node Controllers {
+        [userController] - [gameController]
+    }
+
 }
 
 
 database "MongoDB"
-[databaseController] <-- MongoDB
+Controllers -(0- MongoDB
 
 @enduml
