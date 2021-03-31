@@ -4,19 +4,6 @@ header webrpg.pl
 title "diagram klas"
 left to right direction
 
-
-note as n1
-    Wszystkie gettery są asynchroniczne,
-    czyli wczyują dane z bazy dopiero jak jest taka potrzeba
-    i przechowują je w zmiennych, żeby poźniej nie ładować
-    ich ponownie. Idealnie byłoby też to wszystko jakoś
-    cache'ować, żeby nie ładować przy każdym zapytaniu
-    wszystkiego od nowa z bazy, ale nie znam się na tym
-    więc ¯\_(ツ)_/¯
-end note
-
-
-
 class "Player" {
     int id
     String nickname

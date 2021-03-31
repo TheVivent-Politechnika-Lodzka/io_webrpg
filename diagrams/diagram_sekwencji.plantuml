@@ -9,10 +9,17 @@ database MongoDB as db
 
 
 Player -> SessionController : Próba logowania
+activate Player
+activate SessionController
 SessionController -> db : sprawdzanie poświadczeń
+activate db
 
-
-
+db --> SessionController : status
+deactivate db
+SessionController --> Player : stworzenie sesji
+SessionController --> Player : Błąd
+deactivate SessionController
+deactivate Player
 
 
 
