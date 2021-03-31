@@ -12,30 +12,36 @@ database MongoDB as db
 Player -> UserController : zmiana w karcie postaci
 activate UserController
 
+note left of Player: Player jest\nzalogowany 
+
 alt błąd sesji
+
     UserController -> SessionControler : potwierdzenie\ntożsamości
-    activate UserController
-    activate SessionControler
+        activate UserController
+        activate SessionControler
     SessionControler --> UserController : status
-    deactivate SessionControler
+        deactivate SessionControler
     UserController --> Player : błąd
 
 else sukces
 
     group Uprawnienia [sukces]
+
         UserController -> GameController : potwierdzenie\nuprawnień
-        deactivate UserController
-        activate GameController
+            deactivate UserController
+            activate GameController
         GameController -> db : zapisanie zmian
-        activate db
+            activate db
         db --> GameController : status
-        deactivate db
+            deactivate db
         GameController --> UserController : status 
         UserController --> Player : status
-        deactivate UserController
+            deactivate UserController
+
     else błąd uprawnień 
+
         GameController --> Player : błąd
-        deactivate GameController
+            deactivate GameController
 
 end
 end

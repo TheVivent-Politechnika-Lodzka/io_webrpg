@@ -2,12 +2,14 @@
 skinparam defaultFontName "Comic Sans MS"
 header webrpg.pl
 title "diagram komponentów"
-'left to right direction
+left to right direction
 
 interface "HTTPS/WebSocket" as HTTPS
 
-node "web client" {
-    '[View] <-- HTTPS
+node web_client {
+    note as N1
+        React i ważniejsze moduły
+    end note
     [React] -(0- [characterSheet] 
     [React] -(0- [characterList]
     [characterSheet] -(0)- HTTPS
@@ -17,14 +19,17 @@ node "web client" {
 }
 
 node "server" {
-    
     HTTPS -(0)- [Express]
     [Express-hbs] - [Express]
     [Express] - [Express-session]
-    note bottom of [Express-hbs]
-        layout-manager
+
+    note top of [Express-hbs]
+        layout manager
     end note
 
+    note bottom of [Express]
+        silnik serwera
+    end note
 
     [Express] -(0- Controllers
     node Controllers {
