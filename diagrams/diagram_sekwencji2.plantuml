@@ -16,7 +16,7 @@ note left of Player: Player jest\nzalogowany
 
 alt błąd sesji
 
-    UserController -> SessionControler : potwierdzenie\ntożsamości
+    UserController -> SessionControler : potwierdzenie\ntrwania sesji
         activate UserController
         activate SessionControler
     SessionControler --> UserController : status

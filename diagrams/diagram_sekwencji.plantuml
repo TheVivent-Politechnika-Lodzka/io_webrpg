@@ -8,7 +8,7 @@ participant "sessionController" as SessionController
 database MongoDB as db
 
 
-Player -> SessionController : próba logowania
+Player -> SessionController : logowanie
 
 activate SessionController
 SessionController -> db : sprawdzanie poświadczeń
