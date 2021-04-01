@@ -16,7 +16,6 @@ note left of Player: Player jest\nzalogowany
 alt błąd sesji
 
     UserController -> GameController : potwierdzenie\nuprawnień
-        deactivate UserController
         activate GameController
     GameController -> db : zapisanie zmian
         activate db
@@ -24,9 +23,9 @@ alt błąd sesji
         deactivate db
     GameController --> UserController : status 
     UserController --> Player : status
-        deactivate UserController
 
     else błąd uprawnień 
+        deactivate UserController
 
     GameController --> Player : błąd
         deactivate GameController
