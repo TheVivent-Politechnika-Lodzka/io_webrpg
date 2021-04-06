@@ -40,7 +40,7 @@ note left of Player
 end note
 
 
-class "Game"{
+class "Game"{ 
     
     int id
     Player gameMaster

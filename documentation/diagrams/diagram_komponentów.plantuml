@@ -41,6 +41,8 @@ node "server" {
 
 
 database "MongoDB"
-Controllers -(0- MongoDB
+[gameController] -(0- MongoDB
+[userController] -(0- MongoDB
+' Controllers -(0- MongoDB
 
 @enduml

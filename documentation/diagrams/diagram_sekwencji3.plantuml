@@ -1,0 +1,19 @@
+@startuml
+skinparam defaultFontName "Comic Sans MS"
+header webrpg.pl
+title "diagram sekwencji - dodanie nowego pokoju / gry"
+
+actor Player
+participant "gameController" as GameController
+database MongoDB as db
+
+Player -> GameController : żądanie utworzenia gry \no podanej nazwie
+
+GameController -> db : zapisanie zmian 
+
+db --> GameController : status
+
+GameController --> 
+
+
+@enduml
