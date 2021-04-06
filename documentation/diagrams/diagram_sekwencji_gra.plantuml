@@ -8,12 +8,15 @@ participant "gameController" as GameController
 database MongoDB as db
 
 Player -> GameController : żądanie utworzenia gry \no podanej nazwie
+    activate GameController
 
-GameController -> db : zapisanie zmian 
+GameController -> db : \n zapisanie zmian 
+    activate db
 
 db --> GameController : status
+    deactivate db
 
-GameController --> 
-
+GameController --> Player : status
+    deactivate GameController
 
 @enduml

@@ -11,7 +11,7 @@ database MongoDB as db
 Player -> SessionController : logowanie
 
 activate SessionController
-SessionController -> db : sprawdzanie poświadczeń
+SessionController -> db : sprawdzanie danych logowania
 activate db
 
 db --> SessionController : status

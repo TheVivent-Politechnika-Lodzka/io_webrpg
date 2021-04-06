@@ -1,0 +1,20 @@
+@startuml
+skinparam defaultFontName "Comic Sans MS"
+header webrpg.pl
+title "diagram sekwencji - rzut kością"
+
+actor Player
+participant "moduł kości" as ReactDice
+participant "gameController" as GameController
+
+Player -> ReactDice: rzucanie kością
+    activate ReactDice
+
+ReactDice -> GameController: \n   poinformowanie o\n   nowym rzucie
+    deactivate ReactDice
+    activate GameController
+
+GameController -> Player: poinformowanie wszystkich graczy\no rzucie i jego wyniku
+    deactivate GameController
+
+@enduml
