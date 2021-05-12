@@ -1,8 +1,3 @@
-from enum import Enum
-from typing import NewType
-
-
-
 class Stuff:
     pass
 
@@ -17,7 +12,8 @@ class Window(Stuff):
 
     def __str__(self) -> str:
         return "{}, width: {}, height: {}".format(
-            type(self).__name__, self.width, self.height)
+            type(self).__name__, self.width, self.height
+        )
 
 
 class Roof:
@@ -35,8 +31,5 @@ class Roof:
 
     def __str__(self) -> str:
         return "{}, slope: {}, material: {}".format(
-            type(self).__name__, self.deg, self.material)
-
-# Roof = NewType("Roof", Roof)
-# Window = NewType("Window", Window)
-# Stuff = NewType("Stuff", Stuff)
+            type(self).__name__, self.deg, self.material
+        )

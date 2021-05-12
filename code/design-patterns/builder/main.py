@@ -2,7 +2,7 @@ from house import HouseBuilder, HouseManager
 import stuff as st
 
 
-test = HouseBuilder("custom")
+test = HouseBuilder("Custom")
 
 test.addFloor()
 test.addFeature(0, st.Window(10, 20))

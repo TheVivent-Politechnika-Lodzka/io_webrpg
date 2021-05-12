@@ -2,8 +2,6 @@ import stuff
 import copy
 from typing import Optional, Type
 
-
-
 class House:
 
     name = ""
@@ -81,7 +79,7 @@ class HouseManager:
         hb.newHouse("Block of Flats")
         for i in range(10):
             hb.addFloor()
-            for j in range(20):
+            for _ in range(20):
                 hb.addFeature(i, stuff.Window(50, 50))
 
         return hb.getHouse()
