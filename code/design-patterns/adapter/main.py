@@ -24,5 +24,5 @@ while(cmd != "exit"):
     if cmd == "far": current = far
     if cmd == "kel": current = kel
     if cmd[:3] == "set": 
-        current.setDegrees(int(cmd[4:]))
+        current.setDegrees(float(cmd[4:]))
     print("\033[F-> {} -> [{:.2f}]".format(cmd, current.getDegrees()))
