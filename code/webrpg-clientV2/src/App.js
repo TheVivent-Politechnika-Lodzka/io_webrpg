@@ -1,33 +1,51 @@
+import 'bootstrap/dist/css/bootstrap.min.css'; // css bootstrapa
 import { StrictMode, useState } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import SearchParams from './SearchParams';
-import Details from './Details';
-import ThemeContext from './ThemeContext';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
+import Navigation from './navigation/Navigation';
+import MainPage from './other/MainPage';
+import UserContext from './other/UserContext';
+import Player from './other/Player';
+import Login from './other/Login';
+import Register from './other/Register';
+import Games from './other/Games';
+import Game from './game/Game';
 
 const App = () => {
-	const theme = useState('black');
+	// const user = useState({ logged: false, name: 'nuk tuk', id: 'your mom' });
+	const user = useState({ logged: true, name: 'nuk tuk', id: 'your mom' });
 
 	return (
-		<ThemeContext.Provider value={theme}>
-			<div>
+		<UserContext.Provider value={user}>
+			<Container fluid>
 				<Router>
 					<header>
-						<Link to="/">
-							<h1>Adopt Me!</h1>
-						</Link>
+						<Navigation />
 					</header>
 					<Switch>
-						<Route path="/details/:id">
-							<Details />
+						<Route path="/games">
+							<Games />
+						</Route>
+						<Route path="/game/:id">
+							<Game />
+						</Route>
+						<Route path="/register">
+							<Register />
+						</Route>
+						<Route path="/login">
+							<Login />
+						</Route>
+						<Route path="/user/:id">
+							<Player />
 						</Route>
 						<Route path="/">
-							<SearchParams />
+							<MainPage />
 						</Route>
 					</Switch>
 				</Router>
-			</div>
-		</ThemeContext.Provider>
+			</Container>
+		</UserContext.Provider>
 	);
 };
 

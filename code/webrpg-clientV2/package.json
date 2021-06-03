@@ -27,12 +27,16 @@
 		"prettier": "^2.3.0"
 	},
 	"dependencies": {
+		"bootstrap": "^5.0.1",
 		"e": "^0.2.0",
+		"img": "^3.0.3",
 		"re": "^0.1.4",
 		"rea": "0.0.1",
 		"reac": "0.0.0",
 		"react": "^17.0.1",
+		"react-bootstrap": "^1.6.0",
 		"react-dom": "^17.0.1",
+		"react-favicon": "0.0.22",
 		"react-router-dom": "^5.2.0"
 	},
 	"browserslist": [
