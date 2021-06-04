@@ -1,10 +1,11 @@
 import { Container, Navbar, Nav } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../img/logo.png';
 import UserContext from '../other/UserContext';
 
 const Navigation = () => {
 	return (
-		<Navbar bg="light" expand="lg">
+		<Navbar className="px-2" bg="lime" expand="lg">
 			<Container fluid>
 				<Navbar.Brand href="/">
 					<img
@@ -17,18 +18,20 @@ const Navigation = () => {
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="me-auto">
-						<Nav.Link href="/">Strona główna</Nav.Link>
+						<LinkContainer to="/">
+							<Nav.Link>Strona główna</Nav.Link>
+						</LinkContainer>
 						{/* Wyświetl zamiast zaloguj się imię, jeżeli jesteś zalogowany */}
 						<UserContext.Consumer>
 							{([user]) =>
 								!user.logged ? (
-									<Nav.Link href="/login">
-										Zaloguj się
-									</Nav.Link>
+									<LinkContainer to="/login">
+										<Nav.Link>Zaloguj się</Nav.Link>
+									</LinkContainer>
 								) : (
-									<Nav.Link href={`/user/${user.id}`}>
-										{user.name}
-									</Nav.Link>
+									<LinkContainer to={`/user/${user.id}`}>
+										<Nav.Link>{user.name}</Nav.Link>
+									</LinkContainer>
 								)
 							}
 						</UserContext.Consumer>
@@ -36,7 +39,9 @@ const Navigation = () => {
 						<UserContext.Consumer>
 							{([user]) =>
 								user.logged ? (
-									<Nav.Link href="/games">Twoje Gry</Nav.Link>
+									<LinkContainer to="/games">
+										<Nav.Link>Twoje Gry</Nav.Link>
+									</LinkContainer>
 								) : null
 							}
 						</UserContext.Consumer>
