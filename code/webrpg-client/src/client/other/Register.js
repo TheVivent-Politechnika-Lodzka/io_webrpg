@@ -1,73 +1,140 @@
+import { useContext, useEffect, useState } from 'react';
 import {
 	Col,
 	Container,
 	Form,
 	Row,
 	Button,
-	InputGroup,
 	FormControl,
 } from 'react-bootstrap';
-
-import { Link } from 'react-router-dom';
+import Base64 from 'crypto-js/enc-base64';
+import { Link, Redirect } from 'react-router-dom';
+import SocketMessages from '../../server/SocketMessages';
+import SocketContext from './SocketContext';
+import UserContext from './UserContext';
+import { SHA256 } from 'crypto-js';
 
 const Register = () => {
+	const [email, setEmail] = useState('');
+	const [name, setName] = useState('');
+	const [password, setPassword] = useState('');
+	const [passwordRepeat, setPasswordRepeat] = useState('');
+	const [user, setUser] = useContext(UserContext);
+	const socket = useContext(SocketContext);
+
+	const [isPassSame, setIsPassSame] = useState(true);
+
+	useEffect(() => {
+		setIsPassSame(true);
+	}, [password, passwordRepeat]);
+
+	useEffect(() => {
+		socket.registerOnMessageEvent(
+			SocketMessages.REGISTER_ATTEMPT_RESULT,
+			(msg) => {
+				console.log('witam z register');
+				setUser(msg);
+			}
+		);
+	}, []); //eslint-disable-line
+
+	const register = () => {
+		if (password != passwordRepeat) {
+			setIsPassSame(false);
+			return;
+		}
+		let passwd = Base64.stringify(SHA256(password));
+
+		socket.sendJSON({
+			type: SocketMessages.REGISTER_ATTEMPT,
+			email: email,
+			name: name,
+			password: passwd,
+		});
+	};
+
+	if (user.name == email) {
+		return <Redirect to={`/user/user.id`} />;
+	}
+
 	return (
 		<Row className="justify-content-center h-100">
 			<Col xs="12" sm="8" md="5" xl="3">
-				<Form className="p-3 my-5 bg-info rounded-3">
+				<Form
+					className="p-3 my-5 bg-info rounded-3"
+					onSubmit={(e) => {
+						e.preventDefault();
+						register();
+					}}
+				>
 					<Container fluid>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										E-mail:
-									</InputGroup.Text>
+								<Form.Group className="form-floating">
 									<FormControl
-										id="inlineFormInputGroup"
+										type="email"
+										id="registerFormEmail"
 										placeholder="e-mail"
+										value={email}
+										onChange={(e) =>
+											setEmail(e.target.value)
+										}
 									/>
-								</InputGroup>
+									<Form.Label>Adres e-mail:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										Nazwa:
-									</InputGroup.Text>
+								<Form.Group className="form-floating my-2">
 									<FormControl
-										id="inlineFormInputGroup"
+										id="registerFormNick"
 										placeholder="nazwa użytkownika"
+										value={name}
+										onChange={(e) =>
+											setName(e.target.value)
+										}
 									/>
-								</InputGroup>
+									<Form.Label>Nazwa użytkownika:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										Hasło:
-									</InputGroup.Text>
+								<Form.Group className="form-floating ">
 									<FormControl
 										type="password"
-										id="inlineFormInputGroup"
+										id="registerFormPassword"
 										placeholder="hasło"
+										value={password}
+										onChange={(e) =>
+											setPassword(e.target.value)
+										}
+										className={
+											isPassSame ? null : 'is-invalid'
+										}
 									/>
-								</InputGroup>
+									<Form.Label>Hasło:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										Hasło:
-									</InputGroup.Text>
+								<Form.Group className="form-floating my-2">
 									<FormControl
 										type="password"
-										id="inlineFormInputGroup"
+										id="registerFormRepeatPassword"
 										placeholder="powtórz hasło"
+										value={passwordRepeat}
+										onChange={(e) =>
+											setPasswordRepeat(e.target.value)
+										}
+										className={
+											isPassSame ? null : 'is-invalid'
+										}
 									/>
-								</InputGroup>
+									<Form.Label>Powtórz hasło:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
@@ -75,8 +142,7 @@ const Register = () => {
 								<Button
 									variant="primary"
 									type="submit"
-									className="w-75 fs-5
-							"
+									className="w-75 fs-5"
 								>
 									Zarejestruj
 								</Button>

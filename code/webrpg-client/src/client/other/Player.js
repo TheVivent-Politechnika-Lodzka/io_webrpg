@@ -1,6 +1,5 @@
-import { Button } from 'bootstrap';
 import { useContext } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Button } from 'react-bootstrap';
 import { Redirect, withRouter } from 'react-router';
 import UserContext from './UserContext';
 
@@ -16,7 +15,7 @@ const Player = (props) => {
 	}
 
 	return (
-		<Container fluid>
+		<Container>
 			<Row>
 				<Col>id: </Col>
 				<Col>{props.match.params.id}</Col>
@@ -28,7 +27,7 @@ const Player = (props) => {
 			<Row>
 				<Col>
 					<Button active variant="primary" onClick={logout}>
-						test
+						Wyloguj
 					</Button>
 				</Col>
 			</Row>

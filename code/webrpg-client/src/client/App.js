@@ -1,6 +1,6 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'; // css bootstrapa
 import './App.scss';
-import { StrictMode, useEffect, useState } from 'react';
+import { StrictMode, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
@@ -12,34 +12,28 @@ import Login from './other/Login';
 import Register from './other/Register';
 import Games from './other/Games';
 import Game from './game/Game';
-
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import SocketContext from './other/SocketContext';
-import SocketMessages from './other/SocketMessages';
+import Socket from './other/Socket';
 
-const socket = new W3CWebSocket('ws://192.168.0.21:8000');
+// const socket = new W3CWebSocket('ws://192.168.0.21:8000');
+const socket = new Socket();
 
 const App = () => {
 	const user = useState({ logged: false, name: 'nuk tuk', id: 'your mom' });
 	// const user = useState({ logged: true, name: 'nuk tuk', id: 'your mom' });
 
-	useEffect(() => {
-		socket.onopen = () => {
-			console.log('Ustanowiono połączenie');
-		};
-		socket.onmessage = (message) => {
-			const msg = JSON.parse(message.data);
-			console.log(msg);
-			if (msg.type === SocketMessages.LOGIN_ATTEMPT_RESULT) {
-				user[1]({
-					logged: msg.logged,
-					name: msg.name,
-					id: msg.id,
-				});
-			}
-		};
-	}, []);
-
+	// useEffect(() => {
+	// 	socket.onopen = () => {
+	// 		console.log('Ustanowiono połączenie');
+	// 	};
+	// 	socket.onmessage = (message) => {
+	// 		const msg = JSON.parse(message.data);
+	// 		console.log(msg);
+	// 		if (msg.type === SocketMessages.LOGIN_ATTEMPT_RESULT) {
+	// 			user[1](msg);
+	// 		}
+	// 	};
+	// }, []);
 
 	return (
 		<SocketContext.Provider value={socket}>

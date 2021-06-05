@@ -60,14 +60,29 @@ wsServer.on('request', function (request) {
 	connection.on('message', function (message) {
 		if (message.type === 'utf8') {
 			const dataFromClient = JSON.parse(message.utf8Data);
+			// próba logowania
 			if (dataFromClient.type === SocketMessages.LOGIN_ATTEMPT) {
 				let email = dataFromClient.email;
 				let password = dataFromClient.password;
-				console.log(`${userID} - ${email} : ${password}`);
+				console.log(`logowanie = ${userID} - ${email} : ${password}`);
 				// tutaj logowanie
 				this.sendUTF(
 					JSON.stringify({
 						type: SocketMessages.LOGIN_ATTEMPT_RESULT,
+						logged: true,
+						name: email,
+						id: password,
+					})
+				);
+			}
+			if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {
+				let email = dataFromClient.email;
+				let password = dataFromClient.password;
+				let name = dataFromClient.name;
+				console.log(`rejestracja = ${name} - ${email} : ${password}`);
+				this.sendUTF(
+					JSON.stringify({
+						type: SocketMessages.REGISTER_ATTEMPT_RESULT,
 						logged: true,
 						name: email,
 						id: password,

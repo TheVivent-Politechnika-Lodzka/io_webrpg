@@ -7,7 +7,6 @@ import {
 	Form,
 	Row,
 	Button,
-	InputGroup,
 	FormControl,
 } from 'react-bootstrap';
 import { Link, Redirect } from 'react-router-dom';
@@ -21,22 +20,27 @@ const Login = () => {
 	const socket = useContext(SocketContext);
 	const [user, setUser] = useContext(UserContext);
 
-	const sendForm = (form) => {
-		let tmp = Base64.stringify(SHA256(password));
-		socket.send(
-			JSON.stringify({
-				type: SocketMessages.LOGIN_ATTEMPT,
-				email: email,
-				password: tmp,
-			})
+	useEffect(() => {
+		socket.registerOnMessageEvent(
+			SocketMessages.LOGIN_ATTEMPT_RESULT,
+			(msg) => {
+				setUser(msg);
+			}
 		);
+	}, []); //eslint-disable-line
+
+	const sendForm = () => {
+		let tmp = Base64.stringify(SHA256(password));
+		socket.sendJSON({
+			type: SocketMessages.LOGIN_ATTEMPT,
+			email: email,
+			password: tmp,
+		});
 	};
 
-    if (user.name == email) {
-        return(
-            <Redirect to={`/user/${user.id}`}/>
-        )
-    }
+	if (user.name == email) {
+		return <Redirect to={`/user/${user.id}`} />;
+	}
 
 	return (
 		<Row className="justify-content-center h-100">
@@ -51,10 +55,7 @@ const Login = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										E-mail:
-									</InputGroup.Text>
+								<Form.Group className="form-floating">
 									<FormControl
 										type="email"
 										id="loginFormMail"
@@ -66,15 +67,13 @@ const Login = () => {
 											setEmail(e.target.value)
 										}
 									/>
-								</InputGroup>
+									<Form.Label>Adres e-mail:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<InputGroup className="mb-2">
-									<InputGroup.Text className="w-25">
-										Hasło:
-									</InputGroup.Text>
+								<Form.Group className="form-floating my-2">
 									<FormControl
 										type="password"
 										id="loginFormPassword"
@@ -86,7 +85,8 @@ const Login = () => {
 											setPassword(e.target.value)
 										}
 									/>
-								</InputGroup>
+									<Form.Label>Hasło:</Form.Label>
+								</Form.Group>
 							</Col>
 						</Row>
 						<Row>
