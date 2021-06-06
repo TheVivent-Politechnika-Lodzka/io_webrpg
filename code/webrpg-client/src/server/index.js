@@ -1,5 +1,6 @@
 const db = require('./DatabaseConn');
 const userAuth = require('./userInteraction/userAuth');
+const gameList = require('./userInteraction/gamesList')
 const webSocketsServerPort = 8000;
 const webSocketServer = require('websocket').server;
 const http = require('http');
@@ -80,8 +81,10 @@ wsServer.on('request', function (request) {
 					});
 					break;
 				case SocketMessages.GET_GAMES:
-					console.log("próba pobrania gier")
-					console.log(dataFromClient)	
+					gameList.getGames(dataFromClient).then((val)=>{
+						console.log(val)
+						this.sendUTF(JSON.stringify(val))
+					})
 				break;
 			}
 

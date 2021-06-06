@@ -15,7 +15,7 @@ class Socket {
 
 		this.socket.onmessage = (message) => {
 			const msg = JSON.parse(message.data);
-			console.log(msg);
+			// console.log(msg);
 			const type = msg.type;
 			delete msg.type;
 			this.functions[type](msg);
