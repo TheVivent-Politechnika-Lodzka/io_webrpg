@@ -32,8 +32,10 @@ const Register = () => {
 		socket.registerOnMessageEvent(
 			SocketMessages.REGISTER_ATTEMPT_RESULT,
 			(msg) => {
-				console.log('witam z register');
-				setUser(msg);
+				if (msg.logged) setUser(msg);
+				else {
+					if (msg.email == 'exists') console.log('email istnieje');
+				}
 			}
 		);
 	}, []); //eslint-disable-line
@@ -45,6 +47,8 @@ const Register = () => {
 		}
 		let passwd = Base64.stringify(SHA256(password));
 
+		console.log('próba rejestracji');
+
 		socket.sendJSON({
 			type: SocketMessages.REGISTER_ATTEMPT,
 			email: email,
@@ -53,13 +57,13 @@ const Register = () => {
 		});
 	};
 
-	if (user.name == email) {
-		return <Redirect to={`/user/user.id`} />;
+	if (user.logged) {
+		return <Redirect to={`/user/${user.id}`} />;
 	}
 
 	return (
-		<Row className="justify-content-center h-100">
-			<Col xs="12" sm="8" md="5" xl="3">
+		<Row className="justify-content-center mx-0">
+			<Col xs="11" sm="10" md="6" xl="5">
 				<Form
 					className="p-3 my-5 bg-info rounded-3"
 					onSubmit={(e) => {
@@ -70,7 +74,7 @@ const Register = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										type="email"
 										id="registerFormEmail"
@@ -86,7 +90,7 @@ const Register = () => {
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating my-2">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										id="registerFormNick"
 										placeholder="nazwa użytkownika"
@@ -101,7 +105,7 @@ const Register = () => {
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating ">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										type="password"
 										id="registerFormPassword"
@@ -120,7 +124,7 @@ const Register = () => {
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating my-2">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										type="password"
 										id="registerFormRepeatPassword"
@@ -142,7 +146,7 @@ const Register = () => {
 								<Button
 									variant="primary"
 									type="submit"
-									className="w-75 fs-5"
+									className="w-75 fs-5 m-3"
 								>
 									Zarejestruj
 								</Button>

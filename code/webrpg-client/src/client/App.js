@@ -19,7 +19,7 @@ import Socket from './other/Socket';
 const socket = new Socket();
 
 const App = () => {
-	const user = useState({ logged: false, name: 'nuk tuk', id: 'your mom' });
+	const user = useState({ logged: false, name: 'nuk tuk', id: 'your mom', email: "none" });
 	// const user = useState({ logged: true, name: 'nuk tuk', id: 'your mom' });
 
 	// useEffect(() => {

@@ -1,5 +1,5 @@
-import { SHA256 } from 'crypto-js';
-import Base64 from 'crypto-js/enc-base64';
+import { SHA256 } from 'crypto-js'; //import do szyfrowania
+import Base64 from 'crypto-js/enc-base64'; //import do kodowania
 import { useContext, useEffect, useState } from 'react';
 import {
 	Col,
@@ -8,7 +8,7 @@ import {
 	Row,
 	Button,
 	FormControl,
-} from 'react-bootstrap';
+} from 'react-bootstrap'; //importy z reactBootstrap
 import { Link, Redirect } from 'react-router-dom';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
@@ -20,6 +20,7 @@ const Login = () => {
 	const socket = useContext(SocketContext);
 	const [user, setUser] = useContext(UserContext);
 
+	// setUser zgodnie z UserContext
 	useEffect(() => {
 		socket.registerOnMessageEvent(
 			SocketMessages.LOGIN_ATTEMPT_RESULT,
@@ -29,6 +30,7 @@ const Login = () => {
 		);
 	}, []); //eslint-disable-line
 
+	// wysyłanie zaszyfrowanego formularza z email i haslo JSON
 	const sendForm = () => {
 		let tmp = Base64.stringify(SHA256(password));
 		socket.sendJSON({
@@ -38,13 +40,13 @@ const Login = () => {
 		});
 	};
 
-	if (user.name == email) {
+	if (user.logged) {
 		return <Redirect to={`/user/${user.id}`} />;
 	}
 
 	return (
-		<Row className="justify-content-center h-100">
-			<Col xs="12" sm="8" md="5" xl="3">
+		<Row className="justify-content-center mx-0">
+			<Col xs="11" sm="10" md="6" xl="5">
 				<Form
 					className="p-3 my-5 bg-info rounded-3"
 					onSubmit={(e) => {
@@ -55,7 +57,7 @@ const Login = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										type="email"
 										id="loginFormMail"
@@ -73,7 +75,7 @@ const Login = () => {
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating my-2">
+								<Form.Group className="form-floating m-3">
 									<FormControl
 										type="password"
 										id="loginFormPassword"
@@ -94,8 +96,7 @@ const Login = () => {
 								<Button
 									variant="primary"
 									type="submit"
-									className="w-75 fs-5
-                                "
+									className="w-75 fs-5 m-3"
 								>
 									Zaloguj
 								</Button>
@@ -111,13 +112,13 @@ const Login = () => {
 								<span> </span>
 								<Link to="./register">Zarejestruj się</Link>
 							</Col>
-							<Col
+							{/* <Col
 								xs="12"
 								md="5"
 								className="text-center text-lg-end mt-2"
 							>
 								<Link to="./register">Zapomniałeś hasła?</Link>
-							</Col>
+							</Col> */}
 						</Row>
 					</Container>
 				</Form>

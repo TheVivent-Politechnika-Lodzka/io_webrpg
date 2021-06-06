@@ -5,7 +5,7 @@ const MainPage = () => {
 		<Row>
 			<Col xs="12" className="align-bottom">
 				<h1 className="text-center mt-3">Witamy w Świecie webRPG</h1>
-				<Badge className="bg-lime">Primary</Badge>
+				{/* <Badge className="bg-lime">Primary</Badge> */}
 			</Col>
 		</Row>
 	);

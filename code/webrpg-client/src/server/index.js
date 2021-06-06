@@ -1,3 +1,5 @@
+const db = require('./DatabaseConn');
+const userAuth = require('./userInteraction/userAuth');
 const webSocketsServerPort = 8000;
 const webSocketServer = require('websocket').server;
 const http = require('http');
@@ -8,6 +10,9 @@ const wsServer = new webSocketServer({
 	httpServer: server,
 });
 
+db.dbConnect();
+
+// const db = databaseConn.dbConnect()
 const SocketMessages = require('./SocketMessages');
 
 // I'm maintaining all active connections in this object
@@ -43,7 +48,7 @@ const typesDef = {
 wsServer.on('request', function (request) {
 	var userID = getUniqueID();
 	console.log(
-		userID
+		userID + 'connected'
 		// new Date() +
 		// 	' Recieved a new connection from origin ' +
 		// 	request.origin +
@@ -60,35 +65,46 @@ wsServer.on('request', function (request) {
 	connection.on('message', function (message) {
 		if (message.type === 'utf8') {
 			const dataFromClient = JSON.parse(message.utf8Data);
-			// próba logowania
-			if (dataFromClient.type === SocketMessages.LOGIN_ATTEMPT) {
-				let email = dataFromClient.email;
-				let password = dataFromClient.password;
-				console.log(`logowanie = ${userID} - ${email} : ${password}`);
-				// tutaj logowanie
-				this.sendUTF(
-					JSON.stringify({
-						type: SocketMessages.LOGIN_ATTEMPT_RESULT,
-						logged: true,
-						name: email,
-						id: password,
-					})
-				);
+			const type = dataFromClient.type;
+			delete dataFromClient.type;
+
+			switch (type) {
+				case SocketMessages.LOGIN_ATTEMPT:
+					userAuth.login(dataFromClient).then((val) => {
+						this.sendUTF(JSON.stringify(val));
+					});
+					break;
+				case SocketMessages.REGISTER_ATTEMPT:
+					userAuth.register(dataFromClient).then((val) => {
+						this.sendUTF(JSON.stringify(val));
+					});
+					break;
 			}
-			if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {
-				let email = dataFromClient.email;
-				let password = dataFromClient.password;
-				let name = dataFromClient.name;
-				console.log(`rejestracja = ${name} - ${email} : ${password}`);
-				this.sendUTF(
-					JSON.stringify({
-						type: SocketMessages.REGISTER_ATTEMPT_RESULT,
-						logged: true,
-						name: email,
-						id: password,
-					})
-				);
-			}
+
+			// if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {
+			// 	let email = dataFromClient.email;
+			// 	let password = dataFromClient.password;
+			// 	let name = dataFromClient.name;
+			// 	console.log(`rejestracja = ${name} - ${email} : ${password}`);
+
+			// 	// db.dbFind('users', {_id: 1}).then((val) => console.log(val))
+
+			// 	db.dbInsert('users', {
+			// 		_id: 3,
+			// 		username: name,
+			// 		email: email,
+			// 		passwordHash: password,
+			// 	});
+
+			// 	this.sendUTF(
+			// 		JSON.stringify({
+			// 			type: SocketMessages.REGISTER_ATTEMPT_RESULT,
+			// 			logged: true,
+			// 			name: email,
+			// 			id: password,
+			// 		})
+			// 	);
+			// }
 			// const json = { type: dataFromClient.type };
 			// if (dataFromClient.type === typesDef.USER_EVENT) {
 			// 	users[userID] = dataFromClient;
