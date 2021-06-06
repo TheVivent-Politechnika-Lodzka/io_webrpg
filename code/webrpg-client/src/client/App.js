@@ -19,7 +19,12 @@ import Socket from './other/Socket';
 const socket = new Socket();
 
 const App = () => {
-	const user = useState({ logged: false, name: 'nuk tuk', id: 'your mom', email: "none" });
+	const user = useState({
+		logged: false,
+		name: 'nuk tuk',
+		id: 'your mom',
+		email: 'none',
+	});
 	// const user = useState({ logged: true, name: 'nuk tuk', id: 'your mom' });
 
 	// useEffect(() => {
@@ -73,8 +78,8 @@ const App = () => {
 };
 
 ReactDOM.render(
-	<StrictMode>
-		<App />
-	</StrictMode>,
+	// <StrictMode>
+	<App />,
+	// </StrictMode>,
 	document.getElementById('root')
 );
