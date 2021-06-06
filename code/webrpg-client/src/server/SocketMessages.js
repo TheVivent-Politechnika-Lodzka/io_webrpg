@@ -3,6 +3,8 @@ const SocketMessages = {
 	LOGIN_ATTEMPT_RESULT: 'login_attempt_result',
 	REGISTER_ATTEMPT: 'register_attempt',
 	REGISTER_ATTEMPT_RESULT: 'register_attempt_result',
+	GET_GAMES: 'get_games',
+	GET_GAMES_RESULT: 'get_games_result',
 };
 
 module.exports = SocketMessages;

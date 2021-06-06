@@ -1,6 +1,6 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'; // css bootstrapa
 import './App.scss';
-import { StrictMode, useState } from 'react';
+import { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
@@ -25,20 +25,6 @@ const App = () => {
 		id: 'your mom',
 		email: 'none',
 	});
-	// const user = useState({ logged: true, name: 'nuk tuk', id: 'your mom' });
-
-	// useEffect(() => {
-	// 	socket.onopen = () => {
-	// 		console.log('Ustanowiono połączenie');
-	// 	};
-	// 	socket.onmessage = (message) => {
-	// 		const msg = JSON.parse(message.data);
-	// 		console.log(msg);
-	// 		if (msg.type === SocketMessages.LOGIN_ATTEMPT_RESULT) {
-	// 			user[1](msg);
-	// 		}
-	// 	};
-	// }, []);
 
 	return (
 		<SocketContext.Provider value={socket}>

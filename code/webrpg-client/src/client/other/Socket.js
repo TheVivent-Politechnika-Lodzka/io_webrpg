@@ -4,8 +4,12 @@ class Socket {
 	constructor() {
 		this.socket = new w3cwebsocket('ws://192.168.0.21:8000');
 		this.functions = {};
+		this.msgs = [];
 
 		this.socket.onopen = () => {
+			while (this.msgs.length > 0) {
+				this.send(this.msgs.pop());
+			}
 			console.log('Ustanowiono połączenie');
 		};
 
@@ -23,12 +27,16 @@ class Socket {
 	};
 
 	send = (msg) => {
-		this.socket.send(msg);
+		if (this.socket.readyState !== 1) {
+			this.msgs.push(msg);
+		} else {
+			this.socket.send(msg);
+		}
 	};
 
-    sendJSON = (msg) => {
-        this.socket.send(JSON.stringify(msg))
-    }
+	sendJSON = (msg) => {
+		this.send(JSON.stringify(msg));
+	};
 }
 
 export default Socket;

@@ -79,6 +79,10 @@ wsServer.on('request', function (request) {
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
+				case SocketMessages.GET_GAMES:
+					console.log("próba pobrania gier")
+					console.log(dataFromClient)	
+				break;
 			}
 
 			// if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {
