@@ -15,6 +15,9 @@ import Game from './game/Game';
 import SocketContext from './other/SocketContext';
 import Socket from './other/Socket';
 import SocketMessages from './other/SocketMessages';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 // const socket = new W3CWebSocket('ws://192.168.0.21:8000');
 const socket = new Socket();

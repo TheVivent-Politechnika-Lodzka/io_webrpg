@@ -3,8 +3,8 @@ const { MongoClient } = require('mongodb');
 var globalClient;
 
 async function dbConnect() {
-	const user = 'App';
-	const pass = 'lcgVMoJseuoZL8bn';
+	const user = process.env.DB_USER;
+	const pass = process.env.DB_PASS;
 	const uri =
 		'mongodb+srv://' +
 		user +

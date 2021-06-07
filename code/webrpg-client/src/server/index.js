@@ -5,9 +5,11 @@ const SocketMessages = require('./SocketMessages');
 const webSocketServer = require('websocket').server;
 const http = require('http');
 var ObjectId = require('mongodb').ObjectId;
+const dotenv = require('dotenv')
+dotenv.config()
 
 // konfiguracja
-const webSocketsServerPort = 8000;
+const webSocketsServerPort = process.env.SERVER_PORT;
 
 // odpalenie websocket server
 const server = http.createServer();

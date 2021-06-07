@@ -26,7 +26,7 @@ function eraseCookie(name) {
 
 class Socket {
 	constructor() {
-		this.socket = new w3cwebsocket('ws://192.168.0.21:8000');
+		this.socket = new w3cwebsocket(`ws://${process.env.SOCKET_SERVER}:8000`);
 		this.functions = {};
 		this.msgs = [];
 
