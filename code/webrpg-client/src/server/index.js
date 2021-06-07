@@ -1,32 +1,31 @@
 const db = require('./DatabaseConn');
-var ObjectId = require('mongodb').ObjectId;
 const userAuth = require('./userInteraction/userAuth');
 const gameList = require('./userInteraction/gamesList');
-const webSocketsServerPort = 8000;
+const SocketMessages = require('./SocketMessages');
 const webSocketServer = require('websocket').server;
 const http = require('http');
-// Spinning the http server and the websocket server.
+var ObjectId = require('mongodb').ObjectId;
+
+// konfiguracja
+const webSocketsServerPort = 8000;
+
+// odpalenie websocket server
 const server = http.createServer();
 server.listen(webSocketsServerPort);
 const wsServer = new webSocketServer({
 	httpServer: server,
 });
 
+// połączenie z bazą
 db.dbConnect();
 
-// const db = databaseConn.dbConnect()
-const SocketMessages = require('./SocketMessages');
-
-// I'm maintaining all active connections in this object
+// wszystkie connections są tutaj
 const clients = {};
-// I'm maintaining all active users in this object
+// wszyscy zalogowani użytkownicy są tutaj
+// [indexy pokrywają się z indexami clients]
 const users = {};
-// The current editor content is maintained here.
-let editorContent = null;
-// User activity history.
-let userActivity = [];
 
-// Generates unique ID for every new connection
+// generator unikalnych id
 const getUniqueID = () => {
 	const s4 = () =>
 		Math.floor((1 + Math.random()) * 0x10000)
@@ -35,20 +34,17 @@ const getUniqueID = () => {
 	return s4() + s4() + '-' + s4();
 };
 
-const sendMessage = (json) => {
-	// We are sending the current data to all connected clients
-	Object.keys(clients).map((client) => {
-		clients[client].sendUTF(json);
-	});
-};
-
+// obsługa połączeń
 wsServer.on('request', function (request) {
-	var userID = getUniqueID();
+	var userID = getUniqueID(); // stwórz id
 	console.log(userID + ' connected');
-	// You can rewrite this part of the code to accept only the requests from allowed origin
+
+	// przyjęcie połązenia i zapisanie go
+	// można/trzeba będzie ogarnąć akceptowanie, żeby tylko nasi klienci mogli się podłączyć
 	const connection = request.accept(null, request.origin);
 	clients[userID] = connection;
 
+	// jeżeli dostanę ciastko, to pewnie z id do auto-zalogowania
 	if (request.cookies[0]) {
 		const id = request.cookies[0].value;
 		db.dbFind('users', { _id: ObjectId(id) }).then((res) => {
@@ -70,6 +66,8 @@ wsServer.on('request', function (request) {
 	}
 
 	connection.on('message', function (message) {
+		// komunikacja odbywa się na utf8 - będzie może trzeba przejść na Base64
+		// ale na razie jest git
 		if (message.type === 'utf8') {
 			const dataFromClient = JSON.parse(message.utf8Data);
 			const type = dataFromClient.type;
@@ -77,13 +75,13 @@ wsServer.on('request', function (request) {
 
 			// rzeczy a propos logowania
 			switch (type) {
-				case SocketMessages.LOGIN_ATTEMPT:
+				case SocketMessages.LOGIN_ATTEMPT: // próba zalogwania
 					userAuth.login(dataFromClient).then((val) => {
 						console.log('User logged in');
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
-				case SocketMessages.REGISTER_ATTEMPT:
+				case SocketMessages.REGISTER_ATTEMPT: // próba rejestracji
 					userAuth.register(dataFromClient).then((val) => {
 						console.log('User registered');
 						this.sendUTF(JSON.stringify(val));
@@ -93,14 +91,13 @@ wsServer.on('request', function (request) {
 
 			// rzeczy a propos zalogowanego użytkownika
 			if (users[userID] === undefined) {
-				return
+				return;
 			} // przejdzie dalej, tylko jeżeli użytkownik jest zalogowany
-			
+
 			switch (type) {
-				case SocketMessages.GET_GAMES:
-					gameList.getGames(dataFromClient).then((val) => {
+				case SocketMessages.GET_GAMES: // pobranie gier
+					gameList.getGames(users[userID]).then((val) => {
 						console.log('user loaded games list');
-						// console.log(val)
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
@@ -108,14 +105,14 @@ wsServer.on('request', function (request) {
 		}
 	});
 
-	// user disconnected
+	// obsługa zakończenia połączenia
 	connection.on('close', function (connection) {
 		console.log(userID + ' disconnected.');
-		// const json = { type: typesDef.USER_EVENT };
-		// userActivity.push(`${users[userID].username} left the document`);
-		// json.data = { users, userActivity };
+
+		// tu pewnie będzie obsługa "nagłego" wychodzenia z pokoju
+
+		// trzeba wyczyścić, bo tego pana już nie ma
 		delete clients[userID];
 		delete users[userID];
-		// sendMessage(JSON.stringify(json));
 	});
 });

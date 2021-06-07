@@ -1,9 +1,12 @@
+import { useContext } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../img/logo.png';
 import UserContext from '../other/UserContext';
 
 const Navigation = () => {
+	const [user] = useContext(UserContext);
+
 	return (
 		<Navbar className="px-2" bg="lime" expand="lg">
 			<Container fluid>
@@ -21,30 +24,25 @@ const Navigation = () => {
 						<LinkContainer to="/">
 							<Nav.Link>Strona główna</Nav.Link>
 						</LinkContainer>
-						{/* Wyświetl zamiast zaloguj się imię, jeżeli jesteś zalogowany */}
-						<UserContext.Consumer>
-							{([user]) =>
-								!user.logged ? (
-									<LinkContainer to="/login">
-										<Nav.Link>Zaloguj się</Nav.Link>
-									</LinkContainer>
-								) : (
-									<LinkContainer to={`/user/${user.id}`}>
-										<Nav.Link>{user.username}</Nav.Link>
-									</LinkContainer>
-								)
-							}
-						</UserContext.Consumer>
-						{/* Wyświetl opcję twoje gry, gdy jesteś zalogowany */}
-						<UserContext.Consumer>
-							{([user]) =>
-								user.logged ? (
-									<LinkContainer to="/games">
-										<Nav.Link>Twoje Gry</Nav.Link>
-									</LinkContainer>
-								) : null
-							}
-						</UserContext.Consumer>
+
+						{/* jeżeli użytkownik nie jest zalogowany wyświetle "zaloguj"
+							w przeciwnym wypadku wyświetl jego nick */}
+						{!user.logged ? (
+							<LinkContainer to="/login">
+								<Nav.Link>Zaloguj się</Nav.Link>
+							</LinkContainer>
+						) : (
+							<LinkContainer to={`/user/${user.id}`}>
+								<Nav.Link>{user.username}</Nav.Link>
+							</LinkContainer>
+						)}
+
+						{/* jeżeli użytkownik jest zalogowany wyświetl "twoje gry" */}
+						{user.logged ? (
+							<LinkContainer to="/games">
+								<Nav.Link>Twoje Gry</Nav.Link>
+							</LinkContainer>
+						) : null}
 					</Nav>
 				</Navbar.Collapse>
 			</Container>

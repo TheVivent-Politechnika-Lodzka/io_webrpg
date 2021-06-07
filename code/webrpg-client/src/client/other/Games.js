@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
 import { Redirect } from 'react-router';
+import { getCookie } from './Socket';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
@@ -8,7 +9,7 @@ import UserContext from './UserContext';
 const Games = () => {
 	const [state, setState] = useState({
 		listOfGames: [], // lista gier
-		loading: true, // flaga "czy się ładuję"
+		loading: true, // flaga "czy się ładuje"
 		moreModal: -1, // index gry do wyświetlenia w modalu (-1 oznacza nie wyświetlaj)
 	});
 	const socket = useContext(SocketContext);
@@ -20,7 +21,6 @@ const Games = () => {
 		// wyślij prośbę o przesłanie gierek
 		socket.sendJSON({
 			type: SocketMessages.GET_GAMES,
-			...user,
 		});
 	};
 
@@ -32,9 +32,8 @@ const Games = () => {
 		}));
 	};
 
-	useEffect(refreshGames, []); // pobierz gry przy pierwszym załadowaniu
+	// przypisz event nasłuchujący zwróconych gier
 	useEffect(() => {
-		// przypisz event nasłuchujący zwróconych gier
 		socket.registerOnMessageEvent(
 			SocketMessages.GET_GAMES_RESULT,
 			(msg) => {
@@ -46,17 +45,16 @@ const Games = () => {
 			}
 		);
 	}, []);
+	useEffect(refreshGames, []); // pobierz gry przy pierwszym załadowaniu
 
 	// jeżeli użytkownik nie jest zalogowany, to
 	// przekieruj na stronę główną
 	if (!user.logged) {
-		setTimeout(() => {
-			if (!user.logged) return <Redirect to="/" />;
-
-			// console.log('jednak zalogowany');
-			// refreshGames();
-		}, 500);
-		// return <Redirect to="/" />;
+		// jeżeli jest ustawione cookie, to user pewnie jest zalogowany
+		// tylko auto-logowanie jeszcze się nie odbyło
+		if (!getCookie('id')) {
+			return <Redirect to="/" />;
+		}
 	}
 
 	// ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)

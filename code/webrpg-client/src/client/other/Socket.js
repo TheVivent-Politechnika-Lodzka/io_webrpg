@@ -1,5 +1,4 @@
 import { w3cwebsocket } from 'websocket';
-import SocketMessages from './SocketMessages';
 
 function setCookie(name, value, days) {
 	var expires = '';
@@ -40,7 +39,6 @@ class Socket {
 
 		this.socket.onmessage = (message) => {
 			const msg = JSON.parse(message.data);
-			// console.log(msg);
 			const type = msg.type;
 			delete msg.type;
 			this.functions[type](msg);

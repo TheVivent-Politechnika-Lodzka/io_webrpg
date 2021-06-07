@@ -13,14 +13,14 @@ import Register from './other/Register';
 import Games from './other/Games';
 import Game from './game/Game';
 import SocketContext from './other/SocketContext';
-import Socket, { eraseCookie, getCookie } from './other/Socket';
+import Socket from './other/Socket';
 import SocketMessages from './other/SocketMessages';
 
 // const socket = new W3CWebSocket('ws://192.168.0.21:8000');
 const socket = new Socket();
 
 const App = () => {
-	console.log(getCookie('id'));
+	// defaultowy 'user'. istnieje jako odniesienie jakich danych spodziewać się z usera
 	const user = useState({
 		logged: false,
 		username: 'nuk tuk',
@@ -28,6 +28,7 @@ const App = () => {
 		email: 'none',
 	});
 
+	// rejestracja eventu auto-logowania
 	useEffect(() => {
 		socket.registerOnMessageEvent(SocketMessages.AUTO_LOGIN, (msg) => {
 			user[1](msg);
@@ -71,6 +72,7 @@ const App = () => {
 	);
 };
 
+// wyświetl aplikację
 ReactDOM.render(
 	// <StrictMode>
 	<App />,
