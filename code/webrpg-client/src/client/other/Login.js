@@ -10,6 +10,7 @@ import {
 	FormControl,
 } from 'react-bootstrap'; //importy z reactBootstrap
 import { Link, Redirect } from 'react-router-dom';
+import { setCookie } from './Socket';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
@@ -26,6 +27,7 @@ const Login = () => {
 			SocketMessages.LOGIN_ATTEMPT_RESULT,
 			(msg) => {
 				setUser(msg);
+				setCookie('user', JSON.stringify(msg), 3);
 			}
 		);
 	}, []); //eslint-disable-line

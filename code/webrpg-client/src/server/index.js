@@ -1,6 +1,6 @@
 const db = require('./DatabaseConn');
 const userAuth = require('./userInteraction/userAuth');
-const gameList = require('./userInteraction/gamesList')
+const gameList = require('./userInteraction/gamesList');
 const webSocketsServerPort = 8000;
 const webSocketServer = require('websocket').server;
 const http = require('http');
@@ -72,20 +72,23 @@ wsServer.on('request', function (request) {
 			switch (type) {
 				case SocketMessages.LOGIN_ATTEMPT:
 					userAuth.login(dataFromClient).then((val) => {
+						console.log('User logged in');
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
 				case SocketMessages.REGISTER_ATTEMPT:
 					userAuth.register(dataFromClient).then((val) => {
+						console.log('User registered');
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
 				case SocketMessages.GET_GAMES:
-					gameList.getGames(dataFromClient).then((val)=>{
-						console.log(val)
-						this.sendUTF(JSON.stringify(val))
-					})
-				break;
+					gameList.getGames(dataFromClient).then((val) => {
+						console.log('user loaded games list');
+						// console.log(val)
+						this.sendUTF(JSON.stringify(val));
+					});
+					break;
 			}
 
 			// if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {

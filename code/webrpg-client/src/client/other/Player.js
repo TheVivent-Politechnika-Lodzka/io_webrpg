@@ -1,13 +1,20 @@
 import { useContext } from 'react';
 import { Col, Container, Row, Button } from 'react-bootstrap';
 import { Redirect, withRouter } from 'react-router';
+import { eraseCookie } from './Socket';
 import UserContext from './UserContext';
 
 const Player = (props) => {
 	const [user, setUser] = useContext(UserContext);
 
 	const logout = () => {
-		setUser({ logged: false });
+		setUser({
+			logged: false,
+			name: 'nuk tuk',
+			id: 'your mom',
+			email: 'none',
+		});
+		eraseCookie('user');
 	};
 
 	if (!user.logged) {

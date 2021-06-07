@@ -1,6 +1,6 @@
 // import 'bootstrap/dist/css/bootstrap.min.css'; // css bootstrapa
 import './App.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
@@ -13,18 +13,25 @@ import Register from './other/Register';
 import Games from './other/Games';
 import Game from './game/Game';
 import SocketContext from './other/SocketContext';
-import Socket from './other/Socket';
+import Socket, { eraseCookie, getCookie } from './other/Socket';
 
 // const socket = new W3CWebSocket('ws://192.168.0.21:8000');
 const socket = new Socket();
 
+
 const App = () => {
-	const user = useState({
-		logged: false,
-		name: 'nuk tuk',
-		id: 'your mom',
-		email: 'none',
-	});
+	const tmp = JSON.parse(getCookie('user'));
+	const user = useState(()=>(
+		tmp ? tmp :
+		{
+			logged: false,
+			name: 'nuk tuk',
+			id: 'your mom',
+			email: 'none',
+		}
+	)
+	);
+
 
 	return (
 		<SocketContext.Provider value={socket}>
