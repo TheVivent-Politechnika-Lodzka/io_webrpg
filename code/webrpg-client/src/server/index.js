@@ -1,4 +1,5 @@
 const db = require('./DatabaseConn');
+var ObjectId = require('mongodb').ObjectId;
 const userAuth = require('./userInteraction/userAuth');
 const gameList = require('./userInteraction/gamesList');
 const webSocketsServerPort = 8000;
@@ -41,27 +42,32 @@ const sendMessage = (json) => {
 	});
 };
 
-const typesDef = {
-	USER_EVENT: 'userevent',
-	CONTENT_CHANGE: 'contentchange',
-};
-
 wsServer.on('request', function (request) {
 	var userID = getUniqueID();
-	console.log(
-		userID + 'connected'
-		// new Date() +
-		// 	' Recieved a new connection from origin ' +
-		// 	request.origin +
-		// 	'.'
-	);
+	console.log(userID + ' connected');
 	// You can rewrite this part of the code to accept only the requests from allowed origin
 	const connection = request.accept(null, request.origin);
 	clients[userID] = connection;
-	// console.log(
-	// 	'connected: ' + userID + ' in ' + Object.getOwnPropertyNames(clients)
-	// );
-	// sendMessage('cześć, to wiadomość z serwera');
+
+	if (request.cookies[0]) {
+		const id = request.cookies[0].value;
+		db.dbFind('users', { _id: ObjectId(id) }).then((res) => {
+			const { _id, username, email } = res[0];
+			users[userID] = {
+				id: _id,
+				username: username,
+				email: email,
+			};
+
+			connection.sendUTF(
+				JSON.stringify({
+					type: SocketMessages.AUTO_LOGIN,
+					logged: true,
+					...users[userID],
+				})
+			);
+		});
+	}
 
 	connection.on('message', function (message) {
 		if (message.type === 'utf8') {
@@ -69,6 +75,7 @@ wsServer.on('request', function (request) {
 			const type = dataFromClient.type;
 			delete dataFromClient.type;
 
+			// rzeczy a propos logowania
 			switch (type) {
 				case SocketMessages.LOGIN_ATTEMPT:
 					userAuth.login(dataFromClient).then((val) => {
@@ -82,6 +89,14 @@ wsServer.on('request', function (request) {
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;
+			}
+
+			// rzeczy a propos zalogowanego użytkownika
+			if (users[userID] === undefined) {
+				return
+			} // przejdzie dalej, tylko jeżeli użytkownik jest zalogowany
+			
+			switch (type) {
 				case SocketMessages.GET_GAMES:
 					gameList.getGames(dataFromClient).then((val) => {
 						console.log('user loaded games list');
@@ -90,49 +105,12 @@ wsServer.on('request', function (request) {
 					});
 					break;
 			}
-
-			// if (dataFromClient.type === SocketMessages.REGISTER_ATTEMPT) {
-			// 	let email = dataFromClient.email;
-			// 	let password = dataFromClient.password;
-			// 	let name = dataFromClient.name;
-			// 	console.log(`rejestracja = ${name} - ${email} : ${password}`);
-
-			// 	// db.dbFind('users', {_id: 1}).then((val) => console.log(val))
-
-			// 	db.dbInsert('users', {
-			// 		_id: 3,
-			// 		username: name,
-			// 		email: email,
-			// 		passwordHash: password,
-			// 	});
-
-			// 	this.sendUTF(
-			// 		JSON.stringify({
-			// 			type: SocketMessages.REGISTER_ATTEMPT_RESULT,
-			// 			logged: true,
-			// 			name: email,
-			// 			id: password,
-			// 		})
-			// 	);
-			// }
-			// const json = { type: dataFromClient.type };
-			// if (dataFromClient.type === typesDef.USER_EVENT) {
-			// 	users[userID] = dataFromClient;
-			// 	userActivity.push(
-			// 		`${dataFromClient.username} joined to edit the document`
-			// 	);
-			// 	json.data = { users, userActivity };
-			// } else if (dataFromClient.type === typesDef.CONTENT_CHANGE) {
-			// 	editorContent = dataFromClient.content;
-			// 	json.data = { editorContent, userActivity };
-			// }
-			// sendMessage(JSON.stringify(json));
 		}
 	});
 
 	// user disconnected
 	connection.on('close', function (connection) {
-		console.log(new Date() + ' Peer ' + userID + ' disconnected.');
+		console.log(userID + ' disconnected.');
 		// const json = { type: typesDef.USER_EVENT };
 		// userActivity.push(`${users[userID].username} left the document`);
 		// json.data = { users, userActivity };

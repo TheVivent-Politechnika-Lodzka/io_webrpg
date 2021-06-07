@@ -30,7 +30,7 @@ const Navigation = () => {
 									</LinkContainer>
 								) : (
 									<LinkContainer to={`/user/${user.id}`}>
-										<Nav.Link>{user.name}</Nav.Link>
+										<Nav.Link>{user.username}</Nav.Link>
 									</LinkContainer>
 								)
 							}

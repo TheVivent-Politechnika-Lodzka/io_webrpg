@@ -14,7 +14,8 @@ const Player = (props) => {
 			id: 'your mom',
 			email: 'none',
 		});
-		eraseCookie('user');
+		eraseCookie('id');
+		window.location.reload()
 	};
 
 	if (!user.logged) {

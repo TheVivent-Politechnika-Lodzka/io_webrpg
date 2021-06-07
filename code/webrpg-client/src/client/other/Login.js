@@ -18,6 +18,7 @@ import UserContext from './UserContext';
 const Login = () => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [keepSignedIn, setKeepSignedIn] = useState(true);
 	const socket = useContext(SocketContext);
 	const [user, setUser] = useContext(UserContext);
 
@@ -27,7 +28,9 @@ const Login = () => {
 			SocketMessages.LOGIN_ATTEMPT_RESULT,
 			(msg) => {
 				setUser(msg);
-				setCookie('user', JSON.stringify(msg), 3);
+				if (keepSignedIn) {
+					setCookie('id', msg.id, 3);
+				}
 			}
 		);
 	}, []); //eslint-disable-line
@@ -91,6 +94,18 @@ const Login = () => {
 									/>
 									<Form.Label>Hasło:</Form.Label>
 								</Form.Group>
+							</Col>
+						</Row>
+						<Row>
+							<Col>
+								<Form.Check
+									type="checkbox"
+									checked={keepSignedIn}
+									onChange={(e) =>
+										setKeepSignedIn(e.target.checked)
+									}
+									label="Pozostaw zalogowanym"
+								/>
 							</Col>
 						</Row>
 						<Row>

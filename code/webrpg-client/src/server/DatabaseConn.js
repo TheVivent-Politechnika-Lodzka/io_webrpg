@@ -32,7 +32,7 @@ async function dbConnect() {
 // querry -> MQL querry (JSON based, can be empty?)
 async function dbFind(collection, querry) {
 	try {
-		const cursor = globalClient.collection(collection).find(querry);
+		const cursor = await globalClient.collection(collection).find(querry);
 		var results = await cursor.toArray();
 	} catch (e) {
 		console.error(e);

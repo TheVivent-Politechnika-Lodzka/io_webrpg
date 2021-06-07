@@ -15,20 +15,16 @@ const Games = () => {
 	const [user] = useContext(UserContext);
 
 	const refreshGames = () => {
-        //ustaw flagę "ładuję" na true
+		//ustaw flagę "ładuję" na true
 		setState((prevState) => ({ ...prevState, loading: true }));
 		// wyślij prośbę o przesłanie gierek
-        socket.sendJSON(
-			Object.assign(
-				{
-					type: SocketMessages.GET_GAMES,
-				},
-				user
-			)
-		);
+		socket.sendJSON({
+			type: SocketMessages.GET_GAMES,
+			...user,
+		});
 	};
 
-    // funkcją ustawiająca która gra ma być wyświetlona w modalu
+	// funkcją ustawiająca która gra ma być wyświetlona w modalu
 	const toggleModal = (index) => {
 		setState((prevState) => ({
 			...prevState,
@@ -38,7 +34,7 @@ const Games = () => {
 
 	useEffect(refreshGames, []); // pobierz gry przy pierwszym załadowaniu
 	useEffect(() => {
-        // przypisz event nasłuchujący zwróconych gier
+		// przypisz event nasłuchujący zwróconych gier
 		socket.registerOnMessageEvent(
 			SocketMessages.GET_GAMES_RESULT,
 			(msg) => {
@@ -51,16 +47,22 @@ const Games = () => {
 		);
 	}, []);
 
-    // jeżeli użytkownik nie jest zalogowany, to
-    // przekieruj na stronę główną
+	// jeżeli użytkownik nie jest zalogowany, to
+	// przekieruj na stronę główną
 	if (!user.logged) {
-		return <Redirect to="/" />;
+		setTimeout(() => {
+			if (!user.logged) return <Redirect to="/" />;
+
+			// console.log('jednak zalogowany');
+			// refreshGames();
+		}, 500);
+		// return <Redirect to="/" />;
 	}
 
-    // ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)
+	// ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)
 	var currModal = state.listOfGames[state.moreModal];
-	
-    return (
+
+	return (
 		<Container>
 			{state.loading ? (
 				<Row>

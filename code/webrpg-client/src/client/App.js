@@ -14,24 +14,25 @@ import Games from './other/Games';
 import Game from './game/Game';
 import SocketContext from './other/SocketContext';
 import Socket, { eraseCookie, getCookie } from './other/Socket';
+import SocketMessages from './other/SocketMessages';
 
 // const socket = new W3CWebSocket('ws://192.168.0.21:8000');
 const socket = new Socket();
 
-
 const App = () => {
-	const tmp = JSON.parse(getCookie('user'));
-	const user = useState(()=>(
-		tmp ? tmp :
-		{
-			logged: false,
-			name: 'nuk tuk',
-			id: 'your mom',
-			email: 'none',
-		}
-	)
-	);
+	console.log(getCookie('id'));
+	const user = useState({
+		logged: false,
+		username: 'nuk tuk',
+		id: 'your mom',
+		email: 'none',
+	});
 
+	useEffect(() => {
+		socket.registerOnMessageEvent(SocketMessages.AUTO_LOGIN, (msg) => {
+			user[1](msg);
+		});
+	}, []);
 
 	return (
 		<SocketContext.Provider value={socket}>

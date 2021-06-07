@@ -1,4 +1,5 @@
 import { w3cwebsocket } from 'websocket';
+import SocketMessages from './SocketMessages';
 
 function setCookie(name, value, days) {
 	var expires = '';
@@ -44,6 +45,7 @@ class Socket {
 			delete msg.type;
 			this.functions[type](msg);
 		};
+
 	}
 
 	registerOnMessageEvent = (type, fun) => {

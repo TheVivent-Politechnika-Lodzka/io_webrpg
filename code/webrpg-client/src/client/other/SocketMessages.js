@@ -5,6 +5,7 @@ const SocketMessages = {
 	REGISTER_ATTEMPT_RESULT: 'register_attempt_result',
 	GET_GAMES: 'get_games',
 	GET_GAMES_RESULT: 'get_games_result',
+	AUTO_LOGIN: 'auto_login',
 };
 
 export default SocketMessages;
