@@ -1,5 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
-import { Container, Row, Col, Card, Button, Modal } from 'react-bootstrap';
+import {
+	Container,
+	Row,
+	Col,
+	Card,
+	Button,
+	Modal,
+	ButtonGroup,
+} from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from './Socket';
 import SocketContext from './SocketContext';
@@ -60,6 +68,8 @@ const Games = () => {
 	// ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)
 	var currModal = state.listOfGames[state.moreModal];
 
+	console.log(state.listOfGames);
+
 	return (
 		<Container>
 			{state.loading ? (
@@ -69,21 +79,45 @@ const Games = () => {
 					</Col>
 				</Row>
 			) : (
-				<Row xs={1} md={3} xl={5}>
+				<Row xs={1} sm={2} md={2} lg={3} xl={4}>
 					{state.listOfGames.map((game, index) => (
-						<Col key={game._id} className="mt-3">
-							<Card style={{ height: '250px' }}>
+						<Col key={game._id} className="my-3">
+							<Card style={{ height: '400px' }}>
 								<Card.Header>{game.gameName}</Card.Header>
 								<Card.Body>
 									<Card.Subtitle>{game._id}</Card.Subtitle>
 								</Card.Body>
-								<Button
-									active
-									variant="primary"
-									onClick={() => toggleModal(index)}
-								>
-									Więcej
-								</Button>
+								{/* <div className="d-grid gap-2"></div> */}
+								<Container fluid className="text-center p-3">
+									{/* <Row xs={2} sm={2} md={2} lg={2} xl={2}>
+										<Col className="text-center"> */}
+									<ButtonGroup className="text-center w-100">
+										<Button
+											className="p-3"
+											style={{ height: '100px' }}
+											size="lg"
+											active
+											variant="primary"
+											onClick={() => toggleModal(index)}
+										>
+											Więcej
+										</Button>
+										{/* </Col>
+										<Col className="text-center"> */}
+										<Button
+											className="p-3"
+											style={{ height: '100px' }}
+											size="lg"
+											active
+											variant="success"
+											onClick={() => toggleModal(index)}
+										>
+											Dołącz
+										</Button>
+									</ButtonGroup>
+									{/* </Col>
+									</Row> */}
+								</Container>
 							</Card>
 						</Col>
 					))}
@@ -95,11 +129,12 @@ const Games = () => {
 				</Row>
 			)}
 
-			<Modal show={state.moreModal != -1} onHide={() => toggleModal(-1)}>
-				{currModal ? (
+			{currModal ? (
+				<Modal show={state.moreModal != -1} onHide={() => toggleModal(-1)}>
 					<Modal.Header>{currModal.gameName}</Modal.Header>
-				) : null}
-			</Modal>
+					sdfsdafasdfasdfasdf
+				</Modal>
+			) : null}
 		</Container>
 	);
 };

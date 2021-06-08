@@ -71,7 +71,19 @@ async function dbUpdate(collection, updateSearchQuerry, updateStatement) {
 	return result;
 }
 
-// dbConnect();
+// async function dbAggregate(collection, insert) {
+// 	//await listDatabases(client)
+
+// 	try {
+// 		var result = await globalClient
+// 			.collection(collection)
+// 			.insertOne(insert);
+// 	} catch (e) {
+// 		console.error(e);
+// 	}
+// 	return result;
+// }
+
 module.exports = {
 	dbConnect: dbConnect,
 	dbFind: dbFind,
