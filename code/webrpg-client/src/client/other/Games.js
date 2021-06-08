@@ -87,10 +87,7 @@ const Games = () => {
 								<Card.Body>
 									<Card.Subtitle>{game._id}</Card.Subtitle>
 								</Card.Body>
-								{/* <div className="d-grid gap-2"></div> */}
 								<Container fluid className="text-center p-3">
-									{/* <Row xs={2} sm={2} md={2} lg={2} xl={2}>
-										<Col className="text-center"> */}
 									<ButtonGroup className="text-center w-100">
 										<Button
 											className="p-3"
@@ -102,8 +99,6 @@ const Games = () => {
 										>
 											Więcej
 										</Button>
-										{/* </Col>
-										<Col className="text-center"> */}
 										<Button
 											className="p-3"
 											style={{ height: '100px' }}
@@ -115,22 +110,52 @@ const Games = () => {
 											Dołącz
 										</Button>
 									</ButtonGroup>
-									{/* </Col>
-									</Row> */}
 								</Container>
 							</Card>
 						</Col>
 					))}
 					<Col className="mt-3">
-						<Card bg="lime" style={{ height: '250px' }}>
-							<Card.Body>+</Card.Body>
+						<Card style={{ height: '399px' }}>
+							<Card.Body className="p-0">
+								<Container
+									fluid
+									className="text-center h-100"
+								>
+									<ButtonGroup className="text-center h-100 w-100">
+										<Button
+											className="w-50"
+											// style={{ height: '100px' }}
+											size="lg"
+											active
+											variant="primary"
+											// onClick={() => toggleModal(index)}
+										>
+											Stwórz nowy pokój
+										</Button>
+
+										<Button
+											className="w-50"
+											// style={{ height: '100px' }}
+											size="lg"
+											active
+											variant="success"
+											// onClick={() => toggleModal(index)}
+										>
+											Dołącz do nowego pokoju
+										</Button>
+									</ButtonGroup>
+								</Container>
+							</Card.Body>
 						</Card>
 					</Col>
 				</Row>
 			)}
 
 			{currModal ? (
-				<Modal show={state.moreModal != -1} onHide={() => toggleModal(-1)}>
+				<Modal
+					show={state.moreModal != -1}
+					onHide={() => toggleModal(-1)}
+				>
 					<Modal.Header>{currModal.gameName}</Modal.Header>
 					sdfsdafasdfasdfasdf
 				</Modal>

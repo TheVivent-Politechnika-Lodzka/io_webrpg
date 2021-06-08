@@ -71,22 +71,24 @@ async function dbUpdate(collection, updateSearchQuerry, updateStatement) {
 	return result;
 }
 
-// async function dbAggregate(collection, insert) {
-// 	//await listDatabases(client)
+async function dbAggregate(collection, querry) {
 
-// 	try {
-// 		var result = await globalClient
-// 			.collection(collection)
-// 			.insertOne(insert);
-// 	} catch (e) {
-// 		console.error(e);
-// 	}
-// 	return result;
-// }
+	try {
+		const cursor = await globalClient
+			.collection(collection)
+			.aggregate(querry);
+		var results = await cursor.toArray();
+	} catch (e) {
+		console.error(e);
+	}
+	return results;
+}
+
 
 module.exports = {
 	dbConnect: dbConnect,
 	dbFind: dbFind,
 	dbInsert: dbInsert,
 	dbUpdate: dbUpdate,
+	dbAggregate: dbAggregate,
 };
