@@ -14,8 +14,7 @@ import { getCookie } from './Socket';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
-
-
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const Games = () => {
 	const [state, setState] = useState({
@@ -56,6 +55,7 @@ const Games = () => {
 			}
 		);
 	}, []);
+
 	useEffect(refreshGames, []); // pobierz gry przy pierwszym załadowaniu
 
 	// jeżeli użytkownik nie jest zalogowany, to
@@ -72,8 +72,6 @@ const Games = () => {
 	var currModal = state.listOfGames[state.moreModal];
 
 	console.log(state.listOfGames);
-
-	
 
 	return (
 		<Container>
@@ -177,23 +175,21 @@ const Games = () => {
 											style={{ 'margin-top': '7px' }}
 											id="idGameCode"
 										>
-											<p>
-												{currModal._id}
-											</p>
+											<p>{currModal._id}</p>
 										</div>
 									</td>
 									<td className="w-50">
-										<Button
-											className="w-100 "
-											// style={{ height: '100px' }}
-											// size="lg"
-											active
-											variant="outline-lime"
-											// variant="secondary"
-											// onClick={() => this.copyCodeToClipboard()}
+										<CopyToClipboard
+											text={currModal._id}
 										>
-											Kopiój
-										</Button>
+											<Button
+												className="w-100 "
+												active
+												variant="outline-lime"
+											>
+												Kopiój
+											</Button>
+										</CopyToClipboard>
 									</td>
 								</tr>
 								<tr></tr>
