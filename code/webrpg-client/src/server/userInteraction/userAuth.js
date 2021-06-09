@@ -44,34 +44,35 @@ async function register(data) {
 
 	await db.dbFind('users', { email: email }).then(async (val) => {
 		if (!val.length) {
-			await db.dbInsert('users', {
-				username: name,
-				email: email,
-				passwordHash: password,
-			}).then((val2) => {
-				if (val2.result.ok) {
-					data = val2.ops[0]
-					to_return = {
-						type: SocketMessages.REGISTER_ATTEMPT_RESULT,
-						logged: true,
-						id: data._id,
-						name: data.username,
-						email: data.email,
-					};
-				} else {
-					to_return = {
-						type: SocketMessages.REGISTER_ATTEMPT_RESULT,
-						logged: false,
-					};
-				}
-			});
-		}
-		else{
+			await db
+				.dbInsert('users', {
+					username: name,
+					email: email,
+					passwordHash: password,
+				})
+				.then((val2) => {
+					if (val2.result.ok) {
+						data = val2.ops[0];
+						to_return = {
+							type: SocketMessages.REGISTER_ATTEMPT_RESULT,
+							logged: true,
+							id: data._id,
+							name: data.username,
+							email: data.email,
+						};
+					} else {
+						to_return = {
+							type: SocketMessages.REGISTER_ATTEMPT_RESULT,
+							logged: false,
+						};
+					}
+				});
+		} else {
 			to_return = {
 				type: SocketMessages.REGISTER_ATTEMPT_RESULT,
 				logged: false,
 				email: 'exists',
-			}
+			};
 		}
 	});
 

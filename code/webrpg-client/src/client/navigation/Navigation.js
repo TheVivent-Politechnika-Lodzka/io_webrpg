@@ -10,14 +10,16 @@ const Navigation = () => {
 	return (
 		<Navbar className="px-2" bg="lime" expand="lg">
 			<Container fluid>
-				<Navbar.Brand href="/">
-					<img
-						style={{ height: '2em' }}
-						src={logo}
-						className="d-inline-block allign-top"
-						alt="webRPG"
-					/>
-				</Navbar.Brand>
+				<LinkContainer to="/">
+					<Navbar.Brand>
+						<img
+							style={{ height: '2em' }}
+							src={logo}
+							className="d-inline-block allign-top"
+							alt="webRPG"
+						/>
+					</Navbar.Brand>
+				</LinkContainer>
 				<Navbar.Toggle aria-controls="basic-navbar-nav" />
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="me-auto">

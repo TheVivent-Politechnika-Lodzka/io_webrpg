@@ -5,8 +5,8 @@ const SocketMessages = require('./SocketMessages');
 const webSocketServer = require('websocket').server;
 const http = require('http');
 var ObjectId = require('mongodb').ObjectId;
-const dotenv = require('dotenv')
-dotenv.config()
+const dotenv = require('dotenv');
+dotenv.config();
 
 // konfiguracja
 const webSocketsServerPort = process.env.SERVER_PORT;
@@ -65,6 +65,7 @@ wsServer.on('request', function (request) {
 				})
 			);
 		});
+		
 	}
 
 	connection.on('message', function (message) {
@@ -102,6 +103,32 @@ wsServer.on('request', function (request) {
 						console.log('user loaded games list');
 						this.sendUTF(JSON.stringify(val));
 					});
+					break;
+				case SocketMessages.GAMES_JOIN:
+					gameList
+						.joinGame(users[userID], dataFromClient.code)
+						.then(() => {
+							console.log('użytkownik dołączył do gry');
+							this.sendUTF(
+								JSON.stringify({
+									type: SocketMessages.GAMES_REFRESH,
+								})
+							);
+						});
+					break;
+				case SocketMessages.GAMES_CREATE:
+					gameList
+						.createGame(users[userID], dataFromClient.name)
+						.then((res) => {
+							console.log('użytkownik utworzył grę');
+							if (res) {
+								this.sendUTF(
+									JSON.stringify({
+										type: SocketMessages.GAMES_REFRESH,
+									})
+								);
+							}
+						});
 					break;
 			}
 		}

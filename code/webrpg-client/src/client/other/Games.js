@@ -5,17 +5,16 @@ import {
 	Col,
 	Card,
 	Button,
-	Modal,
 	ButtonGroup,
-	Table,
-	Image,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from './Socket';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ModalGamesInfo from './ModalGamesInfo';
+import ModalGamesCreate from './ModalGamesCreate';
+import ModalGamesJoin from './ModalGamesJoin';
 import img1 from '../img/3dfigure/hifa1.png';
 import img2 from '../img/3dfigure/hifa2.png';
 import img3 from '../img/3dfigure/lemotien1.png';
@@ -32,9 +31,33 @@ const Games = () => {
 		listOfGames: [], // lista gier
 		loading: true, // flaga "czy się ładuje"
 		moreModal: -1, // index gry do wyświetlenia w modalu (-1 oznacza nie wyświetlaj)
+		createModal: false,
+		joinModal: false,
 	});
 	const socket = useContext(SocketContext);
 	const [user] = useContext(UserContext);
+
+	useEffect(() => {
+		// przypisz event nasłuchujący zwróconych gier
+		socket.registerOnMessageEvent(
+			SocketMessages.GET_GAMES_RESULT,
+			(msg) => {
+				setState((prevState) => ({
+					...prevState,
+					listOfGames: msg.games,
+					loading: false,
+				}));
+			}
+		);
+		// przypisz event każący refreshować gry
+		socket.registerOnMessageEvent(
+			SocketMessages.GAMES_REFRESH, () => {
+				refreshGames()
+			}
+		)
+		// pobierz gry przy pierwszym ładowaniu
+		refreshGames()
+	}, []);
 
 	const images = [
 		img1,
@@ -48,8 +71,6 @@ const Games = () => {
 		img9,
 		img10,
 	];
-	const randomIndex = Math.floor(Math.random() * images.length);
-	const selectedPicture = images[randomIndex];
 
 	const refreshGames = () => {
 		//ustaw flagę "ładuję" na true
@@ -60,29 +81,27 @@ const Games = () => {
 		});
 	};
 
-	// funkcją ustawiająca która gra ma być wyświetlona w modalu
-	const toggleModal = (index) => {
+	// funkcja ustawiająca która gra ma być wyświetlona w modalu
+	const toggleModalInfo = (index) => {
 		setState((prevState) => ({
 			...prevState,
 			moreModal: index,
 		}));
 	};
 
-	// przypisz event nasłuchujący zwróconych gier
-	useEffect(() => {
-		socket.registerOnMessageEvent(
-			SocketMessages.GET_GAMES_RESULT,
-			(msg) => {
-				setState((prevState) => ({
-					...prevState,
-					listOfGames: msg.games,
-					loading: false,
-				}));
-			}
-		);
-	}, []);
+	const toggleModalCreate = () => {
+		setState((prevState)=> ({
+			...prevState, 
+			createModal: !state.createModal,
+		}))
+	}
 
-	useEffect(refreshGames, []); // pobierz gry przy pierwszym załadowaniu
+	const toggleModalJoin = () => {
+		setState((prevState)=>({
+			...prevState,
+			joinModal: !state.joinModal,
+		}))
+	}
 
 	// jeżeli użytkownik nie jest zalogowany, to
 	// przekieruj na stronę główną
@@ -95,7 +114,7 @@ const Games = () => {
 	}
 
 	// ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)
-	var currModal = state.listOfGames[state.moreModal];
+	var infoModal = state.listOfGames[state.moreModal];
 
 	return (
 		<Container>
@@ -115,13 +134,9 @@ const Games = () => {
 								<Card.Body
 									className="bgCardImages"
 									style={{
-										backgroundImage: `url(${selectedPicture})`,
+										backgroundImage: `url(${images[Math.floor(Math.random() * images.length)]})`,
 									}}
 								>
-									{/* <Image fluid src={selectedPicture}>
-	
-									</Image> */}
-									{/* <Card.Subtitle>{game._id}</Card.Subtitle> */}
 									<Container className="h-75"></Container>
 									<Container
 										fluid
@@ -138,7 +153,7 @@ const Games = () => {
 												active
 												variant="primary"
 												onClick={() =>
-													toggleModal(index)
+													toggleModalInfo(index)
 												}
 											>
 												Więcej
@@ -149,7 +164,7 @@ const Games = () => {
 												active
 												variant="success"
 												onClick={() =>
-													toggleModal(index)
+													toggleModalInfo(index)
 												}
 											>
 												Dołącz
@@ -167,24 +182,22 @@ const Games = () => {
 									<ButtonGroup className="text-center h-100 w-100">
 										<Button
 											className="w-50"
-											// style={{ height: '100px' }}
 											size="lg"
 											active
 											variant="primary"
-											// onClick={() => toggleModal(index)}
+											onClick={()=>toggleModalCreate()}
 										>
 											Stwórz nowy pokój
 										</Button>
 
 										<Button
 											className="w-50"
-											// style={{ height: '100px' }}
 											size="lg"
 											active
 											variant="success"
-											// onClick={() => toggleModal(index)}
+											onClick={()=>toggleModalJoin()}
 										>
-											Dołącz do nowego pokoju
+											Dołącz do istniejącego pokoju
 										</Button>
 									</ButtonGroup>
 								</Container>
@@ -194,55 +207,23 @@ const Games = () => {
 				</Row>
 			)}
 
-			{currModal ? (
-				<Modal
-					show={state.moreModal != -1}
-					onHide={() => toggleModal(-1)}
-				>
-					<Modal.Header className="fs-3">
-						{currModal.gameName}
-					</Modal.Header>
-					<Modal.Body>
-						Członkowie pokoju:
-						<div>GM: {currModal.gm.username}</div>
-						{currModal.players.map((player) => (
-							<div key={player._id} className="mx-3">- {player.username}</div>
-						))}
-						<Table responsive className="mt-3">
-							<thead className="text-center fs-4">
-								<tr>
-									<th colSpan="2">Numer Pokoju</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>
-										<div
-											className="text-center"
-											style={{ 'marginTop': '7px' }}
-											id="idGameCode"
-										>
-											<p>{currModal._id}</p>
-										</div>
-									</td>
-									<td className="w-50">
-										<CopyToClipboard text={currModal._id}>
-											<Button
-												className="w-100 "
-												active
-												variant="outline-lime"
-											>
-												Kopiuj
-											</Button>
-										</CopyToClipboard>
-									</td>
-								</tr>
-								<tr></tr>
-							</tbody>
-						</Table>
-					</Modal.Body>
-				</Modal>
+			{infoModal ? (
+				<ModalGamesInfo
+					currModal={infoModal}
+					toggleModal={toggleModalInfo}
+				/>
 			) : null}
+
+			{state.createModal ? (
+				<ModalGamesCreate toggleModal={toggleModalCreate}/>
+			) : null}
+
+			<ModalGamesJoin display={state.joinModal} toggleModal={toggleModalJoin}/>
+
+			{/* {state.joinModal ? (
+				<ModalGamesJoin toggleModal={toggleModalJoin}/>
+			) : null} */}
+
 		</Container>
 	);
 };

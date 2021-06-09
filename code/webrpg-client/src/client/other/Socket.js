@@ -26,7 +26,9 @@ function eraseCookie(name) {
 
 class Socket {
 	constructor() {
-		this.socket = new w3cwebsocket(`ws://${process.env.SOCKET_SERVER}:8000`);
+		this.socket = new w3cwebsocket(
+			`ws://${process.env.SOCKET_SERVER}:8000`
+		);
 		this.functions = {};
 		this.msgs = [];
 
@@ -43,7 +45,6 @@ class Socket {
 			delete msg.type;
 			this.functions[type](msg);
 		};
-
 	}
 
 	registerOnMessageEvent = (type, fun) => {
@@ -64,4 +65,4 @@ class Socket {
 }
 
 export default Socket;
-export {setCookie, getCookie, eraseCookie}
+export { setCookie, getCookie, eraseCookie };

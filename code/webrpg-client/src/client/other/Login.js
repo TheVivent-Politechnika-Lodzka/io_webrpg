@@ -27,10 +27,10 @@ const Login = () => {
 		socket.registerOnMessageEvent(
 			SocketMessages.LOGIN_ATTEMPT_RESULT,
 			(msg) => {
-				setUser(msg);
 				if (keepSignedIn) {
 					setCookie('id', msg.id, 3);
 				}
+				setUser(msg);
 			}
 		);
 	}, []); //eslint-disable-line
