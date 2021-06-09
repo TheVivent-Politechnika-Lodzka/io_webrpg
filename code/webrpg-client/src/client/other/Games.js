@@ -50,13 +50,11 @@ const Games = () => {
 			}
 		);
 		// przypisz event każący refreshować gry
-		socket.registerOnMessageEvent(
-			SocketMessages.GAMES_REFRESH, () => {
-				refreshGames()
-			}
-		)
+		socket.registerOnMessageEvent(SocketMessages.GAMES_REFRESH, () => {
+			refreshGames();
+		});
 		// pobierz gry przy pierwszym ładowaniu
-		refreshGames()
+		refreshGames();
 	}, []);
 
 	const images = [
@@ -90,18 +88,18 @@ const Games = () => {
 	};
 
 	const toggleModalCreate = () => {
-		setState((prevState)=> ({
-			...prevState, 
+		setState((prevState) => ({
+			...prevState,
 			createModal: !state.createModal,
-		}))
-	}
+		}));
+	};
 
 	const toggleModalJoin = () => {
-		setState((prevState)=>({
+		setState((prevState) => ({
 			...prevState,
 			joinModal: !state.joinModal,
-		}))
-	}
+		}));
+	};
 
 	// jeżeli użytkownik nie jest zalogowany, to
 	// przekieruj na stronę główną
@@ -129,12 +127,21 @@ const Games = () => {
 					{state.listOfGames.map((game, index) => (
 						<Col key={game._id} className="my-3">
 							<Card style={{ height: '400px' }}>
-								<Card.Header>{game.gameName}</Card.Header>
+								<Card.Header className="fs-6">
+									{game.gameName}
+								</Card.Header>
 								<Container></Container>
 								<Card.Body
 									className="bgCardImages"
 									style={{
-										backgroundImage: `url(${images[Math.floor(Math.random() * images.length)]})`,
+										backgroundImage: `url(${
+											images[
+												Math.floor(
+													Math.random() *
+														images.length
+												)
+											]
+										})`,
 									}}
 								>
 									<Container className="h-75"></Container>
@@ -185,7 +192,7 @@ const Games = () => {
 											size="lg"
 											active
 											variant="primary"
-											onClick={()=>toggleModalCreate()}
+											onClick={() => toggleModalCreate()}
 										>
 											Stwórz nowy pokój
 										</Button>
@@ -195,7 +202,7 @@ const Games = () => {
 											size="lg"
 											active
 											variant="success"
-											onClick={()=>toggleModalJoin()}
+											onClick={() => toggleModalJoin()}
 										>
 											Dołącz do istniejącego pokoju
 										</Button>
@@ -207,23 +214,21 @@ const Games = () => {
 				</Row>
 			)}
 
-			{infoModal ? (
-				<ModalGamesInfo
-					currModal={infoModal}
-					toggleModal={toggleModalInfo}
-				/>
-			) : null}
+			<ModalGamesInfo
+				display={!!infoModal}
+				currModal={infoModal}
+				toggleModal={toggleModalInfo}
+			/>
 
-			{state.createModal ? (
-				<ModalGamesCreate toggleModal={toggleModalCreate}/>
-			) : null}
+			<ModalGamesCreate
+				display={state.createModal}
+				toggleModal={toggleModalCreate}
+			/>
 
-			<ModalGamesJoin display={state.joinModal} toggleModal={toggleModalJoin}/>
-
-			{/* {state.joinModal ? (
-				<ModalGamesJoin toggleModal={toggleModalJoin}/>
-			) : null} */}
-
+			<ModalGamesJoin
+				display={state.joinModal}
+				toggleModal={toggleModalJoin}
+			/>
 		</Container>
 	);
 };

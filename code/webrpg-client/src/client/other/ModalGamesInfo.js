@@ -1,9 +1,14 @@
 import { Button, Modal, Table } from 'react-bootstrap';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
-const ModalGamesInfo = ({ currModal, toggleModal }) => {
+const ModalGamesInfo = ({ display, currModal, toggleModal }) => {
+
+	if (!display){
+		return null;
+	}
+
 	return (
-		<Modal show={true} onHide={() => toggleModal(-1)}>
+		<Modal show={display} onHide={() => toggleModal(-1)}>
 			<Modal.Header className="fs-3">{currModal.gameName}</Modal.Header>
 			<Modal.Body>
 				Członkowie pokoju:

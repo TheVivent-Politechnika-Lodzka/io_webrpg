@@ -1,6 +1,5 @@
 body {
-	background-image: url('./img/bgmap.jpg');
-	backdrop-filter: blur(10px);
+	background-image: url('./img/bgmap.png');
 	min-height: 100vh;
 
 	background-position: center;

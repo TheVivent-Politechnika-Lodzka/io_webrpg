@@ -10,7 +10,7 @@ import { useContext, useState } from 'react';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 
-const ModalGamesCreate = ({ toggleModal }) => {
+const ModalGamesCreate = ({ display, toggleModal }) => {
 	const [name, setName] = useState('');
 	const [validated, setValidated] = useState(false);
 	const socket = useContext(SocketContext);
@@ -31,7 +31,7 @@ const ModalGamesCreate = ({ toggleModal }) => {
 	};
 
 	return (
-		<Modal show={true} onHide={() => toggleModal()}>
+		<Modal show={display} onHide={() => toggleModal()}>
 			<Modal.Header className="fs-4">Stwórz pokój</Modal.Header>
 			<Modal.Body>
 				<p className="m-3">
