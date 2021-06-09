@@ -7,12 +7,15 @@ import {
 	Button,
 	Modal,
 	ButtonGroup,
+	Table,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from './Socket';
 import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
+
+
 
 const Games = () => {
 	const [state, setState] = useState({
@@ -70,6 +73,8 @@ const Games = () => {
 
 	console.log(state.listOfGames);
 
+	
+
 	return (
 		<Container>
 			{state.loading ? (
@@ -117,10 +122,7 @@ const Games = () => {
 					<Col className="mt-3">
 						<Card style={{ height: '399px' }}>
 							<Card.Body className="p-0">
-								<Container
-									fluid
-									className="text-center h-100"
-								>
+								<Container fluid className="text-center h-100">
 									<ButtonGroup className="text-center h-100 w-100">
 										<Button
 											className="w-50"
@@ -156,8 +158,48 @@ const Games = () => {
 					show={state.moreModal != -1}
 					onHide={() => toggleModal(-1)}
 				>
-					<Modal.Header>{currModal.gameName}</Modal.Header>
-					sdfsdafasdfasdfasdf
+					<Modal.Header className="fs-3">
+						{currModal.gameName}
+					</Modal.Header>
+					<Modal.Body>
+						Członkowie pokoju:
+						<Table responsive className="mt-3">
+							<thead className="text-center fs-4">
+								<tr>
+									<th colSpan="2">Numer Pokoju</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<div
+											className="text-center"
+											style={{ 'margin-top': '7px' }}
+											id="idGameCode"
+										>
+											<p>
+												{currModal._id}
+											</p>
+										</div>
+									</td>
+									<td className="w-50">
+										<Button
+											className="w-100 "
+											// style={{ height: '100px' }}
+											// size="lg"
+											active
+											variant="outline-lime"
+											// variant="secondary"
+											// onClick={() => this.copyCodeToClipboard()}
+										>
+											Kopiój
+										</Button>
+									</td>
+								</tr>
+								<tr></tr>
+							</tbody>
+						</Table>
+					</Modal.Body>
 				</Modal>
 			) : null}
 		</Container>
