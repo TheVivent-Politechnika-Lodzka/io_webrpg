@@ -187,7 +187,7 @@ const Games = () => {
 												active
 												variant="outline-lime"
 											>
-												Kopiój
+												Kopiuj
 											</Button>
 										</CopyToClipboard>
 									</td>
