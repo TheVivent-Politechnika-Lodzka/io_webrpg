@@ -6,6 +6,7 @@ import {
 	Row,
 	Button,
 	FormControl,
+	FloatingLabel,
 } from 'react-bootstrap';
 import Base64 from 'crypto-js/enc-base64';
 import { Link, Redirect } from 'react-router-dom';
@@ -74,8 +75,12 @@ const Register = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								<FloatingLabel
+									controlId="floatingPassword"
+									label="Adres e-mail:"
+									className="m-3"
+								>
+									<Form.Control
 										type="email"
 										id="registerFormEmail"
 										placeholder="e-mail"
@@ -84,14 +89,17 @@ const Register = () => {
 											setEmail(e.target.value)
 										}
 									/>
-									<Form.Label>Adres e-mail:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								<FloatingLabel
+									controlId="ruchomaNazwa"
+									label="Nazwa użytkownika:"
+									className="m-3"
+								>
+									<Form.Control
 										id="registerFormNick"
 										placeholder="nazwa użytkownika"
 										value={name}
@@ -99,14 +107,17 @@ const Register = () => {
 											setName(e.target.value)
 										}
 									/>
-									<Form.Label>Nazwa użytkownika:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								<FloatingLabel
+									controlId="ruchomeHasło"
+									label="Hasło:"
+									className="m-3"
+								>
+									<Form.Control
 										type="password"
 										id="registerFormPassword"
 										placeholder="hasło"
@@ -118,14 +129,18 @@ const Register = () => {
 											isPassSame ? null : 'is-invalid'
 										}
 									/>
-									<Form.Label>Hasło:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								
+								<FloatingLabel
+									controlId="ruchomePowtórzHasło"
+									label="Powtórz hasło:"
+									className="m-3"
+								>
+									<Form.Control
 										type="password"
 										id="registerFormRepeatPassword"
 										placeholder="powtórz hasło"
@@ -137,8 +152,7 @@ const Register = () => {
 											isPassSame ? null : 'is-invalid'
 										}
 									/>
-									<Form.Label>Powtórz hasło:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>

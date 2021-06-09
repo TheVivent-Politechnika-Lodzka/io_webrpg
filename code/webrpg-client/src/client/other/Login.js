@@ -8,6 +8,7 @@ import {
 	Row,
 	Button,
 	FormControl,
+	FloatingLabel,
 } from 'react-bootstrap'; //importy z reactBootstrap
 import { Link, Redirect } from 'react-router-dom';
 import { setCookie } from './Socket';
@@ -62,8 +63,12 @@ const Login = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								<FloatingLabel
+									controlId="ruchomaPoczta"
+									label="Email"
+									className="m-3"
+								>
+									<Form.Control
 										type="email"
 										id="loginFormMail"
 										name="mail"
@@ -74,14 +79,17 @@ const Login = () => {
 											setEmail(e.target.value)
 										}
 									/>
-									<Form.Label>Adres e-mail:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<Form.Group className="form-floating m-3">
-									<FormControl
+								<FloatingLabel
+									controlId="ruchomeHasło"
+									label="Hasło"
+									className="m-3"
+								>
+									<Form.Control
 										type="password"
 										id="loginFormPassword"
 										name="password"
@@ -92,8 +100,7 @@ const Login = () => {
 											setPassword(e.target.value)
 										}
 									/>
-									<Form.Label>Hasło:</Form.Label>
-								</Form.Group>
+								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
