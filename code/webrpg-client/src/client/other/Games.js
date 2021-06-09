@@ -8,6 +8,7 @@ import {
 	Modal,
 	ButtonGroup,
 	Table,
+	Image,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from './Socket';
@@ -15,6 +16,16 @@ import SocketContext from './SocketContext';
 import SocketMessages from './SocketMessages';
 import UserContext from './UserContext';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import img1 from '../img/3dfigure/hifa1.png';
+import img2 from '../img/3dfigure/hifa2.png';
+import img3 from '../img/3dfigure/lemotien1.png';
+import img4 from '../img/3dfigure/lemotien2.png';
+import img5 from '../img/3dfigure/ulgrim1.png';
+import img6 from '../img/3dfigure/ulgrim2.png';
+import img7 from '../img/3dfigure/xorim1.png';
+import img8 from '../img/3dfigure/xorim2.png';
+import img9 from '../img/3dfigure/yggrasil1.png';
+import img10 from '../img/3dfigure/yggrasil2.png';
 
 const Games = () => {
 	const [state, setState] = useState({
@@ -24,6 +35,21 @@ const Games = () => {
 	});
 	const socket = useContext(SocketContext);
 	const [user] = useContext(UserContext);
+
+	const images = [
+		img1,
+		img2,
+		img3,
+		img4,
+		img5,
+		img6,
+		img7,
+		img8,
+		img9,
+		img10,
+	];
+	const randomIndex = Math.floor(Math.random() * images.length);
+	const selectedPicture = images[randomIndex];
 
 	const refreshGames = () => {
 		//ustaw flagę "ładuję" na true
@@ -71,8 +97,6 @@ const Games = () => {
 	// ustaw obecny modal (chodzi, żeby była krótsza zmienna przy wyświetlaniu modalu)
 	var currModal = state.listOfGames[state.moreModal];
 
-	console.log(state.listOfGames);
-
 	return (
 		<Container>
 			{state.loading ? (
@@ -87,37 +111,56 @@ const Games = () => {
 						<Col key={game._id} className="my-3">
 							<Card style={{ height: '400px' }}>
 								<Card.Header>{game.gameName}</Card.Header>
-								<Card.Body>
-									<Card.Subtitle>{game._id}</Card.Subtitle>
+								<Container></Container>
+								<Card.Body
+									className="bgCardImages"
+									style={{
+										backgroundImage: `url(${selectedPicture})`,
+									}}
+								>
+									{/* <Image fluid src={selectedPicture}>
+	
+									</Image> */}
+									{/* <Card.Subtitle>{game._id}</Card.Subtitle> */}
+									<Container className="h-75"></Container>
+									<Container
+										fluid
+										className="text-center p-3"
+										fixed="bottom"
+									>
+										<ButtonGroup
+											className="text-center w-100"
+											style={{ height: '70px' }}
+										>
+											<Button
+												className="p-3"
+												size="lg"
+												active
+												variant="primary"
+												onClick={() =>
+													toggleModal(index)
+												}
+											>
+												Więcej
+											</Button>
+											<Button
+												className="p-3"
+												size="lg"
+												active
+												variant="success"
+												onClick={() =>
+													toggleModal(index)
+												}
+											>
+												Dołącz
+											</Button>
+										</ButtonGroup>
+									</Container>
 								</Card.Body>
-								<Container fluid className="text-center p-3">
-									<ButtonGroup className="text-center w-100">
-										<Button
-											className="p-3"
-											style={{ height: '100px' }}
-											size="lg"
-											active
-											variant="primary"
-											onClick={() => toggleModal(index)}
-										>
-											Więcej
-										</Button>
-										<Button
-											className="p-3"
-											style={{ height: '100px' }}
-											size="lg"
-											active
-											variant="success"
-											onClick={() => toggleModal(index)}
-										>
-											Dołącz
-										</Button>
-									</ButtonGroup>
-								</Container>
 							</Card>
 						</Col>
 					))}
-					<Col className="mt-3">
+					<Col className="mt-3 mb-3 mb-sm-0">
 						<Card style={{ height: '399px' }}>
 							<Card.Body className="p-0">
 								<Container fluid className="text-center h-100">
@@ -161,6 +204,10 @@ const Games = () => {
 					</Modal.Header>
 					<Modal.Body>
 						Członkowie pokoju:
+						<div>GM: {currModal.gm.username}</div>
+						{currModal.players.map((player) => (
+							<div key={player._id} className="mx-3">- {player.username}</div>
+						))}
 						<Table responsive className="mt-3">
 							<thead className="text-center fs-4">
 								<tr>
@@ -172,16 +219,14 @@ const Games = () => {
 									<td>
 										<div
 											className="text-center"
-											style={{ 'margin-top': '7px' }}
+											style={{ 'marginTop': '7px' }}
 											id="idGameCode"
 										>
 											<p>{currModal._id}</p>
 										</div>
 									</td>
 									<td className="w-50">
-										<CopyToClipboard
-											text={currModal._id}
-										>
+										<CopyToClipboard text={currModal._id}>
 											<Button
 												className="w-100 "
 												active

@@ -9,3 +9,16 @@
 	/* height: inherit; */
 	padding: 0;
 }
+
+.bgCardImages {
+	height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	transition: all 100ms;
+}
+
+div.card:hover .bgCardImages{
+	background-size: 110%;
+	transition: all 300ms;
+} 

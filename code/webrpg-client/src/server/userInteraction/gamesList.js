@@ -1,37 +1,71 @@
 const SocketMessages = require('../SocketMessages');
 const db = require('./../DatabaseConn');
 
+// async function getGames(user) {
+// 	var to_return;
+
+// 	await db
+// 		.dbFind('games', { playerIDs: { $elemMatch: { $eq: user.id } } })
+// 		.then((res) => {
+// 			to_return = {
+// 				type: SocketMessages.GET_GAMES_RESULT,
+// 				games: res,
+// 			};
+// 		});
+
+
+// 	return to_return;
+// }
+
 async function getGames(user) {
 	var to_return
 
 	await db
-		.dbFind('games', { playerIDs: { $elemMatch: {userId: user.id} } })
+		.dbAggregate('games', [
+			{ $match: { playerIDs: { $elemMatch: { $eq : user.id } } } },
+			{
+				// zamień id gma na usera
+				$lookup: {
+					from: 'users',
+					localField: 'gmID',
+					foreignField: '_id',
+					as: 'gm',
+				},
+			},
+			{
+				// zamień id graczy na usera
+				$lookup: {
+					from: 'users',
+					localField: 'playerIDs',
+					foreignField: '_id',
+					as: 'players',
+				},
+			},
+			{
+				// filtruj, żeby tylko potrzebne pola były zwrócone
+				$project: {
+					_id: 1,
+					gameName: 1,
+					"gm._id": 1,
+					"gm.username": 1,
+					"players._id": 1,
+					"players.username": 1,
+				}
+			},
+			{
+				// wywal żeby gm nie był w tablicy
+				$unwind : "$gm"
+			}
+		])
 		.then((res) => {
 			to_return = {
 				type: SocketMessages.GET_GAMES_RESULT,
 				games: res,
 			};
 		});
-
-	// await test(user)
-
-	return to_return
+	
+	return to_return;
 }
-
-async function test(user) {
-	await db.dbAggregate('games', [
-		{$match: {playerIDs: {$elemMatch : {userId: user.id}}}},
-		{$lookup: {
-			from: 'users',
-			localField: 'gmID',
-			foreignField: '_id',
-			as: 'test'
-		}}
-	]).then((res)=>{
-		console.log(res[0].test[0])
-	})
-}
-
 
 module.exports = {
 	getGames: getGames,
