@@ -55,7 +55,7 @@ const Games = () => {
 		});
 		// pobierz gry przy pierwszym ładowaniu
 		refreshGames();
-	}, []);
+	}, []); //eslint-disable-line
 
 	const images = [
 		img1,

@@ -32,14 +32,19 @@ div.card:hover .bgCardImages {
 	transition: all 300ms;
 }
 
-/* .fade.show.modal-backdrop {
-	position: sticky;
-	top: 0
-	top: calc(100% - 100vh);
+/* SCROLLBAR */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
 }
-
-.modal.fade.show {
-	position: sticky;
-	top: 5vh;
-	top: calc(100% - 95vh);
-}  */
+::-webkit-scrollbar-thumb {
+	background: linear-gradient(270deg, #65656b 0%, #dedede 100%);
+	border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: linear-gradient(270deg, #65656b 20%, #bfbfbf 100%);
+}
+::-webkit-scrollbar-track {
+	background: #ebebeb;
+	border-radius: 0px;
+}
