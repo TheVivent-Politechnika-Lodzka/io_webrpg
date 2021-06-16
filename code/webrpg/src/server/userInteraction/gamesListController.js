@@ -1,6 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
 const SocketMessages = require('../SocketMessages');
-const db = require('./../DatabaseConn');
+const db = require('../DatabaseConn');
 
 /**
  * returns a list of user's games, ready to be displayed in Games

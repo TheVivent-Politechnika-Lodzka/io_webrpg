@@ -7,8 +7,8 @@ import {
 	Container,
 } from 'react-bootstrap';
 import { useContext, useState } from 'react';
-import SocketContext from './SocketContext';
-import SocketMessages from './SocketMessages';
+import SocketContext from '../libs/socket/SocketContext';
+import SocketMessages from '../libs/socket/SocketMessages';
 
 const ModalGamesJoin = ({ display, toggleModal }) => {
 	const [code, setCode] = useState('');

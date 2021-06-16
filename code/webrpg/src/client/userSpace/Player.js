@@ -1,8 +1,8 @@
 import { useContext } from 'react';
 import { Col, Container, Row, Button } from 'react-bootstrap';
 import { Redirect, withRouter } from 'react-router';
-import { eraseCookie } from './Socket';
-import UserContext from './UserContext';
+import { eraseCookie } from '../libs/socket/Socket';
+import UserContext from '../libs/user/UserContext';
 
 const Player = (props) => {
 	const [user, setUser] = useContext(UserContext);

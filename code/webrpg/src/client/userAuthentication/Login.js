@@ -7,14 +7,13 @@ import {
 	Form,
 	Row,
 	Button,
-	FormControl,
 	FloatingLabel,
 } from 'react-bootstrap'; //importy z reactBootstrap
 import { Link, Redirect } from 'react-router-dom';
-import { setCookie } from './Socket';
-import SocketContext from './SocketContext';
-import SocketMessages from './SocketMessages';
-import UserContext from './UserContext';
+import { setCookie } from '../libs/socket/Socket';
+import SocketContext from '../libs/socket/SocketContext';
+import SocketMessages from '../libs/socket/SocketMessages';
+import UserContext from '../libs/user/UserContext';
 
 const Login = () => {
 	const [email, setEmail] = useState('');

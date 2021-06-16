@@ -8,10 +8,10 @@ import {
 	ButtonGroup,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
-import { getCookie } from './Socket';
-import SocketContext from './SocketContext';
-import SocketMessages from './SocketMessages';
-import UserContext from './UserContext';
+import { getCookie } from '../libs/socket/Socket';
+import SocketContext from '../libs/socket/SocketContext';
+import SocketMessages from '../libs/socket/SocketMessages';
+import UserContext from '../libs/user/UserContext';
 import ModalGamesInfo from './ModalGamesInfo';
 import ModalGamesCreate from './ModalGamesCreate';
 import ModalGamesJoin from './ModalGamesJoin';

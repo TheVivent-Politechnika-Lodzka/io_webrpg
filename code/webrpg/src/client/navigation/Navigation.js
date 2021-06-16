@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import logo from '../img/logo.png';
-import UserContext from '../other/UserContext';
+import UserContext from '../libs/user/UserContext';
 
 const Navigation = () => {
 	const [user] = useContext(UserContext);

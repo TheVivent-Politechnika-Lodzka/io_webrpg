@@ -5,14 +5,13 @@ import {
 	Form,
 	Row,
 	Button,
-	FormControl,
 	FloatingLabel,
 } from 'react-bootstrap';
 import Base64 from 'crypto-js/enc-base64';
 import { Link, Redirect } from 'react-router-dom';
 import SocketMessages from '../../server/SocketMessages';
-import SocketContext from './SocketContext';
-import UserContext from './UserContext';
+import SocketContext from '../libs/socket/SocketContext';
+import UserContext from '../libs/user/UserContext';
 import { SHA256 } from 'crypto-js';
 
 const Register = () => {
