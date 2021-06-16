@@ -27,7 +27,7 @@
 		"eslint-plugin-react": "^7.22.0",
 		"eslint-plugin-react-hooks": "^4.2.0",
 		"nodemon": "^2.0.7",
-		"parcel": "^1.12.3",
+		"parcel": "1.12.3",
 		"parcel-bundler": "^1.12.5",
 		"prettier": "^2.3.0",
 		"sass": "^1.34.1"
