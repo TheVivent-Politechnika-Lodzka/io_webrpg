@@ -35,7 +35,9 @@ const Game = (props) => {
 					md={{ span: 5, order: 'last' }}
 					lg="4"
 					xl="3"
-					className="m-0 gamePanel"
+					className={`m-0 gamePanel ${
+						panelState.isBig ? 'h-100' : null
+					}`}
 				>
 					{!['xs', 'sm'].includes(currentBreakpoint) ||
 					panelState.isBig
