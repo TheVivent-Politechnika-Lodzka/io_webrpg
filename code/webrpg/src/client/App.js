@@ -7,7 +7,7 @@ import { Container } from 'react-bootstrap';
 import UserContext from './libs/user/UserContext';
 import Navigation from './navigation/Navigation';
 import MainPage from './landingPage/MainPage';
-import Player from './userSpace/Player';
+import Profile from './userSpace/Profile';
 import Login from './userAuthentication/Login';
 import Register from './userAuthentication/Register';
 import Games from './gameList/Games';
@@ -61,7 +61,7 @@ const App = () => {
 									<Login />
 								</Route>
 								<Route path="/user/:id">
-									<Player />
+									<Profile />
 								</Route>
 								<Route path="/">
 									<MainPage />

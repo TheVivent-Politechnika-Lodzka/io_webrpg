@@ -63,13 +63,11 @@ const Login = () => {
 						<Row>
 							<Col>
 								<FloatingLabel
-									controlId="ruchomaPoczta"
 									label="Email"
 									className="m-3"
 								>
 									<Form.Control
 										type="email"
-										id="loginFormMail"
 										name="mail"
 										placeholder="e-mail"
 										required
@@ -84,13 +82,11 @@ const Login = () => {
 						<Row>
 							<Col>
 								<FloatingLabel
-									controlId="ruchomeHasło"
 									label="Hasło"
 									className="m-3"
 								>
 									<Form.Control
 										type="password"
-										id="loginFormPassword"
 										name="password"
 										placeholder="hasło"
 										required

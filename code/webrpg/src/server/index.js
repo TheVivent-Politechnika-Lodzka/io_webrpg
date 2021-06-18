@@ -64,7 +64,7 @@ wsServer.on('request', function (request) {
 					...users[userID],
 				})
 			);
-		});
+		}).catch(()=>{});
 		
 	}
 

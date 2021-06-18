@@ -2,7 +2,7 @@ import { Col, Row } from 'react-bootstrap';
 
 const MainPage = () => {
 	return (
-		<Row>
+		<Row className="mx-0">
 			<Col xs="12" className="align-bottom">
 				<h1 className="text-center mt-3">Witamy w Świecie webRPG</h1>
 				{/* <Badge className="bg-lime">Primary</Badge> */}

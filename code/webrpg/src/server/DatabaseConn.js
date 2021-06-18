@@ -40,9 +40,10 @@ async function dbConnect() {
  * @param {JSON} querry
  */
 async function dbFind(collection, querry) {
+	var results;
 	try {
 		const cursor = await globalClient.collection(collection).find(querry);
-		var results = await cursor.toArray();
+		results = await cursor.toArray();
 	} catch (e) {
 		console.error(e);
 	}
