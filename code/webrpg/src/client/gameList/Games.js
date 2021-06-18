@@ -15,6 +15,7 @@ import UserContext from '../libs/user/UserContext';
 import ModalGamesInfo from './ModalGamesInfo';
 import ModalGamesCreate from './ModalGamesCreate';
 import ModalGamesJoin from './ModalGamesJoin';
+import { LinkContainer } from 'react-router-bootstrap';
 import img1 from '../img/3dfigure/hifa1.png';
 import img2 from '../img/3dfigure/hifa2.png';
 import img3 from '../img/3dfigure/lemotien1.png';
@@ -165,17 +166,18 @@ const Games = () => {
 											>
 												Więcej
 											</Button>
-											<Button
-												className="p-3"
-												size="lg"
-												active
-												variant="success"
-												onClick={() =>
-													toggleModalInfo(index)
-												}
+											<LinkContainer
+												to={`/game/${game._id}`}
 											>
-												Dołącz
-											</Button>
+												<Button
+													className="p-3"
+													size="lg"
+													active
+													variant="success"
+												>
+													Dołącz
+												</Button>
+											</LinkContainer>
 										</ButtonGroup>
 									</Container>
 								</Card.Body>
