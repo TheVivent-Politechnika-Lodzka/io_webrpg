@@ -21,14 +21,13 @@ const Username = () => {
 		<Form className="border border-dark rounded my-1 p-1">
 			<Row className="align-items-center">
 				<Col>
-					<Container className="text-center p-3 w-75">
+					<Container className="text-center p-3">
 						<FloatingLabel
 							controlId="floatingInput"
 							label="Nazwa użytkownika"
 							className=" w-75"
 						>
 							<Form.Control
-							className=" w-75"
 								type="text"
 								placeholder="Nazwa użytkownika"
 								value={username}
