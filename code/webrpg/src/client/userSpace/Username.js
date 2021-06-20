@@ -9,6 +9,7 @@ import {
 } from 'react-bootstrap';
 import SocketContext from '../libs/socket/SocketContext';
 import UserContext from '../libs/user/UserContext';
+import MaterialIcon from 'material-icons-react';
 
 const Username = () => {
 	const [user] = useContext(UserContext);
@@ -20,31 +21,37 @@ const Username = () => {
 	return (
 		<Form className="border border-dark rounded my-1 p-1">
 			<Row className="align-items-center">
-				<Col>
-					<Container className="text-center p-3">
-						<FloatingLabel
-							controlId="floatingInput"
-							label="Nazwa użytkownika"
-							className=" w-75"
-						>
-							<Form.Control
-								type="text"
-								placeholder="Nazwa użytkownika"
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
-							/>
-						</FloatingLabel>
-					</Container>
+				<Col xs="10" className="ps-3">
+					<FloatingLabel
+						controlId="floatingInput"
+						label="Nazwa użytkownika"
+						className=" w-100"
+					>
+						<Form.Control
+							type="text"
+							placeholder="Nazwa użytkownika"
+							value={username}
+							onChange={(e) => setUsername(e.target.value)}
+							className="w-100 mx-0"
+						/>
+					</FloatingLabel>
 				</Col>
+				<Col xs="2" className="ps-3 text-center">
 					<Button
 						active
 						variant="success"
-						className="w-50"
-						style={{ fontSize: '1.5rem' }}
+						className="w-100 mx-0 pt-3"
 					>
-						Zapisz
+						<div className="d-none d-md-block">
+							<MaterialIcon icon="save" size="large" />
+						</div>
+						<div className="d-none d-sm-block d-md-none">
+							<MaterialIcon icon="save" size="medium" />
+						</div>
+						<div className="d-block d-sm-none me-5">
+							<MaterialIcon icon="save" size="tiny" />
+						</div>
 					</Button>
-				<Col>
 				</Col>
 			</Row>
 		</Form>

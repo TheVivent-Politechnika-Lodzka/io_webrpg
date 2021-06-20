@@ -5,6 +5,8 @@ import UserContext from '../libs/user/UserContext';
 import { Redirect } from 'react-router-dom';
 import { getCookie } from '../libs/socket/Socket';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
+import MaterialIcon, {colorPalette} from 'material-icons-react';
+import Chat from './Chat';
 
 const Game = (props) => {
 	const id = props.match.params.id;
@@ -75,12 +77,14 @@ const Game = (props) => {
 									className="m-0 p-0"
 									style={{
 										height: `${
-											30 + (panelState.isMobile ? 0 : 5)
+											31 + (panelState.isMobile ? 0 : 4)
 										}%`,
 										backgroundColor: 'green',
 									}}
 								>
-									<Col>chat</Col>
+									<Col>
+										<Chat />
+									</Col>
 								</Row>
 							</span>
 						) : null}
@@ -88,21 +92,23 @@ const Game = (props) => {
 						<Row
 							className="m-0 p-0"
 							style={{
-								height: `${5 - (panelState.isMobile ? 0 : 5)}%`,
+								height: `${1 - (panelState.isMobile ? 0 : 1)}%`,
 								backgroundColor: 'blue',
 							}}
 						>
-							<Col>
+							<Col className="m-0 p-0">
 								{/* przycisk do pokazywania / ukrywania panelu w trybie mobilnym */}
 								{panelState.isMobile ? (
-									<Button
-										active
-										variant="primary"
-										className="w-100"
+									<div
+										role="button"
+										tabIndex="0"
+										className="w-100 h-100 text-center bg-primary"
+										style={{ color: 'white' }}
 										onClick={() => togglePanelState()}
+										onKeyDown={() => togglePanelState()}
 									>
-										≡
-									</Button>
+										<MaterialIcon icon="drag_handle" />
+									</div>
 								) : null}
 							</Col>
 						</Row>
