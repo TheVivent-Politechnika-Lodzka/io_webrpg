@@ -15,15 +15,21 @@ const Game = (props) => {
 		isBig: false,
 	});
 
+	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {
+		const isMobile = ['xs', 'sm'].includes(currentBreakpoint);
 		setPanelState({
-			isMobile: ['xs', 'sm'].includes(currentBreakpoint),
 			...panelState,
+			isMobile: isMobile,
 		});
-	}, currentBreakpoint);
+	}, [currentBreakpoint]);
 
+	// aktualizacja czy kliknięto przycisk powiększenia panelu w trybie mobilnym
 	const togglePanelState = () => {
-		setPanelState({ isBig: !panelState.isBig, ...panelState });
+		setPanelState({
+			...panelState,
+			isBig: !panelState.isBig,
+		});
 	};
 
 	// jeżeli użytkownik nie jest zalogowany, to
@@ -69,7 +75,7 @@ const Game = (props) => {
 									className="m-0 p-0"
 									style={{
 										height: `${
-											30 + panelState.isMobile ? 5 : 0
+											30 + (panelState.isMobile ? 0 : 5)
 										}%`,
 										backgroundColor: 'green',
 									}}
@@ -82,7 +88,7 @@ const Game = (props) => {
 						<Row
 							className="m-0 p-0"
 							style={{
-								height: `${5 - panelState.isMobile ? 5 : 0}%`,
+								height: `${5 - (panelState.isMobile ? 0 : 5)}%`,
 								backgroundColor: 'blue',
 							}}
 						>
