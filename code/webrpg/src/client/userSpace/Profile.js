@@ -32,6 +32,7 @@ const Profile = (props) => {
 					<Image
 						src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
 						roundedCircle
+						className="w-75 mt-5"
 					/>
 					<div></div>
 					<Button
@@ -44,9 +45,11 @@ const Profile = (props) => {
 					</Button>
 				</Col>
 				<Col>
-					<Username />
-					<Email />
-					<Password />
+					<Container className="profileBox p-3">
+						<Username />
+						<Email />
+						<Password />
+					</Container>
 				</Col>
 			</Row>
 		</Container>

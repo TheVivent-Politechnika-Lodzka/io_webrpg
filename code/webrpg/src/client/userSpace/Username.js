@@ -1,5 +1,12 @@
 import { useContext, useState } from 'react';
-import { FloatingLabel, Form, Row, Col, Button } from 'react-bootstrap';
+import {
+	FloatingLabel,
+	Form,
+	Row,
+	Col,
+	Button,
+	Container,
+} from 'react-bootstrap';
 import SocketContext from '../libs/socket/SocketContext';
 import UserContext from '../libs/user/UserContext';
 
@@ -13,29 +20,32 @@ const Username = () => {
 	return (
 		<Form className="border border-dark rounded my-1 p-1">
 			<Row className="align-items-center">
-				<Col xs="10">
-					<FloatingLabel
-						controlId="floatingInput"
-						label="Nazwa użytkownika"
-						className="mb-3"
-					>
-						<Form.Control
-							type="text"
-							placeholder="Nazwa użytkownika"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
-						/>
-					</FloatingLabel>
-				</Col>
 				<Col>
+					<Container className="text-center p-3 w-75">
+						<FloatingLabel
+							controlId="floatingInput"
+							label="Nazwa użytkownika"
+							className=" w-75"
+						>
+							<Form.Control
+							className=" w-75"
+								type="text"
+								placeholder="Nazwa użytkownika"
+								value={username}
+								onChange={(e) => setUsername(e.target.value)}
+							/>
+						</FloatingLabel>
+					</Container>
+				</Col>
 					<Button
 						active
 						variant="success"
-						className="mb-2"
+						className="w-50"
 						style={{ fontSize: '1.5rem' }}
 					>
 						Zapisz
 					</Button>
+				<Col>
 				</Col>
 			</Row>
 		</Form>
