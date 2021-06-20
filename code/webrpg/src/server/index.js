@@ -26,6 +26,8 @@ const clients = {};
 // wszyscy zalogowani użytkownicy są tutaj
 // [indexy pokrywają się z indexami clients]
 const users = {};
+// pokoje
+const rooms = {};
 
 // generator unikalnych id
 const getUniqueID = () => {
@@ -47,8 +49,13 @@ wsServer.on('request', function (request) {
 	clients[userID] = connection;
 
 	// jeżeli dostanę ciastko, to pewnie z id do auto-zalogowania
-	if (request.cookies[0]) {
+	if (request.cookies[0].value) {
 		const id = request.cookies[0].value;
+		// console.log("###################################")
+		// console.log("id: " + id)
+		// console.log("###################################")
+
+
 		db.dbFind('users', { _id: ObjectId(id) }).then((res) => {
 			const { _id, username, email } = res[0];
 			users[userID] = {
@@ -64,7 +71,7 @@ wsServer.on('request', function (request) {
 					...users[userID],
 				})
 			);
-		}).catch(()=>{});
+		});
 		
 	}
 
@@ -80,7 +87,7 @@ wsServer.on('request', function (request) {
 			switch (type) {
 				case SocketMessages.LOGIN_ATTEMPT: // próba zalogwania
 					userAuth.login(dataFromClient).then((val) => {
-						console.log('User logged in');
+						console.log('User logged: ' + val.logged);
 						this.sendUTF(JSON.stringify(val));
 					});
 					break;

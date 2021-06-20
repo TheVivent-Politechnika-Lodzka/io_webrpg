@@ -37,6 +37,7 @@
 		"bootstrap-5-breakpoint-react-hook": "^1.1.0",
 		"crypto-js": "^4.0.0",
 		"dotenv": "^10.0.0",
+		"material-icons-react": "^1.0.4",
 		"mongodb": "^3.6.9",
 		"react": "^17.0.1",
 		"react-bootstrap": "^2.0.0-beta.0",

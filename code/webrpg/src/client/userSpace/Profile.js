@@ -6,6 +6,7 @@ import UserContext from '../libs/user/UserContext';
 import Username from './Username';
 import Email from './Email';
 import Password from './Password';
+import MaterialIcon, { colorPalette } from 'material-icons-react';
 
 const Profile = (props) => {
 	const [user, setUser] = useContext(UserContext);
@@ -18,8 +19,6 @@ const Profile = (props) => {
 		eraseCookie('id');
 		window.location.reload();
 	};
-
-	console.log(user);
 
 	if (!user.logged) {
 		return <Redirect to="/login" />;
@@ -34,7 +33,6 @@ const Profile = (props) => {
 						roundedCircle
 						className="w-75 mt-5"
 					/>
-					<div></div>
 					<Button
 						active
 						variant="primary"
@@ -42,6 +40,9 @@ const Profile = (props) => {
 						className="my-2"
 					>
 						Wyloguj
+						<div className="ps-2 pt-2">
+							<MaterialIcon icon="logout" size='small' color="#ffffff" />
+						</div>
 					</Button>
 				</Col>
 				<Col>
