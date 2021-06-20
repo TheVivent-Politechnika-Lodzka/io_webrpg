@@ -1,19 +1,29 @@
 import { withRouter } from 'react-router';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import UserContext from '../libs/user/UserContext';
 import { Redirect } from 'react-router-dom';
 import { getCookie } from '../libs/socket/Socket';
-import useBreakpoint from 'bootstrap-5-breakpoint-react-hook';
+import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
 
 const Game = (props) => {
 	const id = props.match.params.id;
 	const currentBreakpoint = useBreakpoint();
 	const [user] = useContext(UserContext);
-	const [panelState, setPanelState] = useState({ isBig: false });
+	const [panelState, setPanelState] = useState({
+		isMobile: false,
+		isBig: false,
+	});
+
+	useEffect(() => {
+		setPanelState({
+			isMobile: ['xs', 'sm'].includes(currentBreakpoint),
+			...panelState,
+		});
+	}, currentBreakpoint);
 
 	const togglePanelState = () => {
-		setPanelState({ isBig: !panelState.isBig });
+		setPanelState({ isBig: !panelState.isBig, ...panelState });
 	};
 
 	// jeżeli użytkownik nie jest zalogowany, to
@@ -29,30 +39,68 @@ const Game = (props) => {
 	return (
 		<Container fluid className="p-0 m-0 game">
 			<Row className="p-0 m-0 h-100 overflow-hidden">
+				{/* main area */}
 				<Col className="h-100 m-0">{id}</Col>
+
+				{/* panel */}
 				<Col
 					xs={{ span: 12, order: 'first' }}
 					md={{ span: 5, order: 'last' }}
 					lg="4"
 					xl="3"
-					className={`m-0 gamePanel ${
+					className={`m-0 p-0 gamePanel ${
 						panelState.isBig ? 'h-100' : null
 					}`}
 				>
-					{!['xs', 'sm'].includes(currentBreakpoint) ||
-					panelState.isBig
-						? 'panel'
-						: null}
-					{['xs', 'sm'].includes(currentBreakpoint) ? (
-						<Button
-							active
-							variant="primary"
-							className="w-100"
-							onClick={() => togglePanelState()}
+					<Container fluid className="h-100 m-0 p-0">
+						{/* tutaj cała zawartość panelu */}
+						{!panelState.isMobile || panelState.isBig ? (
+							<span>
+								<Row
+									className="m-0 p-0"
+									style={{
+										height: '65%',
+										backgroundColor: 'red',
+									}}
+								>
+									<Col>zawartość (nicki itp)</Col>
+								</Row>
+								<Row
+									className="m-0 p-0"
+									style={{
+										height: `${
+											30 + panelState.isMobile ? 5 : 0
+										}%`,
+										backgroundColor: 'green',
+									}}
+								>
+									<Col>chat</Col>
+								</Row>
+							</span>
+						) : null}
+
+						<Row
+							className="m-0 p-0"
+							style={{
+								height: `${5 - panelState.isMobile ? 5 : 0}%`,
+								backgroundColor: 'blue',
+							}}
 						>
-							≡
-						</Button>
-					) : null}
+							<Col>
+								{/* przycisk do pokazywania / ukrywania panelu w trybie mobilnym */}
+								{panelState.isMobile ? (
+									<Button
+										active
+										variant="primary"
+										className="w-100"
+										onClick={() => togglePanelState()}
+									>
+										≡
+									</Button>
+								) : null}
+							</Col>
+						</Row>
+					</Container>
 				</Col>
 			</Row>
 		</Container>
