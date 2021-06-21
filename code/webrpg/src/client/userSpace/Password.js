@@ -22,7 +22,7 @@ const Password = () => {
 	return (
 		<Form className="border border-dark rounded my-1 p-1">
 			<Row className="align-items-center d-flex align-items-stretch">
-				<Col xs="10" >
+				<Col xs="9" md="10" >
 					<Container className="w-100 p-0">
 						<Row className="my-2">
 							<Col className="ps-3">
@@ -81,20 +81,20 @@ const Password = () => {
 						</Row>
 					</Container>
 				</Col>
-				<Col xs="2" className="ps-3 text-center">
+				<Col md="2" xs="3" className="ps-0 text-center">
 					<Button
 						active
 						variant="success"
-						className="w-100 mx-0 pt-3 h-100"
+						className="w-100 mx-0 pt-3 h-100 p-0"
 						style={{ fontSize: '1.5rem' }}
 					>
-						<div className="d-none d-md-block">
+						<div className="d-none d-md-block m-0 p-0">
 							<MaterialIcon icon="save" size="large" />
 						</div>
-						<div className="d-none d-sm-block d-md-none">
+						<div className="d-none d-sm-block d-md-none m-0 p-0">
 							<MaterialIcon icon="save" size="medium" />
 						</div>
-						<div className="d-block d-sm-none me-5">
+						<div className="d-block d-sm-none m-0 p-0">
 							<MaterialIcon icon="save" size="tiny" />
 						</div>
 					</Button>

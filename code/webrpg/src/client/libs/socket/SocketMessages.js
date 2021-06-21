@@ -9,6 +9,8 @@ const SocketMessages = {
 	GAMES_JOIN: 'games_join',
 	GAMES_REFRESH: 'games_refresh',
 	GAMES_CREATE: 'games_create',
+	GAME_JOIN: 'game_join',
+	GAME_EXIT: 'game_exit',
 };
 
 export default SocketMessages;

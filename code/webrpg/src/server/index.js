@@ -1,11 +1,12 @@
 const db = require('./DatabaseConn');
-const userAuth = require('./userInteraction/userAuthController');
-const gameList = require('./userInteraction/gamesListController');
 const SocketMessages = require('./SocketMessages');
 const webSocketServer = require('websocket').server;
 const http = require('http');
 var ObjectId = require('mongodb').ObjectId;
 const dotenv = require('dotenv');
+const { User, users } = require('./classes/User');
+const { room } = require('./classes/Room');
+const MessageHandler = require('./messageHandling/MainHandler');
 dotenv.config();
 
 // konfiguracja
@@ -23,11 +24,6 @@ db.dbConnect();
 
 // wszystkie connections są tutaj
 const clients = {};
-// wszyscy zalogowani użytkownicy są tutaj
-// [indexy pokrywają się z indexami clients]
-const users = {};
-// pokoje
-const rooms = {};
 
 // generator unikalnych id
 const getUniqueID = () => {
@@ -49,96 +45,24 @@ wsServer.on('request', function (request) {
 	clients[userID] = connection;
 
 	// jeżeli dostanę ciastko, to pewnie z id do auto-zalogowania
-	if (request.cookies[0].value) {
+	if (request.cookies[0] && request.cookies[0].value) {
 		const id = request.cookies[0].value;
-		// console.log("###################################")
-		// console.log("id: " + id)
-		// console.log("###################################")
-
-
-		db.dbFind('users', { _id: ObjectId(id) }).then((res) => {
-			const { _id, username, email } = res[0];
-			users[userID] = {
-				id: _id,
-				username: username,
-				email: email,
-			};
-
-			connection.sendUTF(
-				JSON.stringify({
-					type: SocketMessages.AUTO_LOGIN,
-					logged: true,
-					...users[userID],
-				})
-			);
-		});
-		
+		// auto-logowanie
+		MessageHandler[SocketMessages.AUTO_LOGIN](
+			{ id: id },
+			connection,
+			userID
+		);
 	}
 
 	connection.on('message', function (message) {
-		// komunikacja odbywa się na utf8 - będzie może trzeba przejść na Base64
-		// ale na razie jest git
-		if (message.type === 'utf8') {
-			const dataFromClient = JSON.parse(message.utf8Data);
-			const type = dataFromClient.type;
-			delete dataFromClient.type;
+		if (message.type !== 'utf8') return;
+		const dataFromClient = JSON.parse(message.utf8Data);
+		const type = dataFromClient.type;
+		delete dataFromClient.type;
 
-			// rzeczy a propos logowania
-			switch (type) {
-				case SocketMessages.LOGIN_ATTEMPT: // próba zalogwania
-					userAuth.login(dataFromClient).then((val) => {
-						console.log('User logged: ' + val.logged);
-						this.sendUTF(JSON.stringify(val));
-					});
-					break;
-				case SocketMessages.REGISTER_ATTEMPT: // próba rejestracji
-					userAuth.register(dataFromClient).then((val) => {
-						console.log('User registered');
-						this.sendUTF(JSON.stringify(val));
-					});
-					break;
-			}
-
-			// rzeczy a propos zalogowanego użytkownika
-			if (users[userID] === undefined) {
-				return;
-			} // przejdzie dalej, tylko jeżeli użytkownik jest zalogowany
-
-			switch (type) {
-				case SocketMessages.GET_GAMES: // pobranie gier
-					gameList.getGames(users[userID]).then((val) => {
-						console.log('user loaded games list');
-						this.sendUTF(JSON.stringify(val));
-					});
-					break;
-				case SocketMessages.GAMES_JOIN:
-					gameList
-						.joinGame(users[userID], dataFromClient.code)
-						.then(() => {
-							console.log('użytkownik dołączył do gry');
-							this.sendUTF(
-								JSON.stringify({
-									type: SocketMessages.GAMES_REFRESH,
-								})
-							);
-						});
-					break;
-				case SocketMessages.GAMES_CREATE:
-					gameList
-						.createGame(users[userID], dataFromClient.name)
-						.then((res) => {
-							console.log('użytkownik utworzył grę');
-							if (res) {
-								this.sendUTF(
-									JSON.stringify({
-										type: SocketMessages.GAMES_REFRESH,
-									})
-								);
-							}
-						});
-					break;
-			}
-		}
+		// wywołaj odpowiednią funkcję do danego zapytania
+		MessageHandler[type](dataFromClient, this, userID);
 	});
 
 	// obsługa zakończenia połączenia
@@ -146,6 +70,10 @@ wsServer.on('request', function (request) {
 		console.log(userID + ' disconnected.');
 
 		// tu pewnie będzie obsługa "nagłego" wychodzenia z pokoju
+		
+		if(users[userID]){
+			users[userID].exitRoom()
+		}
 
 		// trzeba wyczyścić, bo tego pana już nie ma
 		delete clients[userID];

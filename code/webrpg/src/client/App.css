@@ -44,6 +44,7 @@ div.game {
 .bgCardImages {
 	height: 100%;
 	background-position: center;
+	object-fit: cover;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	transition: all 100ms;
@@ -63,6 +64,10 @@ div.card:hover .bgCardImages {
 
 .profileBox:hover {
 	transform: scale(1.005);
+}
+
+.test{
+	height: 400px;
 }
 
 /* SCROLLBAR */

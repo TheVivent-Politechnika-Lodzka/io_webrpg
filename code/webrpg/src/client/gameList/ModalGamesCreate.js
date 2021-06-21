@@ -50,10 +50,12 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 								pattern="[a-zA-Z\d]+"
+								maxLength="37"
 							/>
 							<Form.Control.Feedback type="invalid">
 								Nazwa może się składać z liter alfabetu
-								łacińskiego oraz cyfr arabskich i rzymskich
+								łacińskiego oraz cyfr arabskich i rzymskich.
+								Maksymalnie 37 znaków.
 							</Form.Control.Feedback>
 						</InputGroup>
 					</Form.Group>
@@ -63,7 +65,7 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 							className="w-100"
 							variant="success"
 						>
-							Dołącz teraz!
+							Stwórz teraz!
 						</Button>
 					</Container>
 				</Form>

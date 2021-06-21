@@ -54,9 +54,14 @@ const Games = () => {
 		socket.registerOnMessageEvent(SocketMessages.GAMES_REFRESH, () => {
 			refreshGames();
 		});
-		// pobierz gry przy pierwszym ładowaniu
-		refreshGames();
 	}, []); //eslint-disable-line
+
+	useEffect(() => {
+		// pobierz gry
+		if (user.logged) {
+			refreshGames();
+		}
+	}, [user]);
 
 	const images = [
 		img1,

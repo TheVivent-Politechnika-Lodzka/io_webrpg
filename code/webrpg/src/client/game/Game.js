@@ -2,6 +2,8 @@ import { withRouter } from 'react-router';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '../libs/user/UserContext';
+import SocketContext from '../libs/socket/SocketContext';
+import SocketMessages from '../libs/socket/SocketMessages';
 import { Redirect } from 'react-router-dom';
 import { getCookie } from '../libs/socket/Socket';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
@@ -16,6 +18,7 @@ const Game = (props) => {
 		isMobile: false,
 		isBig: false,
 	});
+	const socket = useContext(SocketContext)
 
 	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {
@@ -25,6 +28,20 @@ const Game = (props) => {
 			isMobile: isMobile,
 		});
 	}, [currentBreakpoint]);
+
+	useEffect(()=>{
+		socket.sendJSON({
+			type: SocketMessages.GAME_JOIN,
+			room_id: id
+		})
+
+		return () => {
+			socket.sendJSON({
+				type: SocketMessages.GAME_EXIT,
+			})
+		}
+
+	}, [])
 
 	// aktualizacja czy kliknięto przycisk powiększenia panelu w trybie mobilnym
 	const togglePanelState = () => {
