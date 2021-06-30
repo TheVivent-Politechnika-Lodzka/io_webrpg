@@ -1,4 +1,5 @@
 const { rooms, Room } = require('./Room');
+const SM = require('../SocketMessages')
 
 var users = {};
 
@@ -16,15 +17,41 @@ class User {
 		this.currentRoom = null;
 	}
 
+	getAllPlayers(){
+		this.connection.sendUTF(JSON.stringify({
+			type: SM.GAME_GET_ALL_PLAYERS,
+			users: this.currentRoom.usersANDsheets
+		}))
+	}
+
+	getChat(){
+		this.connection.sendUTF(JSON.stringify({
+			type: SM.GAME_GET_CHAT,
+			users: this.currentRoom.chat
+		}))
+	}
+
 	switchRoom(roomID) {
 		// wyjście z obecnego pokoju
 		this.exitRoom(this);
 
+		const sendNudes = () => {
+			this.getAllPlayers()
+		}
+		
+		var newRoom = false;
 		// przed dołączeniem do nowego pokoju
 		// sprawdź czy istnieje i ew utwórz
 		if (!rooms[roomID]) {
+			newRoom = true
 			rooms[roomID] = new Room(roomID);
-			rooms[roomID].init();
+			rooms[roomID].init().then(()=>{
+				sendNudes()
+			});
+		}
+
+		if (!newRoom) {
+			sendNudes();
 		}
 
 		// dołączenie do pokoju
@@ -34,6 +61,8 @@ class User {
 	}
 
 	exitRoom() {
+		if (this.currentRoom == null) return;
+
 		try {
 			this.currentRoom.exitRoom(this);
 		} finally {
