@@ -37,6 +37,7 @@ class User {
 
 		const sendNudes = () => {
 			this.getAllPlayers()
+			this.getChat()
 		}
 		
 		var newRoom = false;
