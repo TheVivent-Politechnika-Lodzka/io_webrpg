@@ -149,7 +149,19 @@ MessageHandler[SM.GAMES_JOIN] = async (data, conn, userID) => {
 	db.dbUpdate(
 		'games',
 		{ _id: ObjectId(gameCode) }, // znajdź grę
-		{ $push: { playerIDs: user.id } } // dołącz gracza
+		{ $push: {
+			playerIDs: user.id,
+			characterSheets: {
+				player: user.id,
+				sheets: [
+					{
+						name: "empty",
+						content: "empty",
+					}
+				]
+			}
+			}
+		} // dołącz gracza
 	).then(() => {
 		conn.sendUTF(
 			JSON.stringify({
@@ -167,7 +179,15 @@ MessageHandler[SM.GAMES_CREATE] = async (data, conn, userID) => {
 		gameName: gameName,
 		gmID: user.id,
 		playerIDs: [user.id],
-		characterSheets: [],
+		characterSheets: [{
+			player: user.id,
+			sheets: [
+				{
+					name: "empty",
+					content: "empty",
+				}
+			]
+		}],
 		uploads: [],
 		chat: [],
 	}).then((res) => {

@@ -58,6 +58,7 @@ async function fetchData(id) {
 						_id: 1,
 						username: 1,
 					},
+					characterSheets: 1,
 				},
 			},
 		])
@@ -83,7 +84,10 @@ class Room {
 
 		// lista graczy
 		this.activeUsers = [];
-		this.usersANDsheets = {};
+		this.users = [];
+
+		// gracze i ich karty postaci:
+		this.sheets = {}
 	}
 
 	async init() {
@@ -92,18 +96,18 @@ class Room {
 
             this.gamename = data.gameName;
             this.chat = data.chat;
-            this.usersANDsheets = data.players;
+            this.users = data.players;
             this.gm = data.gm
 
-            // console.log("gamename: " + this.gamename)
-            // console.log("chat:")
-            // console.log(this.chat)
-            // console.log("gm:")
-            // console.log(this.gm)
-            
-            // # to nie jest gitara:
-            // console.log("usersANDsheets:")
-            // console.log(this.usersANDsheets)
+
+			for (const user of this.users) {
+				var sheet = data.characterSheets.find(x => JSON.stringify(x.player) == JSON.stringify(user._id))
+				this.sheets[user._id] = {
+					username: user.username,
+					sheets: sheet
+				}
+			}
+
         })
 
 

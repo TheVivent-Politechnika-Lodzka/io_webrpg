@@ -133,7 +133,7 @@ const Games = () => {
 				<Row xs={1} sm={2} md={2} lg={3} xl={4}>
 					{state.listOfGames.map((game, index) => (
 						<Col key={game._id} className="my-3">
-							<Card>
+							<Card style={{background: "#0000000f"}}>
 								{/* <Card.Header className="fs-6">
 									{game.gameName}
 								</Card.Header> */}
@@ -161,7 +161,7 @@ const Games = () => {
 										fixed="bottom"
 									>
 										<ButtonGroup
-											className="text-center w-100"
+											className="text-center w-100 twoButton"
 											style={{ height: '4em' }}
 										>
 											<Button
@@ -177,6 +177,7 @@ const Games = () => {
 											</Button>
 											<LinkContainer
 												to={`/game/${game._id}`}
+												style={{background: "#000005f"}}
 											>
 												<Button
 													className="p-3"
@@ -194,7 +195,7 @@ const Games = () => {
 						</Col>
 					))}
 					<Col className="mt-3 mb-3 mb-sm-0">
-						<Card style={{ height: '450px' }}>
+						<Card style={{ height: '450px', background: "#0000000f" }}>
 							<Card.Body className="p-0">
 								<Container fluid className="text-center h-100">
 									<ButtonGroup className="text-center h-100 w-100">

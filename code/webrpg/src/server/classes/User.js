@@ -18,9 +18,17 @@ class User {
 	}
 
 	getAllPlayers(){
+		var users = []
+		for (var user of this.currentRoom.users) {
+			users.push({
+				...user,
+				sheets: this.currentRoom.sheets[user._id].sheets.sheets
+			})
+		}
+
 		this.connection.sendUTF(JSON.stringify({
 			type: SM.GAME_GET_ALL_PLAYERS,
-			players: this.currentRoom.usersANDsheets
+			players: users,
 		}))
 	}
 

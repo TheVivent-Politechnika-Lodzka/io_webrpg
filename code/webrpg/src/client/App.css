@@ -95,9 +95,9 @@ div.game {
 	height: 2em;
 	text-align: center;
 	vertical-align: sub;
-} 
+}
 
-.card{
+.card {
 	box-shadow: 20px 10px 20px rgba(0, 0, 0, 0.8);
 	transition: transform 150ms ease;
 }
@@ -110,12 +110,13 @@ div.game {
 	background: radial-gradient(circle, #d9b6977e 25%, #b7905281 100%);
 }
 
+.twoButton {
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.8);
+}
 
 .test {
 	height: 400px;
 }
-
-
 
 /* SCROLLBAR */
 ::-webkit-scrollbar {
