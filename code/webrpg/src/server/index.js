@@ -67,7 +67,7 @@ wsServer.on('request', function (request) {
 
 	// obsługa zakończenia połączenia
 	connection.on('close', function (connection) {
-		console.log(userID + ' disconnected.');
+		console.log(userID + ' disconnected');
 
 		// tu pewnie będzie obsługa "nagłego" wychodzenia z pokoju
 		

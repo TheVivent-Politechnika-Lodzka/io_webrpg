@@ -31,9 +31,11 @@ const ModalGamesJoin = ({ display, toggleModal }) => {
 	};
 
 	return (
-		<Modal show={display} onHide={() => toggleModal()} >
-			<Modal.Header className="fs-4">Dołączanie</Modal.Header>
-			<Modal.Body>
+		<Modal show={display} onHide={() => toggleModal()}>
+			<Modal.Header className="fs-4 bg-modal fw-bolder">
+				Dołączanie
+			</Modal.Header>
+			<Modal.Body className="bg-modal">
 				<p className="m-3">
 					Aby dołączyć do już istniejącego pokoju wpisz jego numer w
 					poniższym okienku:
@@ -50,6 +52,7 @@ const ModalGamesJoin = ({ display, toggleModal }) => {
 								value={code}
 								onChange={(e) => setCode(e.target.value)}
 								pattern="[a-f\d]{24}"
+								style={{ background: '#E3D4B762' }}
 							/>
 							<Form.Control.Feedback type="invalid">
 								To nie wygląda jak numer pokoju
@@ -59,7 +62,7 @@ const ModalGamesJoin = ({ display, toggleModal }) => {
 					<Container className="text-center px-3 mb-4">
 						<Button
 							type="submit"
-							className="w-100"
+							className="w-100 bg-primary"
 							variant="success"
 						>
 							Dołącz teraz!

@@ -53,7 +53,7 @@ const Login = () => {
 		<Row className="justify-content-center mx-0">
 			<Col xs="11" sm="10" md="6" xl="5">
 				<Form
-					className="p-3 my-5 bg-info rounded-3"
+					className="p-3 my-5  rounded-3 loginBox"
 					onSubmit={(e) => {
 						e.preventDefault();
 						sendForm(e.target);
@@ -62,11 +62,9 @@ const Login = () => {
 					<Container fluid>
 						<Row>
 							<Col>
-								<FloatingLabel
-									label="Email"
-									className="m-3"
-								>
+								<FloatingLabel label="Email" className="m-3">
 									<Form.Control
+										className="loginInput"
 										type="email"
 										name="mail"
 										placeholder="e-mail"
@@ -75,17 +73,16 @@ const Login = () => {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
 						</Row>
 						<Row>
 							<Col>
-								<FloatingLabel
-									label="Hasło"
-									className="m-3"
-								>
+								<FloatingLabel label="Hasło" className="m-3">
 									<Form.Control
+										className="loginInput"
 										type="password"
 										name="password"
 										placeholder="hasło"
@@ -94,6 +91,7 @@ const Login = () => {
 										onChange={(e) =>
 											setPassword(e.target.value)
 										}
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>

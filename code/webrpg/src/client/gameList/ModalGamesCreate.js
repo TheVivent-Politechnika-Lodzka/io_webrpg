@@ -24,7 +24,7 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 				type: SocketMessages.GAMES_CREATE,
 				name: name,
 			});
-            toggleModal()
+			toggleModal();
 		}
 
 		setValidated(true); //nie mam pojęcia jak to działa, ale dzięki temu ładnie koloruje :)
@@ -32,11 +32,13 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 
 	return (
 		<Modal show={display} onHide={() => toggleModal()}>
-			<Modal.Header className="fs-4">Stwórz pokój</Modal.Header>
-			<Modal.Body>
+			<Modal.Header className="fs-4 bg-modal fw-bolder">
+				Stwórz pokój
+			</Modal.Header>
+			<Modal.Body className="bg-modal">
 				<p className="m-3">
-					Aby dołączyć do już istniejącego pokoju wpisz jego numer w
-					poniższym okienku:
+					Aby stworzyć nowy pokój należy podać jego nazwę i wcisnąć
+					przycisk znajdujący się poniżej.
 				</p>
 				<Form noValidate validated={validated} onSubmit={createGame}>
 					<Form.Group className="form-floating m-3">
@@ -51,6 +53,7 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 								onChange={(e) => setName(e.target.value)}
 								pattern="[a-zA-Z\d]+"
 								maxLength="37"
+								style={{ background: '#E3D4B762' }}
 							/>
 							<Form.Control.Feedback type="invalid">
 								Nazwa może się składać z liter alfabetu
@@ -62,7 +65,7 @@ const ModalGamesCreate = ({ display, toggleModal }) => {
 					<Container className="text-center px-3 mb-4">
 						<Button
 							type="submit"
-							className="w-100"
+							className="w-100 bg-primary"
 							variant="success"
 						>
 							Stwórz teraz!

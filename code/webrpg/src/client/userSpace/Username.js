@@ -34,6 +34,7 @@ const Username = () => {
 								value={username}
 								onChange={(e) => setUsername(e.target.value)}
 								className="w-100 mx-0"
+								style={{ background: '#b7905262' }}
 							/>
 						</FloatingLabel>
 					</div>
@@ -42,7 +43,7 @@ const Username = () => {
 					<Button
 						active
 						variant="success"
-						className="w-100 mx-0 pt-3 p-0 h-100"
+						className="w-100 mx-0 pt-3 p-0 h-100 bg-primary"
 					>
 						<div className="d-none d-md-block m-0 p-0">
 							<MaterialIcon icon="save" size="large" />

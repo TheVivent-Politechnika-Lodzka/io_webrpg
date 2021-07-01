@@ -72,6 +72,8 @@ var rooms = {};
 
 class Room {
 	constructor(roomID) {
+		// this.removePlayer = this.removePlayer.bind(this);
+
 		// proste dane (id, nazwa, itp)
 		this.id = ObjectId(roomID);
 		this.gamename;
@@ -84,8 +86,8 @@ class Room {
 		this.usersANDsheets = {};
 	}
 
-	init() {
-		fetchData(this.id).then((data)=>{
+	async init() {
+		await fetchData(this.id).then((data)=>{ 
             data = data[0]
 
             this.gamename = data.gameName;
@@ -107,7 +109,19 @@ class Room {
 
 	}
 
-	exitRoom(user) {
+	sendActiveUsers(){
+		for (const user of this.activeUsers){
+			user.getActivePlayers();
+		}
+	}
+
+	addActiveUser(user){
+		this.activeUsers.push(user);
+
+		this.sendActiveUsers();
+	}
+
+	removePlayer(user) {
 		for (var i = this.activeUsers.length; i--; ) {
 			if (this.activeUsers[i] === user) this.activeUsers.splice(i, 1);
 		}
@@ -116,6 +130,9 @@ class Room {
         if (this.activeUsers.length == 0) {
 			delete rooms[this.id]
 		}
+		else{
+			this.sendActiveUsers()
+		}
 	}
 }
 
@@ -123,4 +140,3 @@ module.exports = {
 	Room: Room,
 	rooms: rooms,
 };
-

@@ -41,34 +41,81 @@ div.game {
 	height: calc(100vh - 66px);
 }
 
-.bgCardImages {
-	height: 100%;
-	background-position: center;
-	object-fit: cover;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	transition: all 100ms;
-}
-
-div.card:hover .bgCardImages {
-	background-size: 110%;
-	transition: all 300ms;
-}
-
 .profileBox {
-	background: rgba(255, 255, 255, 0.2);
+	/* 
+		jest to box dla profilu użytkownika 
+	*/
+	background: #b790523f;
 	box-shadow: 20px 10px 20px rgba(0, 0, 0, 0.8);
 	border-radius: 0.7em;
 	transition: transform 150ms ease;
 }
 
 .profileBox:hover {
+	/* 
+		Po najechaniu rozmiar się zwiększa
+	*/
 	transform: scale(1.005);
 }
 
-.test{
+.loginBox {
+	/* 
+	jest to box dla logowania jak i rejestrowania
+	*/
+	box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.377);
+	background: linear-gradient(324deg, #eedec25d 5%, #eedec2 100%);
+}
+
+.navbar {
+	/* 
+		Dodanie cienia dla panelu nawigacji
+	*/
+	box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.377);
+}
+
+/* 
+	wielkość obrazka w kartach dla Games 
+*/
+
+.imgGames {
+	height: 17em;
+	width: auto;
+}
+
+.imgGames img {
+	height: 100%;
+	width: 100%;
+}
+
+/* 
+	cień jak i wielkość tytółu karty, powiększanie przy najechaniu karty i gradient
+*/
+
+.card-title {
+	height: 2em;
+	text-align: center;
+	vertical-align: sub;
+} 
+
+.card{
+	box-shadow: 20px 10px 20px rgba(0, 0, 0, 0.8);
+	transition: transform 150ms ease;
+}
+
+.card:hover {
+	transform: scale(1.05);
+}
+
+.bgCardImages {
+	background: radial-gradient(circle, #d9b6977e 25%, #b7905281 100%);
+}
+
+
+.test {
 	height: 400px;
 }
+
+
 
 /* SCROLLBAR */
 ::-webkit-scrollbar {

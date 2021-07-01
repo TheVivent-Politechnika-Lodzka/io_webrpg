@@ -43,6 +43,7 @@ class Socket {
 			const msg = JSON.parse(message.data);
 			const type = msg.type;
 			delete msg.type;
+			// console.log("SEVER SEND: " + type)
 			this.functions[type](msg);
 		};
 	}

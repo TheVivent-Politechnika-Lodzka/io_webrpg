@@ -1,4 +1,4 @@
-const { rooms, Room } = require('./Room');
+const { Room, rooms } = require('./Room');
 const SM = require('../SocketMessages')
 
 var users = {};
@@ -20,14 +20,26 @@ class User {
 	getAllPlayers(){
 		this.connection.sendUTF(JSON.stringify({
 			type: SM.GAME_GET_ALL_PLAYERS,
-			users: this.currentRoom.usersANDsheets
+			players: this.currentRoom.usersANDsheets
 		}))
 	}
 
 	getChat(){
 		this.connection.sendUTF(JSON.stringify({
 			type: SM.GAME_GET_CHAT,
-			users: this.currentRoom.chat
+			chat: this.currentRoom.chat
+		}))
+	}
+
+	getActivePlayers(){
+		var active = []
+		for (const player of this.currentRoom.activeUsers){
+			active.push(player.id)
+		}
+
+		this.connection.sendUTF(JSON.stringify({
+			type: SM.GAME_GET_ACTIVE_PLAYERS,
+			active_players: active
 		}))
 	}
 
@@ -38,6 +50,7 @@ class User {
 		const sendNudes = () => {
 			this.getAllPlayers()
 			this.getChat()
+			// this.getActivePlayers()
 		}
 		
 		var newRoom = false;
@@ -51,21 +64,19 @@ class User {
 			});
 		}
 
-		if (!newRoom) {
-			sendNudes();
-		}
-
 		// dołączenie do pokoju
 		this.currentRoom = rooms[roomID];
-		this.currentRoom.activeUsers.push(this);
-
+		this.currentRoom.addActiveUser(this)
+		
+		// wyślij info do gracza
+		if (!newRoom) sendNudes();
 	}
 
 	exitRoom() {
 		if (this.currentRoom == null) return;
 
 		try {
-			this.currentRoom.exitRoom(this);
+			this.currentRoom.removePlayer(this);
 		} finally {
 			this.currentRoom = null;
 		}

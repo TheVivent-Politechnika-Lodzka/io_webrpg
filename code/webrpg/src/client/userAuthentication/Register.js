@@ -87,6 +87,8 @@ const Register = () => {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
+										
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
@@ -105,6 +107,8 @@ const Register = () => {
 										onChange={(e) =>
 											setName(e.target.value)
 										}
+										
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
@@ -124,6 +128,8 @@ const Register = () => {
 										onChange={(e) =>
 											setPassword(e.target.value)
 										}
+										
+										style={{ background: '#b7905262' }}
 										className={
 											isPassSame ? null : 'is-invalid'
 										}
@@ -150,6 +156,8 @@ const Register = () => {
 										className={
 											isPassSame ? null : 'is-invalid'
 										}
+										
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>

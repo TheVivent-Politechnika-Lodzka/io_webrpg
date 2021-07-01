@@ -1,13 +1,16 @@
-$primary: #014872;
+$primary: #4f2f199d;
 // $primary: #1266f1;
 $secondary: #b23cfd;
-$success: #8EAD00;
-$info: #39c0ed;
+$success: #B79052;
+$info: #eedec2d8;
 $warning: #ffa900;
 $danger: #f93154;
 $light: #fbfbfb;
 $dark: #262626;
-$lime: #696969;
+$lime: rgba(224, 189, 139, 0.63);
+$modal: #B69357;
+$yes:green ;
+$no: red;
 
 $theme-colors: (
 	'primary': $primary,
@@ -19,6 +22,9 @@ $theme-colors: (
 	'light': $light,
 	'dark': $dark,
     'lime': $lime,
+	'modal': $modal,
+	'yes': $yes,
+	'no': $no,
 );
 
 @import '~bootstrap/scss/bootstrap';

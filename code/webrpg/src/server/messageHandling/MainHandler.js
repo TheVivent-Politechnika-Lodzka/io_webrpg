@@ -1,3 +1,4 @@
+
 const db = require('../DatabaseConn');
 const SocketMessages = require('../SocketMessages');
 const SM = SocketMessages;
@@ -204,13 +205,13 @@ MessageHandler[SM.AUTO_LOGIN] = async (data, conn, userID) => {
 // # gameController           #
 // ############################
 MessageHandler[SM.GAME_JOIN] = async (data, conn, userID) => {
-    const user = users[userID]
+    var user = users[userID]
     console.log('user wszedł do pokoju')
     user.switchRoom(data.room_id)
 }
 
 MessageHandler[SM.GAME_EXIT] = async (data, conn, userID) => {
-    const user = users[userID]
+    var user = users[userID]
     console.log('user wyszedł z pokoju')
     user.exitRoom()
 }

@@ -1,5 +1,5 @@
 import { withRouter } from 'react-router';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 import UserContext from '../libs/user/UserContext';
 import SocketContext from '../libs/socket/SocketContext';
@@ -9,6 +9,7 @@ import { getCookie } from '../libs/socket/Socket';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
 import MaterialIcon, {colorPalette} from 'material-icons-react';
 import Chat from './Chat';
+import PlayersPanel from './PlayersPanel';
 
 const Game = (props) => {
 	const id = props.match.params.id;
@@ -18,6 +19,7 @@ const Game = (props) => {
 		isMobile: false,
 		isBig: false,
 	});
+	const [chat, setChat] = useState(null)
 	const socket = useContext(SocketContext)
 
 	// aktualizacja czy w trybie mobilnym
@@ -29,6 +31,14 @@ const Game = (props) => {
 		});
 	}, [currentBreakpoint]);
 
+	useEffect(()=>{
+		socket.registerOnMessageEvent(SocketMessages.GAME_GET_CHAT, (data)=>{
+			setChat(data.chat)
+		})
+
+	}, [])
+
+	// obsługa wejścia/wyjścia z pokoju
 	useEffect(()=>{
 		socket.sendJSON({
 			type: SocketMessages.GAME_JOIN,
@@ -79,16 +89,16 @@ const Game = (props) => {
 				>
 					<Container fluid className="h-100 m-0 p-0">
 						{/* tutaj cała zawartość panelu */}
-						{!panelState.isMobile || panelState.isBig ? (
-							<span>
+							<span className={!panelState.isMobile || panelState.isBig ?null:"d-none"}>
 								<Row
 									className="m-0 p-0"
 									style={{
 										height: '65%',
-										backgroundColor: 'red',
 									}}
 								>
-									<Col>zawartość (nicki itp)</Col>
+									<Col>
+										<PlayersPanel />
+									</Col>
 								</Row>
 								<Row
 									className="m-0 p-0"
@@ -104,7 +114,6 @@ const Game = (props) => {
 									</Col>
 								</Row>
 							</span>
-						) : null}
 
 						<Row
 							className="m-0 p-0"

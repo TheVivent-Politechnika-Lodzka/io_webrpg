@@ -11,6 +11,9 @@ const SocketMessages = {
 	GAMES_CREATE: 'games_create',
 	GAME_JOIN: 'game_join',
 	GAME_EXIT: 'game_exit',
-};
+	GAME_GET_ALL_PLAYERS: 'game_get_all_players',
+	GAME_GET_CHAT: 'game_get_chat',
+	GAME_GET_ACTIVE_PLAYERS: 'game_get_active_players',
+}
 
 export default SocketMessages;

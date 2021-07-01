@@ -6,6 +6,7 @@ import {
 	Card,
 	Button,
 	ButtonGroup,
+	Img,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from '../libs/socket/Socket';
@@ -132,25 +133,28 @@ const Games = () => {
 				<Row xs={1} sm={2} md={2} lg={3} xl={4}>
 					{state.listOfGames.map((game, index) => (
 						<Col key={game._id} className="my-3">
-							<Card style={{ height: '400px' }}>
-								<Card.Header className="fs-6">
+							<Card>
+								{/* <Card.Header className="fs-6">
 									{game.gameName}
-								</Card.Header>
-								<Container></Container>
-								<Card.Body
-									className="bgCardImages"
-									style={{
-										backgroundImage: `url(${
+								</Card.Header> */}
+								<div className="imgGames">
+									<img
+										src={
 											images[
 												Math.floor(
 													Math.random() *
 														images.length
 												)
 											]
-										})`,
-									}}
-								>
-									<Container className="h-75"></Container>
+										}
+										className="card-img-top"
+										alt="..."
+									/>
+								</div>
+								<Card.Body className="bgCardImages mb-0">
+									<h5 className="card-title">
+										{game.gameName}
+									</h5>
 									<Container
 										fluid
 										className="text-center p-3"
@@ -158,7 +162,7 @@ const Games = () => {
 									>
 										<ButtonGroup
 											className="text-center w-100"
-											style={{ height: '70px' }}
+											style={{ height: '4em' }}
 										>
 											<Button
 												className="p-3"
@@ -190,7 +194,7 @@ const Games = () => {
 						</Col>
 					))}
 					<Col className="mt-3 mb-3 mb-sm-0">
-						<Card style={{ height: '399px' }}>
+						<Card style={{ height: '450px' }}>
 							<Card.Body className="p-0">
 								<Container fluid className="text-center h-100">
 									<ButtonGroup className="text-center h-100 w-100">

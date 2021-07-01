@@ -22,7 +22,7 @@ const Password = () => {
 	return (
 		<Form className="border border-dark rounded my-1 p-1">
 			<Row className="align-items-center d-flex align-items-stretch">
-				<Col xs="9" md="10" >
+				<Col xs="9" md="10">
 					<Container className="w-100 p-0">
 						<Row className="my-2">
 							<Col className="ps-3">
@@ -37,6 +37,7 @@ const Password = () => {
 										onChange={(e) =>
 											setOldPassword(e.target.value)
 										}
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
@@ -54,6 +55,7 @@ const Password = () => {
 										onChange={(e) =>
 											setNewPassword1(e.target.value)
 										}
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
@@ -71,6 +73,7 @@ const Password = () => {
 										onChange={(e) =>
 											setNewPassword2(e.target.value)
 										}
+										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
 							</Col>
@@ -85,7 +88,7 @@ const Password = () => {
 					<Button
 						active
 						variant="success"
-						className="w-100 mx-0 pt-3 h-100 p-0"
+						className="w-100 mx-0 pt-3 h-100 p-0 bg-primary"
 						style={{ fontSize: '1.5rem' }}
 					>
 						<div className="d-none d-md-block m-0 p-0">
