@@ -7,7 +7,7 @@ import SocketMessages from '../libs/socket/SocketMessages';
 import { Redirect } from 'react-router-dom';
 import { getCookie } from '../libs/socket/Socket';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
-import MaterialIcon, {colorPalette} from 'material-icons-react';
+import MaterialIcon from 'material-icons-react';
 import Chat from './Chat';
 import PlayersPanel from './PlayersPanel';
 
@@ -19,8 +19,7 @@ const Game = (props) => {
 		isMobile: false,
 		isBig: false,
 	});
-	const [chat, setChat] = useState(null)
-	const socket = useContext(SocketContext)
+	const socket = useContext(SocketContext);
 
 	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {
@@ -31,27 +30,19 @@ const Game = (props) => {
 		});
 	}, [currentBreakpoint]);
 
-	useEffect(()=>{
-		socket.registerOnMessageEvent(SocketMessages.GAME_GET_CHAT, (data)=>{
-			setChat(data.chat)
-		})
-
-	}, [])
-
 	// obsługa wejścia/wyjścia z pokoju
-	useEffect(()=>{
+	useEffect(() => {
 		socket.sendJSON({
 			type: SocketMessages.GAME_JOIN,
-			room_id: id
-		})
+			room_id: id,
+		});
 
 		return () => {
 			socket.sendJSON({
 				type: SocketMessages.GAME_EXIT,
-			})
-		}
-
-	}, [])
+			});
+		};
+	}, []); //eslint-disable-line
 
 	// aktualizacja czy kliknięto przycisk powiększenia panelu w trybie mobilnym
 	const togglePanelState = () => {
@@ -89,31 +80,39 @@ const Game = (props) => {
 				>
 					<Container fluid className="h-100 m-0 p-0">
 						{/* tutaj cała zawartość panelu */}
-							<span className={!panelState.isMobile || panelState.isBig ?null:"d-none"}>
-								<Row
-									className="m-0 p-0"
-									style={{
-										height: '65%',
-									}}
-								>
-									<Col>
-										<PlayersPanel />
-									</Col>
-								</Row>
-								<Row
-									className="m-0 p-0"
-									style={{
-										height: `${
-											31 + (panelState.isMobile ? 0 : 4)
-										}%`,
-										backgroundColor: 'green',
-									}}
-								>
-									<Col>
-										<Chat />
-									</Col>
-								</Row>
-							</span>
+						<span
+							className={
+								!panelState.isMobile || panelState.isBig
+									? null
+									: 'd-none'
+							}
+						>
+							<Row
+								className="m-0 p-0"
+								style={{
+									height: '65%',
+									background: '#B693573f',
+								}}
+							>
+								<Col>
+									<PlayersPanel />
+								</Col>
+							</Row>
+							<Row
+								className="m-0 p-0 gameRowChat"
+								style={{
+									height: `${
+										31 + (panelState.isMobile ? 0 : 4)
+									}%`,
+
+									background: '#b790527a',
+								}}
+							>
+								<Col>
+									<Chat />
+								</Col>
+							</Row>
+						</span>
 
 						<Row
 							className="m-0 p-0"

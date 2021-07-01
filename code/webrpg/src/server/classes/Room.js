@@ -1,5 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
 const db = require('../DatabaseConn');
+const SM = require('../SocketMessages')
 
 // const test = {
 // 	gamename: '',
@@ -99,7 +100,7 @@ class Room {
             this.users = data.players;
             this.gm = data.gm
 
-
+			// załaduj karty postaci:
 			for (const user of this.users) {
 				var sheet = data.characterSheets.find(x => JSON.stringify(x.player) == JSON.stringify(user._id))
 				this.sheets[user._id] = {
@@ -132,11 +133,47 @@ class Room {
 
         // jeżeli w pokoju nie ma graczy, to wywal pokój
         if (this.activeUsers.length == 0) {
-			delete rooms[this.id]
+			this.saveRoom().then(()=>{
+				delete rooms[this.id]
+			})
 		}
 		else{
 			this.sendActiveUsers()
 		}
+	}
+
+	async saveRoom(){
+		// zapisz chat
+		await db.dbUpdate('games', 
+			{ _id: this.id },
+			{$set: {
+				chat: this.chat
+			}}
+		)
+	}
+
+	pushChatMessage(username, message) {
+		// wyślij wszystkim nową wiadomość na chacie
+		for (var user of this.activeUsers) {
+			user.connection.sendUTF(JSON.stringify({
+				type: SM.GAME_MESSAGE_CHAT,
+				username: username,
+				message: message,
+			}))
+		}
+
+		// zachowaj ostatnie 27 ostatnich wiadomości
+		// (Pan Damian tak zarządził)
+		// Tak, to moje zalecenie :) ~Pan Damian 2k21 koloryzowane
+		if (this.chat.length >= 27){
+			this.chat.shift()
+		}
+
+		// zapisz nową wiadomość
+		this.chat.push({
+			username: username,
+			content: message,
+		})
 	}
 }
 

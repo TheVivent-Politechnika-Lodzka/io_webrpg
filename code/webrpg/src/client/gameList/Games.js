@@ -6,7 +6,6 @@ import {
 	Card,
 	Button,
 	ButtonGroup,
-	Img,
 } from 'react-bootstrap';
 import { Redirect } from 'react-router';
 import { getCookie } from '../libs/socket/Socket';

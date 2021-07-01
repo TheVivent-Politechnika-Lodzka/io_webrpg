@@ -14,6 +14,7 @@ const SocketMessages = {
 	GAME_GET_ALL_PLAYERS: 'game_get_all_players',
 	GAME_GET_CHAT: 'game_get_chat',
 	GAME_GET_ACTIVE_PLAYERS: 'game_get_active_players',
+	GAME_MESSAGE_CHAT: 'game_message_chat',
 }
 
 module.exports = SocketMessages;

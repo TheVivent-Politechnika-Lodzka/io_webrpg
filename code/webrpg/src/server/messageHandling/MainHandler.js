@@ -3,10 +3,10 @@ const db = require('../DatabaseConn');
 const SocketMessages = require('../SocketMessages');
 const SM = SocketMessages;
 const { users, User } = require('../classes/User');
-const { rooms } = require('../classes/Room');
 const sha256 = require('crypto-js/sha256'); //import do szyfrowania
 const Base64 = require('crypto-js/enc-base64'); //import do kodowania
 const ObjectId = require('mongodb').ObjectId;
+const sheet = require('./sheet')
 
 function hashPassword(passwd) {
 	return Base64.stringify(sha256(passwd));
@@ -156,7 +156,7 @@ MessageHandler[SM.GAMES_JOIN] = async (data, conn, userID) => {
 				sheets: [
 					{
 						name: "empty",
-						content: "empty",
+						content: sheet,
 					}
 				]
 			}
@@ -184,7 +184,7 @@ MessageHandler[SM.GAMES_CREATE] = async (data, conn, userID) => {
 			sheets: [
 				{
 					name: "empty",
-					content: "empty",
+					content: sheet,
 				}
 			]
 		}],
@@ -234,6 +234,11 @@ MessageHandler[SM.GAME_EXIT] = async (data, conn, userID) => {
     var user = users[userID]
     console.log('user wyszedł z pokoju')
     user.exitRoom()
+}
+
+MessageHandler[SM.GAME_MESSAGE_CHAT] = async (data, conn, userID) => {
+	var user = users[userID]
+	user.currentRoom.pushChatMessage(data.username, data.message)
 }
 
 module.exports = MessageHandler;

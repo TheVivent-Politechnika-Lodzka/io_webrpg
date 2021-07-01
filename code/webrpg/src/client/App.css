@@ -118,6 +118,15 @@ div.game {
 	height: 400px;
 }
 
+.accordion-flush, .accordion-flush .accordion-item, .accordion-flush .accordion-item .accordion-header, .accordion-flush .accordion-item .accordion-header button{
+	background-color: #e5bc9911 !important;
+}
+
+.gameRowChat {
+	background: radial-gradient(ellipse at top, #dfae6e),
+            	radial-gradient(ellipse at bottom, #a06f13);
+}
+
 /* SCROLLBAR */
 ::-webkit-scrollbar {
 	width: 10px;

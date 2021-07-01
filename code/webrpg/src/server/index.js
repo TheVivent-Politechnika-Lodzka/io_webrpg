@@ -2,10 +2,8 @@ const db = require('./DatabaseConn');
 const SocketMessages = require('./SocketMessages');
 const webSocketServer = require('websocket').server;
 const http = require('http');
-var ObjectId = require('mongodb').ObjectId;
 const dotenv = require('dotenv');
-const { User, users } = require('./classes/User');
-const { room } = require('./classes/Room');
+const { users } = require('./classes/User');
 const MessageHandler = require('./messageHandling/MainHandler');
 dotenv.config();
 
