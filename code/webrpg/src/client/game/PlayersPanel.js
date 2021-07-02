@@ -11,13 +11,17 @@ const PlayersPanel = () => {
 	const [activePlayers, setActivePlayers] = useState([]);
 	const socket = useContext(SocketContext);
 	const [user] = useContext(UserContext);
-	const [character, setCharacter] = useContext(CharacterContext);
+	const [sheetId, setSheetId] = useContext(CharacterContext);
 
-	useEffect(()=>{
-		console.log("hejo")
-		// if (Object.keys(character).length === 0) return
-		console.log(character)
-	}, [character])
+	// useEffect(()=>{
+	// 	if (Object.keys(sheets).length === 0) return
+	// 	const priv_sheets = players.find(x => JSON.stringify(x._id) == JSON.stringify(user.id)).sheets
+	// 	console.log(sheets)
+	// 	socket.sendJSON({
+	// 		type: SocketMessages.GAME_UPDATE_SHEETS,
+	// 		sheets: priv_sheets
+	// 	})
+	// }, [sheets])
 
 	useEffect(() => {
 		socket.registerOnMessageEvent(
@@ -81,10 +85,10 @@ const PlayersPanel = () => {
 							</div>
 						</Accordion.Header>
 						<Accordion.Body>
-							{player.sheets.map((sheet, index) => (
-								<div key={index}>
+							{player.sheets.map((sheet) => (
+								<div key={sheet.id}>
 									{player._id == user.id ? (
-										<Button variant="link" onClick={()=>setCharacter({sheets: player.sheets, index: index})}>
+										<Button variant="link" onClick={()=>setSheetId(sheet.id)}>
 											- {sheet.name}
 										</Button>
 									) : (

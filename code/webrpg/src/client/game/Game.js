@@ -23,7 +23,7 @@ const Game = (props) => {
 	});
 	const socket = useContext(SocketContext);
 
-	const character = useState({})
+	const character = useState()
 
 	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {

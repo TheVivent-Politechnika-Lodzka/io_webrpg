@@ -4,18 +4,37 @@ import { useContext, useEffect, useState } from 'react';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
 import CharacterContext from './CharacterContext';
 import MaterialIcon from 'material-icons-react';
+import SocketContext from '../libs/socket/SocketContext';
+import SocketMessages from '../libs/socket/SocketMessages';
 
 const CharacterPanel = () => {
 	const currentBreakpoint = useBreakpoint();
 	const [isMobile, setIsMobile] = useState(false);
-	const [sheets, setSheets] = useContext(CharacterContext);
-    const [character, setCharacter] = useState({})
+	const [sheetId, setSheetId] = useContext(CharacterContext);
+	const [sheet, setSheet] = useState({});
 	const [sheetModified, setSheetModified] = useState(true);
+	const socket = useContext(SocketContext);
+
 
     useEffect(()=>{
-        if (Object.keys(sheets).length === 0) return
-        setCharacter(sheets.sheets[sheets.index])
-    }, [sheets])
+        socket.registerOnMessageEvent(SocketMessages.GAME_GET_SHEET, (data)=>{
+            setSheet(data.sheet)
+        })
+    }, [])
+
+    useEffect(()=>{
+        // jeżeli jeszcze nie ma sheetId, to nic nie rób
+        if (typeof(sheetId) === 'undefined') return
+        // save'uj jak zmieniasz kartę postaci
+        if (Object.keys(sheet).length !== 0) saveSheet()
+        // żądaj nowej karty postaci
+        socket.sendJSON({
+            type: SocketMessages.GAME_GET_SHEET,
+            id: sheetId
+        })
+
+    }, [sheetId])
+
 
 	useEffect(() => {
 		const isMobile = ['xs', 'sm'].includes(currentBreakpoint);
@@ -24,31 +43,34 @@ const CharacterPanel = () => {
 
 	const setContent = (content) => {
 		const new_character = {
-			name: character.name,
+            id: sheet.id,
+			name: sheet.name,
 			content: content,
 		};
-		setCharacter(new_character);
+		setSheet(new_character);
 		setSheetModified(true);
 	};
 
 	const setName = (name) => {
 		const new_character = {
+            id: sheet.id,
 			name: name,
-			content: character.content,
+			content: sheet.content,
 		};
-		setCharacter(new_character);
+		setSheet(new_character);
 		setSheetModified(true);
 	};
 
 	const saveSheet = () => {
-		console.log("I'm saving");
-        var new_sheets = {...sheets}
-        new_sheets.sheets[sheets.index] = character
-        setSheets(new_sheets)
-        setSheetModified(false);
+        console.log(sheet)
+		socket.sendJSON({
+            type: SocketMessages.GAME_SAVE_SHEET,
+            sheet: sheet,
+        })
+		setSheetModified(false);
 	};
 
-	if (Object.keys(character).length === 0)
+	if (Object.keys(sheet).length === 0)
 		return <h2>Wybierz postać z panelu postaci</h2>;
 
 	return (
@@ -86,24 +108,21 @@ const CharacterPanel = () => {
 					style={{ height: '6%' }}
 				>
 					<div className="float-start h-100 text-center">
-                        <FloatingLabel label="Imię" className="m-3">
-                            <Form.Control
-                                type="text"
-                                placeholder="Imię"
-                                required
-                                value={character.name}
-                                onChange={(e) =>
-                                    setName(e.target.value)
-                                }
-                                style={{ background: '#b7905262' }}
-                            />
-                        </FloatingLabel>
+						<Form.Control
+                            className="h-100"
+							type="text"
+							placeholder="Imię"
+							required
+							value={sheet.name}
+							onChange={(e) => setName(e.target.value)}
+							style={{ background: '#b7905262', border: 'none' }}
+						/>
 					</div>
-					<div className="float-end h-100">
+					<div className="float-end h-100 pt-0">
 						{sheetModified ? (
 							<Button
 								variant="link"
-								className="h-100 px-3 mx-1 text-center"
+								className="h-100 px-3 pt-0 pe-0 text-center"
 								onClick={() => saveSheet()}
 							>
 								<MaterialIcon icon="save" size="tiny" />
@@ -120,7 +139,7 @@ const CharacterPanel = () => {
 							resize: 'none',
 							whiteSpace: 'nowrap',
 						}}
-						value={character.content}
+						value={sheet.content}
 						onChange={(e) => setContent(e.target.value)}
 					></textarea>
 				</div>

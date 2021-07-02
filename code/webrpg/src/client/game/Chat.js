@@ -91,6 +91,7 @@ const Chat = () => {
 							placeholder="wiadomość"
 							required
 							value={message}
+							autoComplete="off"
 							onChange={(e) => setMessage(e.target.value)}
 							style={{ background: '#b7905262' }}
 						/>

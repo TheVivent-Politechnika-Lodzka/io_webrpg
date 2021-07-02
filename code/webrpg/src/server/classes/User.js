@@ -17,15 +17,54 @@ class User {
 		this.currentRoom = null;
 	}
 
+	getSheet(id){
+		// to coś szuka karty postaci o podanym id
+		// wśród kart postaci gracza
+		const sheet = this.currentRoom.sheets[this.id].sheets.sheets.find(x=>x.id == id)
+		this.connection.sendUTF(JSON.stringify({
+			type: SM.GAME_GET_SHEET,
+			sheet: sheet,
+		}))
+	}
+	
+	saveSheet(sheet){
+		var same_name = true;
+
+		// znajdź index w tablicy gdzie znajduje się karta do nadpisania
+		const index = this.currentRoom.sheets[this.id].sheets.sheets.findIndex(x=>x.id == sheet.id)
+		same_name = this.currentRoom.sheets[this.id].sheets.sheets[index].name == sheet.name
+		// nadpisz
+		this.currentRoom.sheets[this.id].sheets.sheets[index] = sheet
+
+		// powiadom wszystkich graczy, jeżeli zmieniłeś imię postaci
+		if (!same_name) {
+			for (const user of this.currentRoom.activeUsers) {
+				user.getAllPlayers()
+			}
+		}
+	}
+
 	getAllPlayers(){
 		var users = []
+		// zlistuj wszystkich graczy i ich postaci
 		for (var user of this.currentRoom.users) {
+			var tmp = []
+			// weź tylko id i nazwy postaci z kart (content zostaw w spokoju)
+			for (const sheet of this.currentRoom.sheets[user._id].sheets.sheets) {
+				// console.log(sheet.name)
+				tmp.push({
+					id: sheet.id,
+					name: sheet.name,
+				})
+			}
 			users.push({
 				...user,
-				sheets: this.currentRoom.sheets[user._id].sheets.sheets
+				sheets: tmp
 			})
+			
 		}
 
+		// wyślij ten chaos
 		this.connection.sendUTF(JSON.stringify({
 			type: SM.GAME_GET_ALL_PLAYERS,
 			players: users,

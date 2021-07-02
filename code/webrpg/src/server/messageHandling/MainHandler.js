@@ -155,6 +155,7 @@ MessageHandler[SM.GAMES_JOIN] = async (data, conn, userID) => {
 				player: user.id,
 				sheets: [
 					{
+						id: 0,
 						name: "empty",
 						content: sheet,
 					}
@@ -183,6 +184,7 @@ MessageHandler[SM.GAMES_CREATE] = async (data, conn, userID) => {
 			player: user.id,
 			sheets: [
 				{
+					id: 0,
 					name: "empty",
 					content: sheet,
 				}
@@ -231,14 +233,24 @@ MessageHandler[SM.GAME_JOIN] = async (data, conn, userID) => {
 }
 
 MessageHandler[SM.GAME_EXIT] = async (data, conn, userID) => {
-    var user = users[userID]
+    const user = users[userID]
     console.log('user wyszedł z pokoju')
     user.exitRoom()
 }
 
 MessageHandler[SM.GAME_MESSAGE_CHAT] = async (data, conn, userID) => {
-	var user = users[userID]
+	const user = users[userID]
 	user.currentRoom.pushChatMessage(data.username, data.message)
+}
+
+MessageHandler[SM.GAME_GET_SHEET] = async (data, conn, userID) => {
+	const user = users[userID]
+	user.getSheet(data.id)
+}
+
+MessageHandler[SM.GAME_SAVE_SHEET] = async (data, conn, userID) => {
+	const user = users[userID]
+	user.saveSheet(data.sheet)
 }
 
 module.exports = MessageHandler;

@@ -15,6 +15,8 @@ const SocketMessages = {
 	GAME_GET_CHAT: 'game_get_chat',
 	GAME_GET_ACTIVE_PLAYERS: 'game_get_active_players',
 	GAME_MESSAGE_CHAT: 'game_message_chat',
+	GAME_GET_SHEET: 'game_get_sheet',
+	GAME_SAVE_SHEET: 'game_save_sheet',
 }
 
 export default SocketMessages;

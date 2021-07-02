@@ -17,7 +17,6 @@ const Email = () => {
 				<Col xs="9" md="10" className="ps-3">
 					<div className="pt-1">
 						<FloatingLabel
-							controlId="floatingInput"
 							label="Adres E-mail"
 							className=" w-100"
 						>

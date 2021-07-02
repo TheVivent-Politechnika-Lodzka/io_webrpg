@@ -24,7 +24,6 @@ const Username = () => {
 				<Col md="10" xs="9" className="ps-3 text-center">
 					<div className="pt-1">
 						<FloatingLabel
-							controlId="floatingInput"
 							label="Nazwa użytkownika"
 							className=" w-100"
 						>
