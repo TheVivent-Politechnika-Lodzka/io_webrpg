@@ -3,14 +3,15 @@ $primary: #4f2f199d;
 $secondary: #b23cfd;
 $success: #b79052b2;
 $info: #eedec2d8;
-$warning: #ffa900;
+$warning: #c58e459d;
 $danger: #f93154;
-$light: #fbfbfb;
+$light: #a15e31d2;
 $dark: #262626;
 $lime: rgba(224, 189, 139, 0.63);
-$modal: #B69357;
-$yes:green ;
+$modal: #b69357;
+$yes: green;
 $no: red;
+$cardTextarea: #c58e459d;
 
 $theme-colors: (
 	'primary': $primary,
@@ -21,10 +22,11 @@ $theme-colors: (
 	'danger': $danger,
 	'light': $light,
 	'dark': $dark,
-    'lime': $lime,
+	'lime': $lime,
 	'modal': $modal,
 	'yes': $yes,
 	'no': $no,
+	'cardTextarea': $cardTextarea,
 );
 
 @import '~bootstrap/scss/bootstrap';

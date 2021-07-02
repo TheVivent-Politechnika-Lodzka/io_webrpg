@@ -10,6 +10,8 @@ import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-
 import MaterialIcon from 'material-icons-react';
 import Chat from './Chat';
 import PlayersPanel from './PlayersPanel';
+import CharacterPanel from './CharacterPanel';
+import CharacterContext from './CharacterContext';
 
 const Game = (props) => {
 	const id = props.match.params.id;
@@ -20,6 +22,8 @@ const Game = (props) => {
 		isBig: false,
 	});
 	const socket = useContext(SocketContext);
+
+	const character = useState({})
 
 	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {
@@ -63,84 +67,88 @@ const Game = (props) => {
 	}
 
 	return (
-		<Container fluid className="p-0 m-0 game">
-			<Row className="p-0 m-0 h-100 overflow-hidden">
-				{/* main area */}
-				<Col className="h-100 m-0">{id}</Col>
+		<CharacterContext.Provider value={character}>
+			<Container fluid className="p-0 m-0 game">
+				<Row className="p-0 m-0 h-100 overflow-hidden">
+					{/* main area */}
+					<Col className="h-100 m-0 p-0 position-relative">
+						<CharacterPanel />	
+					</Col>
 
-				{/* panel */}
-				<Col
-					xs={{ span: 12, order: 'first' }}
-					md={{ span: 5, order: 'last' }}
-					lg="4"
-					xl="3"
-					className={`m-0 p-0 gamePanel ${
-						panelState.isBig ? 'h-100' : null
-					}`}
-				>
-					<Container fluid className="h-100 m-0 p-0">
-						{/* tutaj cała zawartość panelu */}
-						<span
-							className={
-								!panelState.isMobile || panelState.isBig
-									? null
-									: 'd-none'
-							}
-						>
+					{/* panel */}
+					<Col
+						xs={{ span: 12, order: 'first' }}
+						md={{ span: 5, order: 'last' }}
+						lg="4"
+						xl="3"
+						className={`m-0 p-0 gamePanel ${
+							panelState.isBig ? 'h-100' : null
+						}`}
+					>
+						<Container fluid className="h-100 m-0 p-0">
+							{/* tutaj cała zawartość panelu */}
+							<span
+								className={
+									!panelState.isMobile || panelState.isBig
+										? null
+										: 'd-none'
+								}
+							>
+								<Row
+									className="m-0 p-0"
+									style={{
+										height: '65%',
+										background: '#B693573f',
+									}}
+								>
+									<Col>
+										<PlayersPanel />
+									</Col>
+								</Row>
+								<Row
+									className="m-0 p-0 gameRowChat"
+									style={{
+										height: `${
+											31 + (panelState.isMobile ? 0 : 4)
+										}%`,
+
+										background: '#b790527a',
+									}}
+								>
+									<Col>
+										<Chat />
+									</Col>
+								</Row>
+							</span>
+
 							<Row
 								className="m-0 p-0"
 								style={{
-									height: '65%',
-									background: '#B693573f',
+									height: `${1 - (panelState.isMobile ? 0 : 1)}%`,
+									backgroundColor: 'blue',
 								}}
 							>
-								<Col>
-									<PlayersPanel />
+								<Col className="m-0 p-0">
+									{/* przycisk do pokazywania / ukrywania panelu w trybie mobilnym */}
+									{panelState.isMobile ? (
+										<div
+											role="button"
+											tabIndex="0"
+											className="w-100 h-100 text-center bg-primary"
+											style={{ color: 'white' }}
+											onClick={() => togglePanelState()}
+											onKeyDown={() => togglePanelState()}
+										>
+											<MaterialIcon icon="drag_handle" />
+										</div>
+									) : null}
 								</Col>
 							</Row>
-							<Row
-								className="m-0 p-0 gameRowChat"
-								style={{
-									height: `${
-										31 + (panelState.isMobile ? 0 : 4)
-									}%`,
-
-									background: '#b790527a',
-								}}
-							>
-								<Col>
-									<Chat />
-								</Col>
-							</Row>
-						</span>
-
-						<Row
-							className="m-0 p-0"
-							style={{
-								height: `${1 - (panelState.isMobile ? 0 : 1)}%`,
-								backgroundColor: 'blue',
-							}}
-						>
-							<Col className="m-0 p-0">
-								{/* przycisk do pokazywania / ukrywania panelu w trybie mobilnym */}
-								{panelState.isMobile ? (
-									<div
-										role="button"
-										tabIndex="0"
-										className="w-100 h-100 text-center bg-primary"
-										style={{ color: 'white' }}
-										onClick={() => togglePanelState()}
-										onKeyDown={() => togglePanelState()}
-									>
-										<MaterialIcon icon="drag_handle" />
-									</div>
-								) : null}
-							</Col>
-						</Row>
-					</Container>
-				</Col>
-			</Row>
-		</Container>
+						</Container>
+					</Col>
+				</Row>
+			</Container>
+		</CharacterContext.Provider>
 	);
 };
 

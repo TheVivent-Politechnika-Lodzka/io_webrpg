@@ -3,13 +3,21 @@ import UserContext from '../libs/user/UserContext';
 import SocketContext from '../libs/socket/SocketContext';
 import SocketMessages from '../libs/socket/SocketMessages';
 import MaterialIcon from 'material-icons-react';
-import { Container, Accordion } from 'react-bootstrap';
+import { Container, Accordion, Button } from 'react-bootstrap';
+import CharacterContext from './CharacterContext';
 
 const PlayersPanel = () => {
 	const [players, setPlayers] = useState([]);
 	const [activePlayers, setActivePlayers] = useState([]);
 	const socket = useContext(SocketContext);
-	const [user] = useContext(UserContext)
+	const [user] = useContext(UserContext);
+	const [character, setCharacter] = useContext(CharacterContext);
+
+	useEffect(()=>{
+		console.log("hejo")
+		// if (Object.keys(character).length === 0) return
+		console.log(character)
+	}, [character])
 
 	useEffect(() => {
 		socket.registerOnMessageEvent(
@@ -26,9 +34,9 @@ const PlayersPanel = () => {
 			}
 		);
 	}, []); //eslint-disable-line
-
+	
 	if (players.length == 0) return <div>Loading...</div>;
-
+	
 	return (
 		<Container className="m-0 p-0 w-100">
 			<h1 className="text-center mt-4 mb-3">Lista Graczy</h1>
@@ -73,9 +81,16 @@ const PlayersPanel = () => {
 							</div>
 						</Accordion.Header>
 						<Accordion.Body>
-							{console.log(player.sheets)}
-							{player.sheets.map((sheet, index)=>(
-								<div key={index}>- {sheet.name}</div>
+							{player.sheets.map((sheet, index) => (
+								<div key={index}>
+									{player._id == user.id ? (
+										<Button variant="link" onClick={()=>setCharacter({sheets: player.sheets, index: index})}>
+											- {sheet.name}
+										</Button>
+									) : (
+										<span>- {sheet.name}</span>
+									)}
+								</div>
 							))}
 						</Accordion.Body>
 					</Accordion.Item>
