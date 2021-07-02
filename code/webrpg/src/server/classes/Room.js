@@ -108,10 +108,7 @@ class Room {
 					sheets: sheet
 				}
 			}
-
         })
-
-
 	}
 
 	sendActiveUsers(){
@@ -143,11 +140,21 @@ class Room {
 	}
 
 	async saveRoom(){
-		// zapisz chat
+		var tmp = []
+		for (const user of this.users){
+			const sheets = this.sheets[user._id].sheets.sheets
+			tmp.push({
+				player: user._id,
+				sheets: sheets,
+			})
+		}
+
+		// zapisz pokój
 		await db.dbUpdate('games', 
 			{ _id: this.id },
 			{$set: {
-				chat: this.chat
+				chat: this.chat,
+				characterSheets: tmp
 			}}
 		)
 	}
