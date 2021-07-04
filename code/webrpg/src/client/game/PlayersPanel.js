@@ -38,9 +38,9 @@ const PlayersPanel = () => {
 			}
 		);
 	}, []); //eslint-disable-line
-	
+
 	if (players.length == 0) return <div>Loading...</div>;
-	
+
 	return (
 		<Container className="m-0 p-0 w-100">
 			<h1 className="text-center mt-4 mb-3">Lista Graczy</h1>
@@ -88,7 +88,10 @@ const PlayersPanel = () => {
 							{player.sheets.map((sheet) => (
 								<div key={sheet.id}>
 									{player._id == user.id ? (
-										<Button variant="link" onClick={()=>setSheetId(sheet.id)}>
+										<Button
+											variant="link"
+											onClick={() => setSheetId(sheet.id)}
+										>
 											- {sheet.name}
 										</Button>
 									) : (

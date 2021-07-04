@@ -48,7 +48,7 @@ const Profile = (props) => {
 										variant="primary"
 										onClick={logout}
 										className="my-2 mt-2"
-										style={{width: "20em"}}
+										style={{ width: '20em' }}
 									>
 										Wyloguj
 										<div className="ps-2 pt-2">

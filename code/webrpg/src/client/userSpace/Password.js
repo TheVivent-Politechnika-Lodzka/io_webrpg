@@ -26,9 +26,7 @@ const Password = () => {
 					<Container className="w-100 p-0">
 						<Row className="my-2">
 							<Col className="ps-3">
-								<FloatingLabel
-									label="Stare hasło"
-								>
+								<FloatingLabel label="Stare hasło">
 									<Form.Control
 										type="password"
 										placeholder="Stare hasło"
@@ -43,9 +41,7 @@ const Password = () => {
 						</Row>
 						<Row className="my-2">
 							<Col className="ps-3">
-								<FloatingLabel
-									label="Nowe hasło"
-								>
+								<FloatingLabel label="Nowe hasło">
 									<Form.Control
 										type="password"
 										placeholder="Nowe hasło"
@@ -60,9 +56,7 @@ const Password = () => {
 						</Row>
 						<Row className="my-2">
 							<Col className="ps-3">
-								<FloatingLabel
-									label="Powtórz nowe hasło"
-								>
+								<FloatingLabel label="Powtórz nowe hasło">
 									<Form.Control
 										type="password"
 										placeholder="Powtórz nowe hasło"

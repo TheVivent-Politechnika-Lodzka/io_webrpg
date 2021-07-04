@@ -68,9 +68,9 @@ wsServer.on('request', function (request) {
 		console.log(userID + ' disconnected');
 
 		// tu pewnie będzie obsługa "nagłego" wychodzenia z pokoju
-		
-		if(users[userID]){
-			users[userID].exitRoom()
+
+		if (users[userID]) {
+			users[userID].exitRoom();
 		}
 
 		// trzeba wyczyścić, bo tego pana już nie ma

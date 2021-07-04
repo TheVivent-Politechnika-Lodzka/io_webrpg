@@ -16,10 +16,7 @@ const Email = () => {
 			<Row className="align-items-center d-flex align-items-stretch">
 				<Col xs="9" md="10" className="ps-3">
 					<div className="pt-1">
-						<FloatingLabel
-							label="Adres E-mail"
-							className=" w-100"
-						>
+						<FloatingLabel label="Adres E-mail" className=" w-100">
 							<Form.Control
 								type="email"
 								placeholder="Adres E-mail"

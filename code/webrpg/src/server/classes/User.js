@@ -1,5 +1,5 @@
 const { Room, rooms } = require('./Room');
-const SM = require('../SocketMessages')
+const SM = require('../SocketMessages');
 
 var users = {};
 
@@ -17,77 +17,91 @@ class User {
 		this.currentRoom = null;
 	}
 
-	getSheet(id){
+	getSheet(id) {
 		// to coś szuka karty postaci o podanym id
 		// wśród kart postaci gracza
-		const sheet = this.currentRoom.sheets[this.id].sheets.sheets.find(x=>x.id == id)
-		this.connection.sendUTF(JSON.stringify({
-			type: SM.GAME_GET_SHEET,
-			sheet: sheet,
-		}))
+		const sheet = this.currentRoom.sheets[this.id].sheets.sheets.find(
+			(x) => x.id == id
+		);
+		this.connection.sendUTF(
+			JSON.stringify({
+				type: SM.GAME_GET_SHEET,
+				sheet: sheet,
+			})
+		);
 	}
-	
-	saveSheet(sheet){
+
+	saveSheet(sheet) {
 		var same_name = true;
 
 		// znajdź index w tablicy gdzie znajduje się karta do nadpisania
-		const index = this.currentRoom.sheets[this.id].sheets.sheets.findIndex(x=>x.id == sheet.id)
-		same_name = this.currentRoom.sheets[this.id].sheets.sheets[index].name == sheet.name
+		const index = this.currentRoom.sheets[this.id].sheets.sheets.findIndex(
+			(x) => x.id == sheet.id
+		);
+		same_name =
+			this.currentRoom.sheets[this.id].sheets.sheets[index].name ==
+			sheet.name;
 		// nadpisz
-		this.currentRoom.sheets[this.id].sheets.sheets[index] = sheet
+		this.currentRoom.sheets[this.id].sheets.sheets[index] = sheet;
 
 		// powiadom wszystkich graczy, jeżeli zmieniłeś imię postaci
 		if (!same_name) {
 			for (const user of this.currentRoom.activeUsers) {
-				user.getAllPlayers()
+				user.getAllPlayers();
 			}
 		}
 	}
 
-	getAllPlayers(){
-		var users = []
+	getAllPlayers() {
+		var users = [];
 		// zlistuj wszystkich graczy i ich postaci
 		for (var user of this.currentRoom.users) {
-			var tmp = []
+			var tmp = [];
 			// weź tylko id i nazwy postaci z kart (content zostaw w spokoju)
-			for (const sheet of this.currentRoom.sheets[user._id].sheets.sheets) {
+			for (const sheet of this.currentRoom.sheets[user._id].sheets
+				.sheets) {
 				// console.log(sheet.name)
 				tmp.push({
 					id: sheet.id,
 					name: sheet.name,
-				})
+				});
 			}
 			users.push({
 				...user,
-				sheets: tmp
-			})
-			
+				sheets: tmp,
+			});
 		}
 
 		// wyślij ten chaos
-		this.connection.sendUTF(JSON.stringify({
-			type: SM.GAME_GET_ALL_PLAYERS,
-			players: users,
-		}))
+		this.connection.sendUTF(
+			JSON.stringify({
+				type: SM.GAME_GET_ALL_PLAYERS,
+				players: users,
+			})
+		);
 	}
 
-	getChat(){
-		this.connection.sendUTF(JSON.stringify({
-			type: SM.GAME_GET_CHAT,
-			chat: this.currentRoom.chat
-		}))
+	getChat() {
+		this.connection.sendUTF(
+			JSON.stringify({
+				type: SM.GAME_GET_CHAT,
+				chat: this.currentRoom.chat,
+			})
+		);
 	}
 
-	getActivePlayers(){
-		var active = []
-		for (const player of this.currentRoom.activeUsers){
-			active.push(player.id)
+	getActivePlayers() {
+		var active = [];
+		for (const player of this.currentRoom.activeUsers) {
+			active.push(player.id);
 		}
 
-		this.connection.sendUTF(JSON.stringify({
-			type: SM.GAME_GET_ACTIVE_PLAYERS,
-			active_players: active
-		}))
+		this.connection.sendUTF(
+			JSON.stringify({
+				type: SM.GAME_GET_ACTIVE_PLAYERS,
+				active_players: active,
+			})
+		);
 	}
 
 	switchRoom(roomID) {
@@ -95,26 +109,26 @@ class User {
 		this.exitRoom(this);
 
 		const sendNudes = () => {
-			this.getAllPlayers()
-			this.getChat()
+			this.getAllPlayers();
+			this.getChat();
 			// this.getActivePlayers()
-		}
-		
+		};
+
 		var newRoom = false;
 		// przed dołączeniem do nowego pokoju
 		// sprawdź czy istnieje i ew utwórz
 		if (!rooms[roomID]) {
-			newRoom = true
+			newRoom = true;
 			rooms[roomID] = new Room(roomID);
-			rooms[roomID].init().then(()=>{
-				sendNudes()
+			rooms[roomID].init().then(() => {
+				sendNudes();
 			});
 		}
 
 		// dołączenie do pokoju
 		this.currentRoom = rooms[roomID];
-		this.currentRoom.addActiveUser(this)
-		
+		this.currentRoom.addActiveUser(this);
+
 		// wyślij info do gracza
 		if (!newRoom) sendNudes();
 	}
@@ -127,7 +141,6 @@ class User {
 		} finally {
 			this.currentRoom = null;
 		}
-
 	}
 }
 

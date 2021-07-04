@@ -23,7 +23,7 @@ const Game = (props) => {
 	});
 	const socket = useContext(SocketContext);
 
-	const character = useState()
+	const character = useState();
 
 	// aktualizacja czy w trybie mobilnym
 	useEffect(() => {
@@ -72,7 +72,7 @@ const Game = (props) => {
 				<Row className="p-0 m-0 h-100 overflow-hidden">
 					{/* main area */}
 					<Col className="h-100 m-0 p-0 position-relative">
-						<CharacterPanel />	
+						<CharacterPanel />
 					</Col>
 
 					{/* panel */}
@@ -124,7 +124,9 @@ const Game = (props) => {
 							<Row
 								className="m-0 p-0"
 								style={{
-									height: `${1 - (panelState.isMobile ? 0 : 1)}%`,
+									height: `${
+										1 - (panelState.isMobile ? 0 : 1)
+									}%`,
 									backgroundColor: 'blue',
 								}}
 							>

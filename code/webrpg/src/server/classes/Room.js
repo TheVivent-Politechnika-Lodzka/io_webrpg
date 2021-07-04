@@ -1,6 +1,6 @@
 const ObjectId = require('mongodb').ObjectId;
 const db = require('../DatabaseConn');
-const SM = require('../SocketMessages')
+const SM = require('../SocketMessages');
 
 // const test = {
 // 	gamename: '',
@@ -22,7 +22,7 @@ const SM = require('../SocketMessages')
 // };
 
 async function fetchData(id) {
-    var to_return
+	var to_return;
 	await db
 		.dbAggregate('games', [
 			{
@@ -51,9 +51,9 @@ async function fetchData(id) {
 					_id: 1,
 					gameName: 1,
 					gm: {
-                        _id: 1,
-                        username: 1,
-                    },
+						_id: 1,
+						username: 1,
+					},
 					chat: 1,
 					players: {
 						_id: 1,
@@ -67,7 +67,7 @@ async function fetchData(id) {
 			to_return = res;
 		});
 
-    return to_return
+	return to_return;
 }
 
 var rooms = {};
@@ -79,7 +79,7 @@ class Room {
 		// proste dane (id, nazwa, itp)
 		this.id = ObjectId(roomID);
 		this.gamename;
-        this.gm;
+		this.gm;
 		// chat
 		this.chat = []; //lista push musi dbać o maksymalny rozmiar chatu (50 ostatnich wpisów?)
 
@@ -88,36 +88,38 @@ class Room {
 		this.users = [];
 
 		// gracze i ich karty postaci:
-		this.sheets = {}
+		this.sheets = {};
 	}
 
 	async init() {
-		await fetchData(this.id).then((data)=>{ 
-            data = data[0]
+		await fetchData(this.id).then((data) => {
+			data = data[0];
 
-            this.gamename = data.gameName;
-            this.chat = data.chat;
-            this.users = data.players;
-            this.gm = data.gm
+			this.gamename = data.gameName;
+			this.chat = data.chat;
+			this.users = data.players;
+			this.gm = data.gm;
 
 			// załaduj karty postaci:
 			for (const user of this.users) {
-				var sheet = data.characterSheets.find(x => JSON.stringify(x.player) == JSON.stringify(user._id))
+				var sheet = data.characterSheets.find(
+					(x) => JSON.stringify(x.player) == JSON.stringify(user._id)
+				);
 				this.sheets[user._id] = {
 					username: user.username,
-					sheets: sheet
-				}
+					sheets: sheet,
+				};
 			}
-        })
+		});
 	}
 
-	sendActiveUsers(){
-		for (const user of this.activeUsers){
+	sendActiveUsers() {
+		for (const user of this.activeUsers) {
 			user.getActivePlayers();
 		}
 	}
 
-	addActiveUser(user){
+	addActiveUser(user) {
 		this.activeUsers.push(user);
 
 		this.sendActiveUsers();
@@ -128,59 +130,63 @@ class Room {
 			if (this.activeUsers[i] === user) this.activeUsers.splice(i, 1);
 		}
 
-        // jeżeli w pokoju nie ma graczy, to wywal pokój
-        if (this.activeUsers.length == 0) {
-			this.saveRoom().then(()=>{
-				delete rooms[this.id]
-			})
-		}
-		else{
-			this.sendActiveUsers()
+		// jeżeli w pokoju nie ma graczy, to wywal pokój
+		if (this.activeUsers.length == 0) {
+			this.saveRoom().then(() => {
+				delete rooms[this.id];
+			});
+		} else {
+			this.sendActiveUsers();
 		}
 	}
 
-	async saveRoom(){
-		var tmp = []
-		for (const user of this.users){
-			const sheets = this.sheets[user._id].sheets.sheets
+	async saveRoom() {
+		var tmp = [];
+		for (const user of this.users) {
+			const sheets = this.sheets[user._id].sheets.sheets;
 			tmp.push({
 				player: user._id,
 				sheets: sheets,
-			})
+			});
 		}
 
 		// zapisz pokój
-		await db.dbUpdate('games', 
+		await db.dbUpdate(
+			'games',
 			{ _id: this.id },
-			{$set: {
-				chat: this.chat,
-				characterSheets: tmp
-			}}
-		)
+			{
+				$set: {
+					chat: this.chat,
+					characterSheets: tmp,
+				},
+			}
+		);
 	}
 
 	pushChatMessage(username, message) {
 		// wyślij wszystkim nową wiadomość na chacie
 		for (var user of this.activeUsers) {
-			user.connection.sendUTF(JSON.stringify({
-				type: SM.GAME_MESSAGE_CHAT,
-				username: username,
-				message: message,
-			}))
+			user.connection.sendUTF(
+				JSON.stringify({
+					type: SM.GAME_MESSAGE_CHAT,
+					username: username,
+					message: message,
+				})
+			);
 		}
 
 		// zachowaj ostatnie 27 ostatnich wiadomości
 		// (Pan Damian tak zarządził)
 		// Tak, to moje zalecenie :) ~Pan Damian 2k21 koloryzowane
-		if (this.chat.length >= 27){
-			this.chat.shift()
+		if (this.chat.length >= 27) {
+			this.chat.shift();
 		}
 
 		// zapisz nową wiadomość
 		this.chat.push({
 			username: username,
 			content: message,
-		})
+		});
 	}
 }
 

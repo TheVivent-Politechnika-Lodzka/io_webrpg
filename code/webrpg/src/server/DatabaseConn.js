@@ -98,7 +98,6 @@ async function dbUpdate(collection, updateSearchQuerry, updateStatement) {
  * @param {Array[JSON]} querry
  */
 async function dbAggregate(collection, querry) {
-
 	try {
 		const cursor = await globalClient
 			.collection(collection)
@@ -109,7 +108,6 @@ async function dbAggregate(collection, querry) {
 	}
 	return results;
 }
-
 
 module.exports = {
 	dbConnect: dbConnect,

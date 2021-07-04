@@ -6,44 +6,65 @@ import CharacterContext from './CharacterContext';
 import MaterialIcon from 'material-icons-react';
 import SocketContext from '../libs/socket/SocketContext';
 import SocketMessages from '../libs/socket/SocketMessages';
+import { GlobalHotKeys, configure } from 'react-hotkeys';
 
 const CharacterPanel = () => {
 	const currentBreakpoint = useBreakpoint();
 	const [isMobile, setIsMobile] = useState(false);
 	const [sheetId, setSheetId] = useContext(CharacterContext);
 	const [sheet, setSheet] = useState({});
-	const [sheetModified, setSheetModified] = useState(true);
+	const [sheetModified, setSheetModified] = useState(false);
+	const [timer, setTimer] = useState(0);
 	const socket = useContext(SocketContext);
+	configure({ ignoreTags: [] });
 
-
-    useEffect(()=>{
-        socket.registerOnMessageEvent(SocketMessages.GAME_GET_SHEET, (data)=>{
-            setSheet(data.sheet)
-        })
-    }, [])
-
-    useEffect(()=>{
-        // jeżeli jeszcze nie ma sheetId, to nic nie rób
-        if (typeof(sheetId) === 'undefined') return
-        // save'uj jak zmieniasz kartę postaci
-        if (Object.keys(sheet).length !== 0) saveSheet()
-        // żądaj nowej karty postaci
-        socket.sendJSON({
-            type: SocketMessages.GAME_GET_SHEET,
-            id: sheetId
-        })
-
-    }, [sheetId])
-
+	useEffect(() => {
+		socket.registerOnMessageEvent(SocketMessages.GAME_GET_SHEET, (data) => {
+			setSheet(data.sheet);
+		});
+	}, []);
 
 	useEffect(() => {
 		const isMobile = ['xs', 'sm'].includes(currentBreakpoint);
 		setIsMobile(isMobile);
 	}, [currentBreakpoint]);
 
+	useEffect(() => {
+		// jeżeli jeszcze nie ma sheetId, to nic nie rób
+		if (typeof sheetId === 'undefined') return;
+		// save'uj jak zmieniasz kartę postaci
+		if (Object.keys(sheet).length !== 0) saveSheet();
+		// żądaj nowej karty postaci
+		socket.sendJSON({
+			type: SocketMessages.GAME_GET_SHEET,
+			id: sheetId,
+		});
+	}, [sheetId]);
+
+	useEffect(() => {
+		if (sheetModified == false) return;
+
+		setTimer(30);
+	}, [sheetModified]);
+
+	useEffect(() => {
+		if (timer == 0) {
+			saveSheet();
+			return;
+		}
+		console.log(timer);
+		console.log('hello');
+
+		const tim = setTimeout(() => {
+			setTimer((old) => old - 1);
+		}, 1000);
+
+		return () => clearTimeout(tim);
+	}, [timer]);
+
 	const setContent = (content) => {
 		const new_character = {
-            id: sheet.id,
+			id: sheet.id,
 			name: sheet.name,
 			content: content,
 		};
@@ -53,7 +74,7 @@ const CharacterPanel = () => {
 
 	const setName = (name) => {
 		const new_character = {
-            id: sheet.id,
+			id: sheet.id,
 			name: name,
 			content: sheet.content,
 		};
@@ -62,12 +83,22 @@ const CharacterPanel = () => {
 	};
 
 	const saveSheet = () => {
-        console.log(sheet)
 		socket.sendJSON({
-            type: SocketMessages.GAME_SAVE_SHEET,
-            sheet: sheet,
-        })
+			type: SocketMessages.GAME_SAVE_SHEET,
+			sheet: sheet,
+		});
 		setSheetModified(false);
+	};
+
+	const keyMap = {
+		SAVE: 'ctrl+s',
+	};
+
+	const handlers = {
+		SAVE: (event) => {
+			event.preventDefault();
+			saveSheet();
+		},
 	};
 
 	if (Object.keys(sheet).length === 0)
@@ -109,7 +140,7 @@ const CharacterPanel = () => {
 				>
 					<div className="float-start h-100 text-center">
 						<Form.Control
-                            className="h-100"
+							className="h-100"
 							type="text"
 							placeholder="Imię"
 							required
@@ -131,6 +162,11 @@ const CharacterPanel = () => {
 					</div>
 				</div>
 				<div style={{ height: '94%' }}>
+					<GlobalHotKeys
+						keyMap={keyMap}
+						handlers={handlers}
+						allowChanges={true}
+					/>
 					<textarea
 						className="font-monospace bg-cardTextarea m-0 p-0"
 						style={{

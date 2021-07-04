@@ -87,7 +87,6 @@ const Register = () => {
 										onChange={(e) =>
 											setEmail(e.target.value)
 										}
-										
 										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
@@ -107,7 +106,6 @@ const Register = () => {
 										onChange={(e) =>
 											setName(e.target.value)
 										}
-										
 										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>
@@ -128,7 +126,6 @@ const Register = () => {
 										onChange={(e) =>
 											setPassword(e.target.value)
 										}
-										
 										style={{ background: '#b7905262' }}
 										className={
 											isPassSame ? null : 'is-invalid'
@@ -139,7 +136,6 @@ const Register = () => {
 						</Row>
 						<Row>
 							<Col>
-								
 								<FloatingLabel
 									controlId="ruchomePowtórzHasło"
 									label="Powtórz hasło:"
@@ -156,7 +152,6 @@ const Register = () => {
 										className={
 											isPassSame ? null : 'is-invalid'
 										}
-										
 										style={{ background: '#b7905262' }}
 									/>
 								</FloatingLabel>

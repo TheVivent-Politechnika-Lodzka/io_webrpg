@@ -30,9 +30,9 @@ class Socket {
 			`ws://rimuru.thevivent.com:8000`
 			// `ws://${process.env.SOCKET_SERVER}:8000`
 		);
-		this.socket.onerror = (error)=>{
-			console.log(error)
-		}
+		this.socket.onerror = (error) => {
+			console.log(error);
+		};
 		this.functions = {};
 		this.msgs = [];
 
