@@ -118,6 +118,10 @@ div.game {
 	height: 400px;
 }
 
+.playerPanelButtonShadow {
+	box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.205);
+}
+
 .accordion-flush,
 .accordion-flush .accordion-item,
 .accordion-flush .accordion-item .accordion-header,

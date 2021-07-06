@@ -95,7 +95,7 @@ const Game = (props) => {
 								}
 							>
 								<Row
-									className="m-0 p-0"
+									className="m-0 p-0 overflow-auto"
 									style={{
 										height: '65%',
 										background: '#B693573f',

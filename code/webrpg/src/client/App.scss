@@ -12,6 +12,7 @@ $modal: #b69357;
 $yes: green;
 $no: red;
 $cardTextarea: #c58e459d;
+$cardAdd: #b790524b;
 
 $theme-colors: (
 	'primary': $primary,
@@ -27,6 +28,7 @@ $theme-colors: (
 	'yes': $yes,
 	'no': $no,
 	'cardTextarea': $cardTextarea,
+	'cardAdd': $cardAdd,
 );
 
 @import '~bootstrap/scss/bootstrap';
