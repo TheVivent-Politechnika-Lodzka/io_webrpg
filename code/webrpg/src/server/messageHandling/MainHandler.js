@@ -1,4 +1,3 @@
-
 const db = require('../DatabaseConn');
 const SocketMessages = require('../SocketMessages');
 const SM = SocketMessages;
@@ -6,7 +5,7 @@ const { users, User } = require('../classes/User');
 const sha256 = require('crypto-js/sha256'); //import do szyfrowania
 const Base64 = require('crypto-js/enc-base64'); //import do kodowania
 const ObjectId = require('mongodb').ObjectId;
-const sheet = require('./sheet')
+const sheet = require('./sheet');
 
 function hashPassword(passwd) {
 	return Base64.stringify(sha256(passwd));
@@ -18,7 +17,6 @@ const MessageHandler = {};
 // MessageHandler[SM.<typ_message'a>] = async (data, conn, userID) => {}
 // async jest bardzo ważny !!!
 // w funkcji można zrobić wszystko normalnie jak się chce
-
 
 // ############################
 // # userAuthController       #
@@ -149,19 +147,20 @@ MessageHandler[SM.GAMES_JOIN] = async (data, conn, userID) => {
 	db.dbUpdate(
 		'games',
 		{ _id: ObjectId(gameCode) }, // znajdź grę
-		{ $push: {
-			playerIDs: user.id,
-			characterSheets: {
-				player: user.id,
-				sheets: [
-					{
-						id: 0,
-						name: "empty",
-						content: sheet,
-					}
-				]
-			}
-			}
+		{
+			$push: {
+				playerIDs: user.id,
+				characterSheets: {
+					player: user.id,
+					sheets: [
+						{
+							id: 0,
+							name: 'empty',
+							content: sheet,
+						},
+					],
+				},
+			},
 		} // dołącz gracza
 	).then(() => {
 		conn.sendUTF(
@@ -180,16 +179,18 @@ MessageHandler[SM.GAMES_CREATE] = async (data, conn, userID) => {
 		gameName: gameName,
 		gmID: user.id,
 		playerIDs: [user.id],
-		characterSheets: [{
-			player: user.id,
-			sheets: [
-				{
-					id: 0,
-					name: "empty",
-					content: sheet,
-				}
-			]
-		}],
+		characterSheets: [
+			{
+				player: user.id,
+				sheets: [
+					{
+						id: 0,
+						name: 'empty',
+						content: sheet,
+					},
+				],
+			},
+		],
 		uploads: [],
 		chat: [],
 	}).then((res) => {
@@ -216,7 +217,7 @@ MessageHandler[SM.AUTO_LOGIN] = async (data, conn, userID) => {
 			email: email,
 		};
 
-        console.log("user się auto-zalogował")
+		console.log('user się auto-zalogował');
 
 		users[userID] = new User(conn, tmp);
 		conn.sendUTF(JSON.stringify(tmp));
@@ -227,30 +228,49 @@ MessageHandler[SM.AUTO_LOGIN] = async (data, conn, userID) => {
 // # gameController           #
 // ############################
 MessageHandler[SM.GAME_JOIN] = async (data, conn, userID) => {
-    var user = users[userID]
-    console.log('user wszedł do pokoju')
-    user.switchRoom(data.room_id)
-}
+	var user = users[userID];
+	console.log('user wszedł do pokoju');
+	user.switchRoom(data.room_id);
+};
 
 MessageHandler[SM.GAME_EXIT] = async (data, conn, userID) => {
-    const user = users[userID]
-    console.log('user wyszedł z pokoju')
-    user.exitRoom()
-}
+	const user = users[userID];
+	console.log('user wyszedł z pokoju');
+	user.exitRoom();
+};
 
 MessageHandler[SM.GAME_MESSAGE_CHAT] = async (data, conn, userID) => {
-	const user = users[userID]
-	user.currentRoom.pushChatMessage(data.username, data.message)
-}
+	const user = users[userID];
+	user.currentRoom.pushChatMessage(data.username, data.message);
+};
 
 MessageHandler[SM.GAME_GET_SHEET] = async (data, conn, userID) => {
-	const user = users[userID]
-	user.getSheet(data.id)
-}
+	const user = users[userID];
+
+	const sheet = user.currentRoom.getSheet(data.user_id, data.sheet_id);
+
+	conn.sendUTF(
+		JSON.stringify({
+			type: SM.GAME_GET_SHEET,
+			sheet: sheet,
+		})
+	);
+};
 
 MessageHandler[SM.GAME_SAVE_SHEET] = async (data, conn, userID) => {
-	const user = users[userID]
-	user.saveSheet(data.sheet)
-}
+	const user = users[userID];
+	user.currentRoom.saveSheet(data.user, data.sheet);
+};
+
+MessageHandler[SM.GAME_ADD_SHEET] = async (data, conn, userID) => {
+	const user = users[userID];
+	user.currentRoom.addSheet(data.user);
+};
+
+MessageHandler[SM.GAME_DELETE_SHEET] = async (data, conn, userID) => {
+	const user = users[userID];
+	// console.log(data)
+	user.currentRoom.deleteSheet(data.user, data.sheet);
+};
 
 module.exports = MessageHandler;

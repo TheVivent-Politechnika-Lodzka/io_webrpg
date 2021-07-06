@@ -1,5 +1,5 @@
 import Draggable from 'react-draggable';
-import { Button, FloatingLabel, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useContext, useEffect, useState } from 'react';
 import useBreakpoint from 'bootstrap-5-breakpoint-react-hook'; //eslint-disable-line
 import CharacterContext from './CharacterContext';
@@ -11,7 +11,7 @@ import { GlobalHotKeys, configure } from 'react-hotkeys';
 const CharacterPanel = () => {
 	const currentBreakpoint = useBreakpoint();
 	const [isMobile, setIsMobile] = useState(false);
-	const [sheetId, setSheetId] = useContext(CharacterContext);
+	const [sheetId] = useContext(CharacterContext);
 	const [sheet, setSheet] = useState({});
 	const [sheetModified, setSheetModified] = useState(false);
 	const [timer, setTimer] = useState(0);
@@ -32,13 +32,18 @@ const CharacterPanel = () => {
 	useEffect(() => {
 		// jeżeli jeszcze nie ma sheetId, to nic nie rób
 		if (typeof sheetId === 'undefined') return;
-		// save'uj jak zmieniasz kartę postaci
-		if (Object.keys(sheet).length !== 0) saveSheet();
+
+		// save'uj jak zmieniasz kartę postaci // buguje przechodzenie między postaciami :(
+		// if (Object.keys(sheet).length !== 0) saveSheet();
+
 		// żądaj nowej karty postaci
 		socket.sendJSON({
 			type: SocketMessages.GAME_GET_SHEET,
-			id: sheetId,
+			user_id: sheetId.user,
+			sheet_id: sheetId.sheet,
 		});
+
+		setSheetModified(false);
 	}, [sheetId]);
 
 	useEffect(() => {
@@ -48,12 +53,13 @@ const CharacterPanel = () => {
 	}, [sheetModified]);
 
 	useEffect(() => {
+		// jeżeli jeszcze nie ma sheetId, to nic nie rób
+		if (typeof sheetId === 'undefined') return;
+		// jak skończyło się odliczanie, zapisz
 		if (timer == 0) {
 			saveSheet();
 			return;
 		}
-		console.log(timer);
-		console.log('hello');
 
 		const tim = setTimeout(() => {
 			setTimer((old) => old - 1);
@@ -85,6 +91,7 @@ const CharacterPanel = () => {
 	const saveSheet = () => {
 		socket.sendJSON({
 			type: SocketMessages.GAME_SAVE_SHEET,
+			user: sheetId.user,
 			sheet: sheet,
 		});
 		setSheetModified(false);

@@ -104,6 +104,16 @@ class User {
 		);
 	}
 
+	getGmId() {
+		const gmId = this.currentRoom.gm._id;
+		this.connection.sendUTF(
+			JSON.stringify({
+				type: SM.GAME_GET_GM,
+				gmId: gmId,
+			})
+		);
+	}
+
 	switchRoom(roomID) {
 		// wyjście z obecnego pokoju
 		this.exitRoom(this);
@@ -111,7 +121,7 @@ class User {
 		const sendNudes = () => {
 			this.getAllPlayers();
 			this.getChat();
-			// this.getActivePlayers()
+			this.getGmId();
 		};
 
 		var newRoom = false;

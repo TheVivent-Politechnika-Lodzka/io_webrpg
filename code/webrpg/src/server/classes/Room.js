@@ -1,25 +1,7 @@
 const ObjectId = require('mongodb').ObjectId;
 const db = require('../DatabaseConn');
 const SM = require('../SocketMessages');
-
-// const test = {
-// 	gamename: '',
-// 	gm: { id: 'id', username: 'username' },
-// 	players: {
-// 		id1: {
-// 			username: 'username',
-// 			charsheets: [
-// 				{ name: '', text: '' },
-// 				{ name: '', text: '' },
-// 			],
-// 		},
-// 		id2: {
-// 			username: 'username2',
-// 			charsheets: [{ name: '', text: '' }],
-// 		},
-// 	},
-// 	chat: [{ username: 'tekst' }, { username2: 'tekst' }],
-// };
+const defaultSheet = require('../messageHandling/sheet');
 
 async function fetchData(id) {
 	var to_return;
@@ -98,7 +80,7 @@ class Room {
 			this.gamename = data.gameName;
 			this.chat = data.chat;
 			this.users = data.players;
-			this.gm = data.gm;
+			this.gm = data.gm[0];
 
 			// załaduj karty postaci:
 			for (const user of this.users) {
@@ -111,6 +93,69 @@ class Room {
 				};
 			}
 		});
+	}
+
+	getSheet(userID, sheetID) {
+		const sheet = this.sheets[userID].sheets.sheets.find(
+			(x) => JSON.stringify(x.id) == sheetID
+		);
+
+		return sheet;
+	}
+
+	saveSheet(userID, sheet) {
+		var same_name = true;
+
+		// znajdź index w tablicy gdzie znajduje się karta do nadpisania
+		const index = this.sheets[userID].sheets.sheets.findIndex(
+			(x) => x.id == sheet.id
+		);
+
+		// jeżeli próba zapisu karty postaci której już nie ma
+		if (index == -1) {
+			return;
+		}
+
+		same_name = this.sheets[userID].sheets.sheets[index].name == sheet.name;
+		// nadpisz
+		this.sheets[userID].sheets.sheets[index] = sheet;
+
+		// powiadom wszystkich graczy, jeżeli zmieniłeś imię postaci
+		if (!same_name) {
+			for (const user of this.activeUsers) {
+				user.getAllPlayers();
+			}
+		}
+	}
+
+	addSheet(userID) {
+		var highestId = 0;
+		var sheets = this.sheets[userID].sheets.sheets;
+		for (const sheet of sheets) {
+			if (sheet.id > highestId) highestId = sheet.id;
+		}
+		sheets.push({
+			id: ++highestId,
+			name: 'empty',
+			content: defaultSheet,
+		});
+
+		for (const user of this.activeUsers) {
+			user.getAllPlayers();
+		}
+	}
+
+	deleteSheet(userID, sheetID) {
+		for (var i = this.sheets[userID].sheets.sheets.length; i--; ) {
+			if (this.sheets[userID].sheets.sheets[i].id === sheetID) {
+				this.sheets[userID].sheets.sheets.splice(i, 1);
+				break;
+			}
+		}
+
+		for (const user of this.activeUsers) {
+			user.getAllPlayers();
+		}
 	}
 
 	sendActiveUsers() {

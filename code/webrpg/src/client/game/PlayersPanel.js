@@ -9,19 +9,10 @@ import CharacterContext from './CharacterContext';
 const PlayersPanel = () => {
 	const [players, setPlayers] = useState([]);
 	const [activePlayers, setActivePlayers] = useState([]);
+	const [gmId, setGmId] = useState('');
 	const socket = useContext(SocketContext);
 	const [user] = useContext(UserContext);
 	const [sheetId, setSheetId] = useContext(CharacterContext);
-
-	// useEffect(()=>{
-	// 	if (Object.keys(sheets).length === 0) return
-	// 	const priv_sheets = players.find(x => JSON.stringify(x._id) == JSON.stringify(user.id)).sheets
-	// 	console.log(sheets)
-	// 	socket.sendJSON({
-	// 		type: SocketMessages.GAME_UPDATE_SHEETS,
-	// 		sheets: priv_sheets
-	// 	})
-	// }, [sheets])
 
 	useEffect(() => {
 		socket.registerOnMessageEvent(
@@ -37,9 +28,28 @@ const PlayersPanel = () => {
 				setActivePlayers(data.active_players);
 			}
 		);
+
+		socket.registerOnMessageEvent(SocketMessages.GAME_GET_GM, (data) => {
+			setGmId(data.gmId);
+		});
 	}, []); //eslint-disable-line
 
-	if (players.length == 0) return <div>Loading...</div>;
+	const deleteSheet = (userId, sheetId) => {
+		socket.sendJSON({
+			type: SocketMessages.GAME_DELETE_SHEET,
+			user: userId,
+			sheet: sheetId,
+		});
+	};
+
+	const addSheet = (userId) => {
+		socket.sendJSON({
+			type: SocketMessages.GAME_ADD_SHEET,
+			user: userId,
+		});
+	};
+
+	if (players.length == 0 || gmId == '') return <div>Loading...</div>;
 
 	return (
 		<Container className="m-0 p-0 w-100">
@@ -80,25 +90,58 @@ const PlayersPanel = () => {
 								className="w-75 d-inline-block  mt-2"
 								style={{ verticalAlign: 'top' }}
 							>
-								{player.username}
-								{/* [{player._id}] */}
+								{player.username}{' '}
+								{player._id == gmId ? '👑' : null}
 							</div>
 						</Accordion.Header>
 						<Accordion.Body>
 							{player.sheets.map((sheet) => (
 								<div key={sheet.id}>
-									{player._id == user.id ? (
-										<Button
-											variant="link"
-											onClick={() => setSheetId(sheet.id)}
-										>
-											- {sheet.name}
-										</Button>
+									{player._id == user.id ||
+									user.id == gmId ? (
+										<div>
+											<Button
+												variant="link"
+												onClick={() =>
+													setSheetId({
+														sheet: sheet.id,
+														user: player._id,
+													})
+												}
+												className="w-75"
+											>
+												{sheet.name}
+											</Button>
+											<Button
+												variant="link"
+												onClick={() =>
+													deleteSheet(
+														player._id,
+														sheet.id
+													)
+												}
+												className="pt-3 w-25 playerPanelButtonShadow"
+											>
+												<MaterialIcon icon="delete" />
+											</Button>
+											<hr></hr>
+										</div>
 									) : (
 										<span>- {sheet.name}</span>
 									)}
 								</div>
 							))}
+							{user.id == gmId ? (
+								<div>
+									<Button
+										variant="link"
+										onClick={() => addSheet(player._id)}
+										className="w-100 bg-cardAdd pt-3 playerPanelButtonShadow"
+									>
+										<MaterialIcon icon="add" />
+									</Button>
+								</div>
+							) : null}
 						</Accordion.Body>
 					</Accordion.Item>
 				))}
